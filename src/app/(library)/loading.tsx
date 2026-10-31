@@ -1,3 +1,3 @@
-import { GalleryPageSkeleton } from '@/components/skeletons';
+import { ListPageSkeleton } from '@/components/skeletons';
 
-export default GalleryPageSkeleton;
+export default ListPageSkeleton;

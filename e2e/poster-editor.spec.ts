@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('opens a poster from the library grid in the editor', async ({ page }) => {
-  await page.goto(`/?${new URLSearchParams({ type: 'poster', q: 'hiring spotlight' })}`);
+  await page.goto(`/library?${new URLSearchParams({ type: 'poster', q: 'hiring spotlight' })}`);
   const card = page.getByRole('article', { name: 'Hiring Spotlight 2', exact: true });
   await expect(card).toBeVisible();
   await card.getByRole('link', { name: 'Edit Hiring Spotlight 2' }).click();

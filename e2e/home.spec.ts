@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const search = (query: string) => `/?${new URLSearchParams({ q: query })}`;
+const search = (query: string) => `/library?${new URLSearchParams({ q: query })}`;
 
 test('lists animations and opens the editor', async ({ page }) => {
   await page.goto(search('phone spin'));
@@ -20,7 +20,7 @@ test('finds clips by search and keeps the grid virtualized while scrolling', asy
   await page.goto(search('handwritten'));
   await expect(page.getByText('Handwritten Note')).toBeVisible();
 
-  await page.goto('/');
+  await page.goto('/library');
   const total = Number((await page.getByText(/^\d+ items$/).textContent())?.split(' ')[0]);
   await page.mouse.wheel(0, 15_000);
   await expect(page.locator('a[href^="/clips/"], article').first()).toBeVisible();

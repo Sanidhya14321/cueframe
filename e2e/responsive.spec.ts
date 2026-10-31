@@ -14,7 +14,7 @@ for (const viewport of VIEWPORTS) {
     test.use({ viewport: { width: viewport.width, height: viewport.height } });
 
     test('the library fills the width without overflowing', async ({ page }) => {
-      await page.goto('/');
+      await page.goto('/library');
       await expect(page.getByRole('searchbox', { name: 'Search the library' })).toBeVisible();
       expect(await pageOverflow(page)).toBe(0);
     });

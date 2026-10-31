@@ -17,16 +17,20 @@ const config: NextConfig = {
   agentRules: false,
   transpilePackages: ['remotion', '@remotion/player', '@remotion/google-fonts', '@remotion/three'],
   headers: () =>
-    Promise.resolve(
-      htmlInCanvasTrialToken
+    Promise.resolve([
+      {
+        source: '/opencut/assets/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      ...(htmlInCanvasTrialToken
         ? [
             {
               source: '/:path*',
               headers: [{ key: 'Origin-Trial', value: htmlInCanvasTrialToken }],
             },
           ]
-        : [],
-    ),
+        : []),
+    ]),
 };
 
 export default config;

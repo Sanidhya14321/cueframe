@@ -17,10 +17,10 @@ export const HomeStart = () => {
       .catch(() => setRecent([]));
   }, []);
   return (
-    <section aria-label="Start a video" className="mb-8 flex flex-col gap-4">
-      <p className="max-w-3xl font-display text-3xl sm:text-4xl">
+    <section aria-label="Start a video" className="flex flex-col gap-6">
+      <h1 className="max-w-4xl font-display text-4xl sm:text-6xl">
         Your coding agent, now a video editor. Watch it build, then take over.
-      </p>
+      </h1>
       <div className="flex flex-wrap gap-2">
         {STARTS.map((start) => (
           <Link
