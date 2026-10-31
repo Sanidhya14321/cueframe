@@ -1,0 +1,330 @@
+import { defineControls } from '../../control-layout';
+import { LOOK, MOTION } from '../../control-presets';
+import type { WebsiteFoundSpotlightProps } from './website-found-spotlight';
+
+export const websiteFoundSpotlightControls = defineControls<WebsiteFoundSpotlightProps>({
+  sections: [
+    {
+      title: 'Text',
+      fields: [
+        { path: 'copy.headline', label: 'Headline' },
+        {
+          path: 'copy.highlight',
+          label: 'Highlight word',
+          hint: 'Large serif word under the headline',
+        },
+        { path: 'copy.body', label: 'Body text' },
+        {
+          link: ['copy.website', 'endCard.website'],
+          label: 'Website',
+          hint: 'Shown in the top corner and on the end card',
+        },
+      ],
+      more: [
+        {
+          link: ['copy.email', 'endCard.email'],
+          label: 'Email',
+          hint: 'Shown in the top corner and on the end card',
+        },
+        {
+          path: 'copy.markLetter',
+          label: 'Logo letter',
+          hint: 'Shown inside the ring logo on the poster and the end card',
+        },
+        { path: 'copy.website', label: 'Top corner website' },
+        { path: 'copy.email', label: 'Top corner email' },
+        { path: 'type.headlineSize', label: 'Headline size' },
+        { path: 'type.highlightSize', label: 'Highlight word size' },
+        { path: 'type.bodySize', label: 'Body text size' },
+        { path: 'type.contactSize', label: 'Top corner contact size' },
+        { path: 'type.markSize', label: 'Logo size' },
+        { path: 'type.insetX', label: 'Side margin' },
+        { path: 'type.headlineTop', label: 'Headline top position', hint: 'Pixels from the top' },
+        { path: 'type.markTop', label: 'Logo top position', hint: 'Pixels from the top' },
+      ],
+    },
+    {
+      title: 'Colors',
+      fields: [
+        {
+          link: [
+            'palette.highlight',
+            'palette.contact',
+            'palette.heroPaper',
+            'palette.glow',
+            'endCard.accent',
+          ],
+          label: 'Primary color',
+          hint: 'The gold: highlight word and its side line, logo ring, top corner website, gold ball and its glow, and the end card accents',
+        },
+        {
+          link: ['palette.headline', 'endCard.brandInk'],
+          label: 'Secondary color',
+          hint: 'The headline and the end card brand name',
+        },
+        {
+          link: ['palette.body', 'palette.mark', 'endCard.ink', 'endCard.contactInk'],
+          label: 'Text color',
+          hint: 'Body text, top corner email, logo letter, and the end card headline and contacts',
+        },
+        {
+          link: ['palette.floor', 'palette.paper', 'endCard.band'],
+          label: 'Surface color',
+          hint: 'The floor, the paper balls and the end card contact band',
+        },
+        {
+          link: ['palette.sky', 'palette.skyEdge', 'endCard.backdrop', 'endCard.backdropEdge'],
+          label: 'Background color',
+          hint: 'The sky behind the scene and the end card background, center and edge together',
+        },
+      ],
+      more: [
+        {
+          path: 'palette.highlight',
+          label: 'Highlight word and logo ring color',
+          hint: 'Also the line beside the body text',
+        },
+        { path: 'palette.contact', label: 'Top corner website color' },
+        { path: 'palette.heroPaper', label: 'Gold ball color' },
+        { path: 'palette.glow', label: 'Gold ball glow color' },
+        {
+          path: 'endCard.accent',
+          label: 'End card accent color',
+          hint: 'Tagline, logo ring, code tile frame, brand second word and contact dot',
+        },
+        { path: 'palette.headline', label: 'Headline color' },
+        { path: 'endCard.brandInk', label: 'End card brand name color' },
+        { path: 'palette.body', label: 'Body text and email color' },
+        { path: 'palette.mark', label: 'Logo letter color' },
+        { path: 'endCard.ink', label: 'End card headline and logo letter color' },
+        { path: 'endCard.contactInk', label: 'End card contact text color' },
+        { path: 'palette.floor', label: 'Floor color' },
+        {
+          path: 'palette.paper',
+          label: 'Paper balls color',
+          hint: 'Every ball except the gold one',
+        },
+        { path: 'endCard.band', label: 'End card contact band color' },
+        { path: 'palette.sky', label: 'Sky color', hint: 'Also the haze the far floor fades into' },
+        { path: 'palette.skyEdge', label: 'Sky top color' },
+        { path: 'endCard.backdrop', label: 'End card background' },
+        {
+          path: 'endCard.backdropEdge',
+          label: 'End card background edge',
+          hint: 'Color the background fades to at the top and bottom',
+        },
+        { path: 'palette.lamp', label: 'Lamp color', hint: 'Also tints the ambient light' },
+        { path: 'palette.bulb', label: 'Bulb glow color' },
+        {
+          path: 'palette.beam',
+          label: 'Light beam color',
+          hint: 'Also colors the pool of light on the floor',
+        },
+        { path: 'palette.question', label: 'Question mark color' },
+        {
+          path: 'endCard.beam',
+          label: 'End card light beam color',
+          hint: 'Also colors the glow around the iris',
+        },
+      ],
+    },
+    {
+      title: 'End card',
+      fields: [
+        {
+          path: 'endCard.show',
+          label: 'Show end card',
+          hint: 'Irises open from the gold ball into a contact card',
+        },
+        { path: 'endCard.brand', label: 'Brand name' },
+      ],
+      more: [
+        { path: 'endCard.headline', label: 'End card headline' },
+        { path: 'endCard.subline', label: 'End card tagline' },
+        { path: 'endCard.phone', label: 'Phone number' },
+        {
+          path: 'endCard.brandAccent',
+          label: 'Brand name second word',
+          hint: 'Drawn in the accent color after the brand name',
+        },
+        { path: 'endCard.website', label: 'End card website' },
+        { path: 'endCard.email', label: 'End card email' },
+        { path: 'endCard.headlineSize', label: 'Headline size' },
+        { path: 'endCard.sublineSize', label: 'Tagline size' },
+        {
+          path: 'endCard.showCode',
+          label: 'Show code tile',
+          hint: 'Decorative QR-style tile; it cannot be scanned',
+        },
+        { path: 'endCard.codeSeed', label: 'Code tile pattern', hint: 'Picks a different pattern' },
+        { path: 'endCard.beamOpacity', label: 'Light beam strength' },
+        { path: 'endCard.irisFrames', label: 'Iris open length', hint: 'In frames' },
+        {
+          path: 'endCard.irisX',
+          label: 'Iris center across',
+          hint: '0 is the left edge, 1 the right',
+        },
+        { path: 'endCard.irisY', label: 'Iris center down', hint: '0 is the top, 1 the bottom' },
+        {
+          path: 'endCard.stagger',
+          label: 'Delay between items',
+          hint: 'In frames, as each line rises in',
+        },
+      ],
+    },
+    {
+      title: 'Spotlight',
+      fields: [
+        {
+          path: 'lamp.intensity',
+          label: 'Light brightness',
+          hint: 'How strongly the lamp lights the floor',
+        },
+      ],
+      more: [
+        { path: 'lamp.coneAngle', label: 'Beam width' },
+        { path: 'lamp.showQuestion', label: 'Show question mark' },
+        { path: 'lamp.beamOpacity', label: 'Visible beam strength' },
+        {
+          path: 'lamp.beamSoftness',
+          label: 'Beam edge fade',
+          hint: 'Higher fades the sides of the beam more',
+        },
+        {
+          path: 'lamp.penumbra',
+          label: 'Light pool softness',
+          hint: 'Higher blurs the edge of the light on the floor',
+        },
+        { path: 'lamp.floorGlow', label: 'Gold ball glow' },
+        { path: 'lamp.questionSize', label: 'Question mark size' },
+        {
+          path: 'lamp.questionAt',
+          label: 'Question mark position',
+          hint: 'Along the beam: 0 at the lamp, 1 at the floor',
+        },
+        { path: 'lamp.targetX', label: 'Aim left or right' },
+        {
+          path: 'lamp.targetZ',
+          label: 'Aim near or far',
+          hint: 'Higher aims closer to the camera',
+        },
+      ],
+    },
+    {
+      title: 'Timing',
+      fields: [
+        {
+          ...MOTION.speed,
+          hint: 'Speeds up the light flicker, camera drift and end card; the entrance and exit keep their own length',
+        },
+      ],
+      more: [
+        MOTION.enter,
+        MOTION.exit,
+        {
+          path: 'timing.offStart1',
+          label: 'Flicker starts at',
+          hint: 'Frame number of the first blackout',
+        },
+        {
+          path: 'timing.onStart3',
+          label: 'Light settles on at',
+          hint: 'Frame number of the final switch-on',
+        },
+        { path: 'timing.endCardStart', label: 'End card starts at', hint: 'Frame number' },
+        { path: 'timing.onStart1', label: 'First relight at', hint: 'Frame number' },
+        { path: 'timing.offStart2', label: 'Second blackout at', hint: 'Frame number' },
+        { path: 'timing.onStart2', label: 'Second relight at', hint: 'Frame number' },
+        { path: 'timing.offStart3', label: 'Third blackout at', hint: 'Frame number' },
+        { path: 'timing.onFrames', label: 'Switch-on length', hint: 'In frames' },
+        { path: 'timing.offFrames', label: 'Blackout fade length', hint: 'In frames' },
+        {
+          path: 'timing.snap',
+          label: 'Switch-on snap',
+          hint: 'How much of the light pops on at once before easing up',
+        },
+        {
+          path: 'timing.questionFrames',
+          label: 'Question mark grow length',
+          hint: 'In frames, after each switch-on',
+        },
+        MOTION.enterFrames,
+        MOTION.exitFrames,
+      ],
+    },
+    {
+      title: 'Scene',
+      fields: [
+        {
+          ...LOOK.showBackdrop,
+          hint: 'Off drops the sky, floor color, fog and lens effects, leaving only shadows',
+        },
+      ],
+      more: [
+        { path: 'paper.spread', label: 'Paper spread', hint: 'How far apart the paper balls sit' },
+        { path: 'paper.size', label: 'Paper ball size', hint: 'Includes the gold ball' },
+        { path: 'lamp.scale', label: 'Lamp size' },
+        { path: 'lamp.x', label: 'Lamp left or right' },
+        { path: 'lamp.z', label: 'Lamp near or far', hint: 'Higher is closer to the camera' },
+        { path: 'paper.heroX', label: 'Gold ball left or right' },
+        {
+          path: 'paper.heroZ',
+          label: 'Gold ball near or far',
+          hint: 'Higher is closer to the camera',
+        },
+        { path: 'paper.crumple', label: 'Crumple depth' },
+        { path: 'paper.facets', label: 'Surface detail' },
+        { path: 'paper.roughness', label: 'Paper roughness', hint: 'Higher is more matte' },
+        { path: 'paper.seed', label: 'Crumple pattern', hint: 'Picks a different crumple' },
+      ],
+    },
+    {
+      title: 'Camera',
+      fields: [],
+      more: [
+        { path: 'camera.height', label: 'Camera height' },
+        { path: 'camera.distance', label: 'Camera distance' },
+        { path: 'camera.fieldOfView', label: 'Field of view' },
+        {
+          path: 'camera.targetZ',
+          label: 'Look-at point',
+          hint: 'Higher looks closer to the camera',
+        },
+        {
+          path: 'camera.drift',
+          label: 'Camera drift',
+          hint: 'Slow push-in and sideways drift over the clip',
+        },
+        {
+          path: 'camera.ambient',
+          label: 'Ambient light',
+          hint: 'Even light everywhere, tinted by the lamp color. Stays on during the flicker',
+        },
+        {
+          path: 'camera.fill',
+          label: 'Fill light',
+          hint: 'Soft light from the upper left. Stays on during the flicker',
+        },
+        { path: 'camera.fillColor', label: 'Fill light color' },
+        { path: 'camera.fog', label: 'Fog', hint: 'Higher fades the distance into the sky color' },
+        { path: 'camera.vignette', label: 'Vignette' },
+        { path: 'camera.grain', label: 'Film grain' },
+      ],
+    },
+  ],
+  hidden: [
+    'look.background',
+    'look.backgroundEdge',
+    'look.ink',
+    'look.muted',
+    'look.accent',
+    'look.grain',
+    'look.liveGrain',
+    'look.spotlight',
+    'look.paper',
+    'look.paperLine',
+    'look.paperSpacing',
+    'look.paperMargin',
+    'motion.float',
+  ],
+});
