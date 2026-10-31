@@ -23,7 +23,7 @@ export const proxy = (request: NextRequest) => {
     !pathname.startsWith('/api/') &&
     pathname !== '/mcp'
   ) {
-    return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
+    return new NextResponse(null, { status: 307, headers: { location: '/login' } });
   }
   if (request.nextUrl.pathname.startsWith('/api/') || request.nextUrl.pathname === '/mcp') {
     return requireLocalSession(request) ?? NextResponse.next();

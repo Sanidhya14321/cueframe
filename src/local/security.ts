@@ -38,7 +38,8 @@ export const passwordMatches = (value: string): boolean => {
 export const localOrigin = (request: Request): string | null => {
   const hosted = hostedConfig();
   if (hosted) {
-    return request.headers.get('host') === new URL(hosted.origin).host ? hosted.origin : null;
+    const host = request.headers.get('host') ?? new URL(request.url).host;
+    return host === new URL(hosted.origin).host ? hosted.origin : null;
   }
   const url = new URL(request.url);
   const host = request.headers.get('host') ?? url.host;

@@ -8,9 +8,9 @@ export const POST = async (request: Request) => {
   const password = form.get('password');
   if (!isHosted() || typeof password !== 'string' || !passwordMatches(password)) {
     await new Promise((resolve) => setTimeout(resolve, FAILURE_DELAY_MS));
-    return NextResponse.redirect(new URL('/login?failed=1', request.url), 303);
+    return new NextResponse(null, { status: 303, headers: { location: '/login?failed=1' } });
   }
-  const response = NextResponse.redirect(new URL('/', request.url), 303);
+  const response = new NextResponse(null, { status: 303, headers: { location: '/' } });
   response.cookies.set(SESSION_COOKIE, sessionToken(), {
     httpOnly: true,
     sameSite: 'strict',

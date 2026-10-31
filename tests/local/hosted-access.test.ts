@@ -18,7 +18,7 @@ describe('hosted access', () => {
       CLIPKIT_PASSWORD: 'correct',
       CLIPKIT_PUBLIC_URL: 'https://studio.example.com',
     });
-    const request = (host: string) => new Request('http://0.0.0.0:3000/', { headers: { host } });
+    const request = (host: string) => new Request(`http://${host}/`);
     expect(localOrigin(request('studio.example.com'))).toBe('https://studio.example.com');
     expect(localOrigin(request('evil.example.com'))).toBeNull();
     expect(passwordMatches('correct')).toBe(true);
