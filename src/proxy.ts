@@ -1,5 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import {
+  hasBrowserSession,
+  isHosted,
   localRequestProblem,
   requireLocalSession,
   SESSION_COOKIE,
@@ -10,6 +12,18 @@ export const proxy = (request: NextRequest) => {
   const problem = localRequestProblem(request);
   if (problem !== null) {
     return problem;
+  }
+  const { pathname } = request.nextUrl;
+  if (pathname === '/login' || pathname === '/api/login') {
+    return NextResponse.next();
+  }
+  if (
+    isHosted() &&
+    !hasBrowserSession(request) &&
+    !pathname.startsWith('/api/') &&
+    pathname !== '/mcp'
+  ) {
+    return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
   }
   if (request.nextUrl.pathname.startsWith('/api/') || request.nextUrl.pathname === '/mcp') {
     return requireLocalSession(request) ?? NextResponse.next();
@@ -23,12 +37,14 @@ export const proxy = (request: NextRequest) => {
     'X-Frame-Options',
     request.nextUrl.pathname === '/opencut/index.html' ? 'SAMEORIGIN' : 'DENY',
   );
-  response.cookies.set(SESSION_COOKIE, sessionToken(), {
-    httpOnly: true,
-    sameSite: 'strict',
-    path: '/',
-    secure: request.nextUrl.protocol === 'https:',
-  });
+  if (!isHosted()) {
+    response.cookies.set(SESSION_COOKIE, sessionToken(), {
+      httpOnly: true,
+      sameSite: 'strict',
+      path: '/',
+      secure: request.nextUrl.protocol === 'https:',
+    });
+  }
   return response;
 };
 

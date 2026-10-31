@@ -1,4 +1,4 @@
-import { randomBytes, timingSafeEqual } from 'node:crypto';
+import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 
 export const SESSION_COOKIE = 'clipkit-session';
 
@@ -20,7 +20,26 @@ const equalToken = (value: string): boolean => {
   return expected.length === received.length && timingSafeEqual(expected, received);
 };
 
+const hostedConfig = (): { password: string; origin: string } | null => {
+  // biome-ignore lint/style/noProcessEnv: hosted access is configured by the server operator
+  const { CLIPKIT_PASSWORD: password, CLIPKIT_PUBLIC_URL: url } = process.env;
+  return password && url ? { password, origin: new URL(url).origin } : null;
+};
+
+export const isHosted = (): boolean => hostedConfig() !== null;
+
+const digest = (value: string): Buffer => createHash('sha256').update(value).digest();
+
+export const passwordMatches = (value: string): boolean => {
+  const config = hostedConfig();
+  return config !== null && timingSafeEqual(digest(value), digest(config.password));
+};
+
 export const localOrigin = (request: Request): string | null => {
+  const hosted = hostedConfig();
+  if (hosted) {
+    return request.headers.get('host') === new URL(hosted.origin).host ? hosted.origin : null;
+  }
   const url = new URL(request.url);
   const host = request.headers.get('host') ?? url.host;
   try {
@@ -50,6 +69,16 @@ export const localRequestProblem = (request: Request): Response | null => {
     return Response.json({ problem: 'This website cannot access ClipKit.' }, { status: 403 });
   }
   return null;
+};
+
+export const hasBrowserSession = (request: Request): boolean => {
+  const cookie = request.headers
+    .get('cookie')
+    ?.split(';')
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(`${SESSION_COOKIE}=`))
+    ?.slice(SESSION_COOKIE.length + 1);
+  return cookie !== undefined && equalToken(cookie);
 };
 
 export const requireLocalSession = (request: Request): Response | null => {
