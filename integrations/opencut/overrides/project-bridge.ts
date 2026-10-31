@@ -31,6 +31,7 @@ const transformParams = (item: Element) => ({
   'transform.rotate': item.transform.rotation,
   opacity: item.transform.opacity,
 });
+const seenItems = new Map<string, Element>();
 export const needsSourcePreview = (item: Element) =>
   item.type === 'composition' ||
   item.type === 'captions' ||
@@ -230,9 +231,10 @@ export function projectToNative(
 
 export function nativeToProject(native: TProject, source: Project, media: MediaAsset[]): Project {
   const fps = native.settings.fps.numerator / native.settings.fps.denominator;
-  const originals = new Map(
-    source.tracks.flatMap((track) => track.elements).map((item) => [item.id, item]),
-  );
+  for (const item of source.tracks.flatMap((track) => track.elements)) {
+    seenItems.set(item.id, item);
+  }
+  const originals = seenItems;
   const assets = new Map(media.map((asset) => [asset.id, asset]));
   const tracks = native.scenes
     .flatMap((scene) => allTracks(scene.tracks))

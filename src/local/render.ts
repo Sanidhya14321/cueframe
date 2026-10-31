@@ -5,8 +5,10 @@ import { join } from 'node:path';
 import { repoRoot } from '@/lib/repo-root';
 import { ensureDirectory, writeJson } from './files';
 import { readMedia } from './media';
+import { readOpenCut } from './opencut';
 import { renderNativeProject } from './opencut-render';
 import { projectDirectory, readProject } from './projects';
+import { renderTurn } from './render-turn';
 
 export const inlineProjectMedia = async (value: unknown): Promise<unknown> => {
   if (typeof value === 'string') {
@@ -35,18 +37,22 @@ export const renderLocalProject = async (
   origin = 'http://127.0.0.1:3000',
 ) => {
   const state = await readProject(projectId);
-  if (state.project.opencut) {
-    return renderNativeProject(projectId, origin, update);
+  const drafts = state.project.opencut
+    ? (await readOpenCut(projectId)).media.some((asset) => asset.url.startsWith('/previews/'))
+    : false;
+  if (state.project.opencut && !drafts) {
+    return renderTurn(() => renderNativeProject(projectId, origin, update));
   }
   await update(0.01, 'Preparing the full-fidelity renderer');
   const name = `video-${state.revision}`;
   const outDir = join(await projectDirectory(projectId), 'out');
-  const project = (await inlineProjectMedia(state.project)) as typeof state.project;
+  const { opencut: _native, ...canonical } = state.project;
+  const project = (await inlineProjectMedia(canonical)) as typeof state.project;
   await ensureDirectory(outDir);
   const input = join(outDir, `${name}.input.json`);
   await writeJson(input, project);
   try {
-    await runRenderWorker(input, name, update);
+    await renderTurn(() => runRenderWorker(input, name, update));
   } finally {
     await rm(input, { force: true });
   }
@@ -98,7 +104,10 @@ const runRenderWorker = (
         }
       }
     });
-    child.stderr.on('data', () => undefined);
+    let detail = '';
+    child.stderr.on('data', (chunk: Buffer) => {
+      detail = `${detail}${chunk}`.slice(-1500);
+    });
     child.on('error', () => {
       clearTimeout(timer);
       reject(new Error('Could not start the local Bun renderer.'));
@@ -108,6 +117,7 @@ const runRenderWorker = (
       if (code === 0) {
         resolve();
       } else {
+        console.error(`[ClipKit render] ${detail}`);
         reject(new Error('Local rendering failed. Check the project media and available memory.'));
       }
     });

@@ -5,6 +5,10 @@ type Context = { params: Promise<{ projectId: string; itemId: string }> };
 export const POST = (request: Request, { params }: Context) =>
   projectApi(request, async () => {
     const { projectId, itemId } = await params;
-    const preview = await prepareOpenCutPreview(projectId, itemId);
-    return Response.json(preview);
+    const preview = await prepareOpenCutPreview(
+      projectId,
+      itemId,
+      new URL(request.url).searchParams.has('cached'),
+    );
+    return preview ? Response.json(preview) : new Response(null, { status: 204 });
   });

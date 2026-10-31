@@ -13,7 +13,7 @@ Object.assign(process.env, {
 const config: NextConfig = {
   reactStrictMode: true,
   distDir: clipkitDistDir ?? '.next',
-  serverExternalPackages: ['@remotion/renderer', '@remotion/bundler'],
+  serverExternalPackages: ['@remotion/renderer', '@remotion/bundler', '@huggingface/transformers'],
   agentRules: false,
   transpilePackages: ['remotion', '@remotion/player', '@remotion/google-fonts', '@remotion/three'],
   headers: () =>

@@ -12,8 +12,9 @@ import { serialDisk } from './file-lock';
 import { writeJson } from './files';
 import { ProjectProblem, projectDirectory, readProject } from './projects';
 import { inlineProjectMedia } from './render';
+import { renderTurn } from './render-turn';
 
-export const prepareOpenCutPreview = async (id: string, itemId: string) => {
+export const prepareOpenCutPreview = async (id: string, itemId: string, cachedOnly = false) => {
   const state = await readProject(id);
   const item = state.project.tracks
     .flatMap((track) => track.elements)
@@ -41,6 +42,9 @@ export const prepareOpenCutPreview = async (id: string, itemId: string) => {
     )
     .digest('hex');
   const output = join(await projectDirectory(id), 'media', `${digest}.webm`);
+  if (cachedOnly && !existsSync(output)) {
+    return null;
+  }
   await serialDisk(output, async () => {
     if (existsSync(output)) {
       return;
@@ -71,7 +75,7 @@ export const prepareOpenCutPreview = async (id: string, itemId: string) => {
     await writeJson(input, await inlineProjectMedia(project));
     const temporary = `${output}.tmp.webm`;
     try {
-      await renderLayer(input, temporary);
+      await renderTurn(() => renderLayer(input, temporary));
       await rename(temporary, output);
     } finally {
       await rm(input, { force: true });
@@ -115,7 +119,10 @@ const renderLayer = (input: string, output: string) =>
       child.kill();
       reject(new Error('Source layer preview timed out.'));
     }, 600000);
-    child.stderr.on('data', () => undefined);
+    let detail = '';
+    child.stderr.on('data', (chunk: Buffer) => {
+      detail = `${detail}${chunk}`.slice(-2000);
+    });
     child.on('error', () => {
       clearTimeout(timer);
       reject(new Error('Could not start the source layer renderer.'));
@@ -125,6 +132,7 @@ const renderLayer = (input: string, output: string) =>
       if (code === 0) {
         resolve();
       } else {
+        console.error(`[ClipKit preview] ${detail}`);
         reject(
           new Error('Could not render this source layer. Open Animation workspace to inspect it.'),
         );

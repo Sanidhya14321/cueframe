@@ -73,7 +73,7 @@ export const registerCatalogTools = (server: McpServer, appUrl: string): void =>
     {
       title: 'Recommend clips for a brief',
       description:
-        'Turn a video brief into a storyboard: one distinct clip per story role, ranked from each clip\'s labels, with alternatives. Reads format and theme from the brief ("dark vertical reel") unless given. Use this before add_item.',
+        'Turn a video brief into a storyboard: one distinct clip per story role, ranked by local semantic similarity and each clip\'s labels, with alternatives and textSlots, the prop paths to fill with your copy. Reads format and theme from the brief ("dark vertical reel") unless given. Use this before add_item.',
       inputSchema: {
         brief: z.string().min(1).describe('What the video is about, in plain language'),
         roles: z.array(z.enum(CLIP_ROLES)).min(1).max(16).optional(),
@@ -82,9 +82,9 @@ export const registerCatalogTools = (server: McpServer, appUrl: string): void =>
       },
       annotations: { readOnlyHint: true },
     },
-    ({ brief, roles, orientation, theme }) =>
+    async ({ brief, roles, orientation, theme }) =>
       json({
-        storyboard: recommendClips(brief, { roles, orientation, theme }).map((step) => ({
+        storyboard: (await recommendClips(brief, { roles, orientation, theme })).map((step) => ({
           ...step,
           preview: step.clip ? previewUrl(appUrl, step.clip.id) : null,
         })),

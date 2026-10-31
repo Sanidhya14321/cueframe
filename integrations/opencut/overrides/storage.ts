@@ -13,6 +13,7 @@ import { processMediaAssets } from '@/media/processing';
 import type { MediaAsset } from '@/media/types';
 import type { TProject } from '@/project/types';
 import { TICKS_PER_SECOND } from '@/wasm';
+import { cachedPreview, draftIds, renderPreview, upgradeDrafts } from './draft-previews';
 import { setNativeLocks } from './locks';
 import { nativeToProject, needsSourcePreview, projectToNative } from './project-bridge';
 
@@ -219,10 +220,10 @@ export async function connectCanonical() {
       accept(value);
     }
   }, 250);
-  const accept = (latest: PublicProjectState) => {
+  const accept = (latest: PublicProjectState, force = false) => {
     source.agent = latest.agent;
     updateLocks();
-    if (latest.revision === source.revision) {
+    if (latest.revision === source.revision && !force) {
       return;
     }
     if (loading || editor.save.getIsDirty()) {
@@ -239,6 +240,7 @@ export async function connectCanonical() {
         editor.command.clear();
         editor.save.resume();
         report('Saved locally');
+        upgrade();
       })
       .catch((error) =>
         report(error instanceof Error ? error.message : 'Could not receive agent changes'),
@@ -249,6 +251,10 @@ export async function connectCanonical() {
         editor.save.resume();
       });
   };
+  const upgrade = () => {
+    upgradeDrafts(report, () => accept(source, true)).catch(() => undefined);
+  };
+  upgrade();
   events.onmessage = (event: MessageEvent<string>) =>
     accept(JSON.parse(event.data) as PublicProjectState);
   return () => {
@@ -272,34 +278,27 @@ export async function hydrateCanonical(editor: EditorCore) {
     ) {
       continue;
     }
-    let preview:
-      | {
-          url: string;
-          width: number;
-          height: number;
-          duration: number;
-          fps: number;
-          hasAudio: boolean;
-        }
-      | undefined;
+    let preview: Awaited<ReturnType<typeof renderPreview>> | undefined;
     let url: string;
     if (needsSourcePreview(item)) {
       previewNumber += 1;
       report(
         `Preparing ${item.type === 'composition' ? item.clipId : item.type} (${previewNumber} of ${previewCount})`,
       );
-      const response = await fetch(
-        `/api/projects/${projectId}/opencut/preview/${encodeURIComponent(item.id)}`,
-        { method: 'POST' },
-      );
-      if (!response.ok) {
-        throw new Error(
-          'Could not prepare an animation layer. Open Animation workspace to inspect it.',
-        );
-      }
-      preview = await response.json();
-      if (!preview) {
-        throw new Error('Missing preview metadata');
+      preview = item.type === 'composition' ? await cachedPreview(item.id) : undefined;
+      if (item.type === 'composition' && !preview) {
+        draftIds.add(item.id);
+        preview = {
+          url: `/previews/${item.clipId}.mp4`,
+          width: source.project.width,
+          height: source.project.height,
+          duration: item.durationInFrames / source.project.fps,
+          fps: source.project.fps,
+          hasAudio: false,
+        };
+      } else {
+        draftIds.delete(item.id);
+        preview ??= await renderPreview(item.id);
       }
       url = preview.url;
     } else if (item.type === 'video' || item.type === 'audio' || item.type === 'image') {
@@ -336,7 +335,7 @@ export async function hydrateCanonical(editor: EditorCore) {
     if (!processed) {
       throw new Error('Unsupported source media');
     }
-    if (!url.startsWith(`/api/projects/${projectId}/media/`)) {
+    if (!(url.startsWith(`/api/projects/${projectId}/media/`) || draftIds.has(item.id))) {
       const upload = await fetch(`/api/projects/${projectId}/media`, {
         method: 'POST',
         headers: { 'content-type': mime },

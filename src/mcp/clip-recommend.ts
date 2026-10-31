@@ -1,4 +1,6 @@
+import { clipCatalog } from '@/agent/catalog';
 import type { ClipRole, ClipTheme } from '@/schemas';
+import { embedQuery, semanticOrder } from './clip-embeddings';
 import { type ClipSearchHit, type Orientation, searchClips } from './clip-search';
 
 const DEFAULT_STORY: readonly ClipRole[] = ['opener', 'feature', 'proof', 'cta', 'closer'];
@@ -26,21 +28,44 @@ export interface ClipRecommendOptions {
 export interface ClipRecommendation {
   role: ClipRole;
   clip: ClipSearchHit | null;
+  textSlots: readonly { path: string }[];
   alternatives: readonly string[];
 }
 
-export const recommendClips = (
+const RRF_K = 60;
+
+const blendRanks = (
+  hits: ClipSearchHit[],
+  keyword: ReadonlyMap<string, number>,
+  semantic: readonly string[],
+): ClipSearchHit[] => {
+  const place = new Map(semantic.map((id, index) => [id, index]));
+  const rrf = (rank: number | undefined) => (rank === undefined ? 0 : 1 / (RRF_K + rank));
+  return hits.toSorted(
+    (a, b) =>
+      rrf(keyword.get(b.id)) + rrf(place.get(b.id)) - rrf(keyword.get(a.id)) - rrf(place.get(a.id)),
+  );
+};
+
+export const recommendClips = async (
   brief: string,
   options: ClipRecommendOptions = {},
-): ClipRecommendation[] => {
+  embed: (text: string) => Promise<readonly number[] | null> = embedQuery,
+): Promise<ClipRecommendation[]> => {
+  const vector = await embed(brief);
   const orientation = options.orientation ?? matchWord(brief, ORIENTATION_WORDS);
   const theme = options.theme ?? matchWord(brief, THEME_WORDS);
   const used = new Set<string>();
   const categories = new Set<string>();
   return (options.roles ?? DEFAULT_STORY).map((role) => {
-    const hits = searchClips(brief, { role, orientation, theme }, 500).filter(
-      (hit) => !used.has(hit.id),
+    const candidates = vector
+      ? searchClips('', { role, orientation, theme }, 500)
+      : searchClips(brief, { role, orientation, theme }, 500);
+    const keyword = new Map(
+      searchClips(brief, { role, orientation, theme }, 500).map((hit, index) => [hit.id, index]),
     );
+    const ordered = vector ? blendRanks(candidates, keyword, semanticOrder(vector)) : candidates;
+    const hits = ordered.filter((hit) => !used.has(hit.id));
     const clip = hits.find((hit) => !categories.has(hit.category)) ?? hits[0] ?? null;
     if (clip !== null) {
       used.add(clip.id);
@@ -49,6 +74,7 @@ export const recommendClips = (
     return {
       role,
       clip,
+      textSlots: clipCatalog.find((entry) => entry.id === clip?.id)?.textSlots ?? [],
       alternatives: hits
         .filter((hit) => hit.id !== clip?.id)
         .slice(0, 3)

@@ -80,7 +80,15 @@ export const saveOpenCut = async (id: string, input: unknown) => {
     if (change.document && change.document.metadata.id !== id) {
       throw new ProjectProblem('OpenCut project ID does not match.');
     }
-    if (change.media?.some((asset) => !asset.url.startsWith(`/api/projects/${id}/media/`))) {
+    if (
+      change.media?.some(
+        (asset) =>
+          !(
+            asset.url.startsWith(`/api/projects/${id}/media/`) ||
+            /^\/previews\/[a-z0-9-]+\.mp4$/.test(asset.url)
+          ),
+      )
+    ) {
       throw new ProjectProblem('OpenCut media must be stored in this project.');
     }
     if (change.document && !change.project) {
