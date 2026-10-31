@@ -80,7 +80,9 @@ export const ProjectsTable = ({ rows }: { rows: Row[] }) => {
                 <td className="p-3 tabular-nums">{row.seconds.toFixed(1)} s</td>
                 <td className="p-3 tabular-nums">{row.size}</td>
                 <td className="p-3">{row.engine}</td>
-                <td className="p-3 whitespace-nowrap">{dateFormat.format(row.updated)}</td>
+                <td className="p-3 whitespace-nowrap" suppressHydrationWarning>
+                  {dateFormat.format(row.updated)}
+                </td>
               </tr>
             ))}
           </tbody>
