@@ -5,9 +5,11 @@ export const dynamic = 'force-dynamic';
 const ProjectsPage = async () => {
   const rows = await listProjectSummaries();
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col gap-4 p-6">
-      <h1 className="text-2xl font-semibold">Local projects</h1>
-      <NewProject />
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-5 sm:px-6">
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="font-display text-2xl">Projects</h1>
+        <NewProject />
+      </div>
       <ProjectsTable rows={rows} />
     </div>
   );

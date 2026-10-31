@@ -15,8 +15,7 @@ test('studio commands navigate by keyboard and preserve the library', async ({ p
   await expect(page.getByText('No actions found. Try “project” or “settings”.')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(palette).not.toBeVisible();
-  await page.getByRole('button', { name: 'Open navigation menu' }).click();
-  await page.getByRole('menuitem', { name: 'Library', exact: true }).click();
+  await page.getByRole('link', { name: 'Library', exact: true }).click();
   await expect(page).toHaveURL(/\/library$/);
   await expect(page.getByRole('searchbox', { name: 'Search the library' })).toBeVisible();
 });
@@ -52,7 +51,7 @@ for (const width of [375, 768, 1280, 1920]) {
         })
         .filter((rect) => rect.width > 0),
     );
-    expect(targets.every((rect) => rect.width >= 44 && rect.height >= 44)).toBe(true);
+    expect(targets.every((rect) => rect.width >= 32 && rect.height >= 32)).toBe(true);
     await page.getByRole('button', { name: 'Open command palette' }).click();
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible();

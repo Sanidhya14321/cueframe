@@ -230,7 +230,7 @@ export const projectTools = {
         await commitAction(
           pid,
           { type: 'update-props', id, props },
-          { actor: ctx.actor, label: `Update ${id}` },
+          { actor: ctx.actor, label: 'Update animation settings' },
         )
       ).revision,
     }),

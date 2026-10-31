@@ -127,7 +127,7 @@ export const saveOpenCut = async (id: string, input: unknown) => {
         {
           actor: `browser:${change.clientId ?? 'opencut'}`,
           revision: change.canonicalRevision,
-          label: 'Edit in OpenCut',
+          label: 'Edit in video editor',
           title: change.document.metadata.name,
           ...(change.summary
             ? { nativeVideo: { ...change.summary, revision: current.version + 1 } }

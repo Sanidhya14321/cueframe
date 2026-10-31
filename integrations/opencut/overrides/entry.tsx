@@ -23,7 +23,6 @@ import { buildElementFromMedia } from '@/timeline/element-utils';
 import { useTimelineStore } from '@/timeline/timeline-store';
 import { mediaTimeFromSeconds, ZERO_MEDIA_TIME } from '@/wasm';
 import { CaptionsView } from './captions-panel';
-import { draftIds } from './draft-previews';
 import { HostContext } from './host-context';
 import { LibraryView, libraryDropTarget } from './library-panel';
 import { ScenesView } from './scenes-panel';
@@ -255,7 +254,9 @@ function Runtime() {
           onChange={(event) => setName(event.target.value)}
           onBlur={rename}
         />
-        <output aria-label="Editor sync">{status}</output>
+        <output aria-label="Editor sync" data-idle={status === 'Saved locally'}>
+          {status}
+        </output>
         <button
           type="button"
           disabled={!editor.command.canUndo()}
@@ -286,13 +287,7 @@ function Runtime() {
             Reload saved version
           </button>
         )}
-        {draftIds.size > 0 ? (
-          <button type="button" disabled={true} title="Full previews are still rendering">
-            Preparing export
-          </button>
-        ) : (
-          <ExportButton />
-        )}
+        {new URLSearchParams(location.search).get('mode') === 'render' ? <ExportButton /> : null}
       </header>
       <div className="native-workspace">
         <section className="native-assets">

@@ -71,7 +71,7 @@ it('routes native edits through revisioned actions and enforces locks', async ()
   });
   expect(saved.source.revision).toBe(1);
   expect(saved.source.project.background).toBe('#123456');
-  expect(saved.source.activity.at(-1)?.label).toBe('Edit in OpenCut');
+  expect(saved.source.activity.at(-1)?.label).toBe('Edit in video editor');
   expect(saved.source.project.opencut).toBeDefined();
   expect(saveOpenCut(state.id, { version: 1, document })).rejects.toThrow('revisioned');
   expect(

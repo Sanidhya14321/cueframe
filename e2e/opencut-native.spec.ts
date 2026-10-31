@@ -82,9 +82,8 @@ test('actual OpenCut imports media, saves, selects by keyboard, splits, undoes a
   await expect.poll(() => count(page, id)).toBe(1);
   await page.reload();
   await expect(editor.getByRole('button', { name: 'Select proof.mp4', exact: true })).toBeVisible();
-  await editor.getByRole('button', { name: 'Export', exact: true }).click();
-  const downloading = page.waitForEvent('download');
-  await editor.getByRole('button', { name: 'Export', exact: true }).last().click();
+  const downloading = page.waitForEvent('download', { timeout: 120_000 });
+  await page.getByRole('button', { name: 'Export', exact: true }).click();
   const download = await downloading;
   const path = await download.path();
   expect(path).not.toBeNull();
@@ -382,6 +381,7 @@ test('native agent locks refuse edits and agent undo updates OpenCut', async ({ 
     confirmed: true,
   });
   await expect(clip).toHaveAttribute('data-agent-locked', 'false');
+  await page.getByRole('button', { name: 'Agent', exact: true }).click();
   await page.getByRole('button', { name: 'Undo agent turn', exact: true }).click();
   await clip.click();
   await expect(editor.locator('.native-properties textarea').first()).toHaveValue('Original text');

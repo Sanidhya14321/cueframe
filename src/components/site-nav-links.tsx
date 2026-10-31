@@ -18,26 +18,31 @@ export const SiteNavLinks = () => {
   return (
     <>
       <div className="hidden items-center gap-1 md:flex">
-        {STUDIO_PAGES.filter((page) => ['/projects', '/library'].includes(page.href)).map(
-          (page) => (
-            <Link
-              key={page.href}
-              href={page.href}
-              aria-current={pathname === page.href ? 'page' : undefined}
-              className={cn(
-                'flex min-h-11 items-center gap-2 rounded-md px-3 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground',
-                pathname === page.href && 'bg-accent text-foreground',
-              )}
-            >
-              <page.icon className="size-4" />
-              {page.label}
-            </Link>
-          ),
-        )}
+        {STUDIO_PAGES.filter((page) =>
+          ['/projects', '/library', '/websites'].includes(page.href),
+        ).map((page) => (
+          <Link
+            key={page.href}
+            href={page.href}
+            aria-current={pathname === page.href ? 'page' : undefined}
+            className={cn(
+              'flex min-h-11 items-center gap-2 rounded-md px-3 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground',
+              pathname === page.href && 'bg-accent text-foreground',
+            )}
+          >
+            <page.icon className="size-4" />
+            {page.label}
+          </Link>
+        ))}
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="size-11" aria-label="Open navigation menu">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-11 md:hidden"
+            aria-label="Open navigation menu"
+          >
             <Menu />
           </Button>
         </DropdownMenuTrigger>

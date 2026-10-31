@@ -32,7 +32,7 @@ export const ProjectsTable = ({ rows }: { rows: Row[] }) => {
     <div className="flex flex-col gap-3">
       <Input
         aria-label="Search projects"
-        className="min-h-11"
+        className="min-h-8"
         placeholder="Search projects"
         value={query}
         onChange={(event) => {
@@ -46,28 +46,28 @@ export const ProjectsTable = ({ rows }: { rows: Row[] }) => {
             <tr>
               <th
                 scope="col"
-                className="px-3 py-2"
+                className="px-3 py-1.5"
                 aria-sort={sort === 'title' ? 'ascending' : 'none'}
               >
-                <button type="button" className="min-h-11" onClick={() => setSort('title')}>
+                <button type="button" className="min-h-8" onClick={() => setSort('title')}>
                   Name
                 </button>
               </th>
-              <th scope="col" className="px-3 py-2">
+              <th scope="col" className="px-3 py-1.5">
                 Length
               </th>
-              <th scope="col" className="px-3 py-2">
+              <th scope="col" className="px-3 py-1.5">
                 Size
               </th>
-              <th scope="col" className="px-3 py-2">
+              <th scope="col" className="px-3 py-1.5">
                 Type
               </th>
               <th
                 scope="col"
-                className="px-3 py-2"
+                className="px-3 py-1.5"
                 aria-sort={sort === 'updated' ? 'descending' : 'none'}
               >
-                <button type="button" className="min-h-11" onClick={() => setSort('updated')}>
+                <button type="button" className="min-h-8" onClick={() => setSort('updated')}>
                   Updated
                 </button>
               </th>
@@ -76,15 +76,15 @@ export const ProjectsTable = ({ rows }: { rows: Row[] }) => {
           <tbody>
             {shown.slice(current * PAGE_SIZE, (current + 1) * PAGE_SIZE).map((row) => (
               <tr key={row.id} className="border-b last:border-0 hover:bg-muted">
-                <td className="px-3 py-2">
-                  <Link className="inline-flex min-h-11 items-center" href={`/video/${row.id}`}>
+                <td className="px-3 py-1.5">
+                  <Link className="inline-flex min-h-8 items-center" href={`/video/${row.id}`}>
                     {row.title}
                   </Link>
                 </td>
-                <td className="px-3 py-2 tabular-nums">{row.seconds.toFixed(1)} s</td>
-                <td className="px-3 py-2 tabular-nums">{row.size}</td>
-                <td className="px-3 py-2">{row.engine}</td>
-                <td className="px-3 py-2 whitespace-nowrap" suppressHydrationWarning>
+                <td className="px-3 py-1.5 tabular-nums">{row.seconds.toFixed(1)} s</td>
+                <td className="px-3 py-1.5 tabular-nums">{row.size}</td>
+                <td className="px-3 py-1.5">{row.engine}</td>
+                <td className="px-3 py-1.5 whitespace-nowrap" suppressHydrationWarning>
                   {dateFormat.format(row.updated)}
                 </td>
               </tr>
@@ -97,7 +97,7 @@ export const ProjectsTable = ({ rows }: { rows: Row[] }) => {
         <nav aria-label="Project pages" className="flex items-center gap-3 text-sm">
           <Button
             variant="outline"
-            className="min-h-11"
+            className="min-h-8"
             disabled={current === 0}
             onClick={() => setPage(current - 1)}
           >
@@ -108,7 +108,7 @@ export const ProjectsTable = ({ rows }: { rows: Row[] }) => {
           </span>
           <Button
             variant="outline"
-            className="min-h-11"
+            className="min-h-8"
             disabled={current === pages - 1}
             onClick={() => setPage(current + 1)}
           >

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useDictation } from '@/lib/use-dictation';
-import { createTrack } from '@/project';
+import { createTrack, createVideoElement } from '@/project';
 
 const ASPECTS = {
   '9:16': [1080, 1920],
@@ -16,6 +16,19 @@ const ASPECTS = {
 type Aspect = keyof typeof ASPECTS;
 const LENGTHS = [15, 30, 45, 60];
 const FPS = 30;
+
+const videoSize = (file: File) =>
+  new Promise<{ width: number; height: number; seconds: number }>((resolve, reject) => {
+    const video = document.createElement('video');
+    const url = URL.createObjectURL(file);
+    video.preload = 'metadata';
+    video.onloadedmetadata = () => {
+      URL.revokeObjectURL(url);
+      resolve({ width: video.videoWidth, height: video.videoHeight, seconds: video.duration });
+    };
+    video.onerror = () => reject(new Error('unreadable video'));
+    video.src = url;
+  });
 
 export const NewVideoForm = () => {
   const router = useRouter();
@@ -42,7 +55,12 @@ export const NewVideoForm = () => {
     setBusy(true);
     setMessage('');
     try {
-      const [width, height] = ASPECTS[aspect];
+      const size = file
+        ? await videoSize(file)
+        : { width: ASPECTS[aspect][0], height: ASPECTS[aspect][1], seconds };
+      const { width, height } = size;
+      const frames = Math.max(1, Math.round(size.seconds * FPS));
+      const track = createTrack('Clips');
       const state = (await post('/api/projects', {
         headers: json,
         body: JSON.stringify({
@@ -51,23 +69,36 @@ export const NewVideoForm = () => {
             width,
             height,
             fps: FPS,
-            durationInFrames: seconds * FPS,
+            durationInFrames: frames,
             background: '#0a0a0a',
-            tracks: [createTrack('Clips')],
+            tracks: [track],
           },
         }),
       })) as { id: string };
       if (file) {
-        await post(`/api/projects/${state.id}/media`, {
+        const { url } = (await post(`/api/projects/${state.id}/media`, {
           headers: { 'content-type': file.type },
           body: file,
+        })) as { url: string };
+        const element = createVideoElement({
+          src: url,
+          durationInFrames: frames,
         });
-      }
-      if (prompt.trim()) {
+        await post(`/api/projects/${state.id}/actions`, {
+          headers: json,
+          body: JSON.stringify({
+            action: { type: 'add-item', trackId: track.id, element },
+            label: 'Add uploaded video',
+            clientId: 'new-video',
+          }),
+        });
+      } else if (prompt.trim()) {
         await post(`/api/projects/${state.id}/compose`, {
           headers: json,
           body: JSON.stringify({ brief: prompt.trim() }),
         });
+      }
+      if (prompt.trim()) {
         const text = `${prompt.trim()}\nLength: ${seconds}s. Aspect: ${aspect}.`;
         await post(`/api/projects/${state.id}/agent-events`, {
           headers: json,

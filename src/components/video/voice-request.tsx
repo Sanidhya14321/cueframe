@@ -41,7 +41,7 @@ export const VoiceRequest = ({ projectId, frames, selectedId }: Props) => {
   };
   return (
     <form
-      className="flex min-w-64 flex-1 flex-wrap items-center gap-2"
+      className="flex w-full flex-wrap items-center gap-2"
       onSubmit={(event) => {
         event.preventDefault();
         send().catch(() => undefined);
@@ -51,7 +51,7 @@ export const VoiceRequest = ({ projectId, frames, selectedId }: Props) => {
         type="button"
         variant="outline"
         size="icon"
-        className="size-11"
+        className="size-9"
         aria-label={recording ? 'Stop recording' : 'Record voice request'}
         aria-pressed={recording}
         disabled={busy || phase === 'sending'}
@@ -61,7 +61,7 @@ export const VoiceRequest = ({ projectId, frames, selectedId }: Props) => {
       </Button>
       <Input
         aria-label="Voice request"
-        className="min-h-11 min-w-40 flex-1 text-xs"
+        className="h-9 min-w-40 flex-1 text-xs"
         placeholder="Speak or type an edit for your agent"
         value={text}
         onChange={(event) => setText(event.target.value)}

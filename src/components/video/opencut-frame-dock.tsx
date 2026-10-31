@@ -33,7 +33,10 @@ export const OpenCutFrameDock = ({
     }, SAVE_DELAY_MS);
   };
   return (
-    <aside aria-label="Frame controls" className="hidden w-80 shrink-0 flex-col border-l lg:flex">
+    <aside
+      aria-label="Frame controls"
+      className="hidden w-72 shrink-0 flex-col overflow-hidden border-l bg-card lg:flex"
+    >
       <div className="shrink-0 border-b p-2">
         <Player
           acknowledgeRemotionLicense

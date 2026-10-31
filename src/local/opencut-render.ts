@@ -15,7 +15,7 @@ export const renderNativeProject = async (
   const state = await readProject(id);
   const name = `video-${state.revision}`;
   const output = join(await projectDirectory(id), 'out', `${name}.mp4`);
-  await update(0.05, 'Rendering the OpenCut timeline');
+  await update(0.05, 'Rendering the video');
   await new Promise<void>((resolve, reject) => {
     const child = spawn(
       'bun',

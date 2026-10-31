@@ -379,3 +379,52 @@ button[data-agent-locked="true"]::after {
   background: var(--background);
   box-sizing: content-box;
 }
+.native-workspace {
+  gap: 0;
+  padding: 0;
+}
+.native-assets,
+.native-preview,
+.native-properties {
+  overflow: hidden;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+}
+.native-assets {
+  width: 248px;
+}
+.native-properties {
+  width: 232px;
+  overflow: auto;
+  border-right: 0;
+}
+.native-preview {
+  background: var(--background);
+}
+.native-editor .native-timeline {
+  height: 34dvh;
+  min-height: 180px;
+  padding: 0;
+  background: var(--card);
+}
+.native-header {
+  height: 32px;
+  gap: 8px;
+  padding: 0 8px;
+  font-size: 12px;
+}
+.native-header > button {
+  min-height: 24px;
+  padding: 0 6px;
+}
+.native-assets nav button {
+  min-height: 30px;
+  padding: 0 8px;
+}
+.native-library {
+  padding: 8px;
+  gap: 8px;
+}
+.native-header output[data-idle="true"] {
+  opacity: 0;
+}
