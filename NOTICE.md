@@ -97,3 +97,7 @@ Beat beds, whooshes and hits are synthesized by original deterministic code in `
 
 - ClipKit-authored shared bridge files under `integrations/opencut/overrides/` adapt source layers, selection/playhead context, lock checks, disk revisions, SSE updates and native rendering. Source schema metadata and source offsets are retained. The native scene switcher is hidden to match ClipKit's single shared timeline.
 - Local preview/render workers use Playwright 1.64.0 (Apache-2.0). Its complete LICENSE and NOTICE are retained in `licenses/playwright-apache-2.txt` and `licenses/playwright-notice.txt`. Playwright controls the local Chromium renderer and is not part of the browser editor bundle. Its installed Chromium distribution retains its upstream notices in the browser cache.
+
+## Website template fonts
+
+Bodoni Moda, EB Garamond, Jost, Fredoka, Nunito, Fraunces, Caveat, Poiret One and Gochi Hand are bundled from Fontsource packages under the SIL Open Font License 1.1.

@@ -25,6 +25,7 @@ import { mediaTimeFromSeconds, ZERO_MEDIA_TIME } from '@/wasm';
 import { CaptionsView } from './captions-panel';
 import { HostContext } from './host-context';
 import { LibraryView, libraryDropTarget } from './library-panel';
+import { ScenesView } from './scenes-panel';
 import { connectCanonical, hydrateCanonical, storageService } from './storage';
 import './style.css';
 
@@ -229,6 +230,7 @@ function Runtime() {
   const panels: Record<string, React.ReactNode> = {
     Media: <MediaView />,
     Library: <LibraryView />,
+    Scenes: <ScenesView />,
     Inspect: <PropertiesPanel />,
     Text: <TextView />,
     Captions: <CaptionsView />,

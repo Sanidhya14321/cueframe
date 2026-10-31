@@ -1,18 +1,40 @@
-import { Bodoni_Moda, EB_Garamond, Poiret_One } from 'next/font/google';
+import localFont from 'next/font/local';
 
-const display = Bodoni_Moda({
-  weight: ['400', '500', '600'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
+const display = localFont({
+  src: [
+    {
+      path: '../../../../../node_modules/@fontsource-variable/bodoni-moda/files/bodoni-moda-latin-standard-normal.woff2',
+      weight: '400 900',
+      style: 'normal',
+    },
+    {
+      path: '../../../../../node_modules/@fontsource-variable/bodoni-moda/files/bodoni-moda-latin-standard-italic.woff2',
+      weight: '400 900',
+      style: 'italic',
+    },
+  ],
   variable: '--font-mc-display',
 });
 
-const deco = Poiret_One({ weight: '400', subsets: ['latin'], variable: '--font-mc-deco' });
+const deco = localFont({
+  src: '../../../../../node_modules/@fontsource/poiret-one/files/poiret-one-latin-400-normal.woff2',
+  weight: '400',
+  variable: '--font-mc-deco',
+});
 
-const body = EB_Garamond({
-  weight: ['400', '500'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
+const body = localFont({
+  src: [
+    {
+      path: '../../../../../node_modules/@fontsource-variable/eb-garamond/files/eb-garamond-latin-wght-normal.woff2',
+      weight: '400 800',
+      style: 'normal',
+    },
+    {
+      path: '../../../../../node_modules/@fontsource-variable/eb-garamond/files/eb-garamond-latin-wght-italic.woff2',
+      weight: '400 800',
+      style: 'italic',
+    },
+  ],
   variable: '--font-mc-body',
 });
 

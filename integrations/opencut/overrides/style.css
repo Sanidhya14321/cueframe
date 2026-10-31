@@ -271,3 +271,29 @@ button[data-agent-locked="true"]::after {
 .native-library input:focus-visible {
   outline: 2px solid var(--ring);
 }
+.native-library-skeleton {
+  height: 160px;
+  border-radius: 6px;
+  background: var(--muted);
+}
+.native-library-more {
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+}
+.native-scenes {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  font-size: 12px;
+}
+.native-scenes button {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 8px;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}

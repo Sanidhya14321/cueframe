@@ -1,18 +1,32 @@
-import { Fredoka, Gochi_Hand, Nunito } from 'next/font/google';
+import localFont from 'next/font/local';
 
-const display = Fredoka({
-  weight: ['500', '600', '700'],
-  subsets: ['latin'],
+const display = localFont({
+  src: [
+    {
+      path: '../../../../../node_modules/@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2',
+      weight: '300 700',
+      style: 'normal',
+    },
+  ],
   variable: '--font-sd-display',
 });
 
-const body = Nunito({
-  weight: ['400', '600', '700', '800'],
-  subsets: ['latin'],
+const body = localFont({
+  src: [
+    {
+      path: '../../../../../node_modules/@fontsource-variable/nunito/files/nunito-latin-wght-normal.woff2',
+      weight: '200 1000',
+      style: 'normal',
+    },
+  ],
   variable: '--font-sd-body',
 });
 
-const hand = Gochi_Hand({ weight: '400', subsets: ['latin'], variable: '--font-sd-hand' });
+const hand = localFont({
+  src: '../../../../../node_modules/@fontsource/gochi-hand/files/gochi-hand-latin-400-normal.woff2',
+  weight: '400',
+  variable: '--font-sd-hand',
+});
 
 export const FONT_VARIABLES = `${display.variable} ${body.variable} ${hand.variable}`;
 

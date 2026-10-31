@@ -1,20 +1,47 @@
-import { Bodoni_Moda, EB_Garamond, Jost } from 'next/font/google';
+import localFont from 'next/font/local';
 
-const display = Bodoni_Moda({
-  weight: ['400', '500'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
+const display = localFont({
+  src: [
+    {
+      path: '../../../../../node_modules/@fontsource-variable/bodoni-moda/files/bodoni-moda-latin-standard-normal.woff2',
+      weight: '400 900',
+      style: 'normal',
+    },
+    {
+      path: '../../../../../node_modules/@fontsource-variable/bodoni-moda/files/bodoni-moda-latin-standard-italic.woff2',
+      weight: '400 900',
+      style: 'italic',
+    },
+  ],
   variable: '--font-er-display',
 });
 
-const body = EB_Garamond({
-  weight: ['400', '500'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
+const body = localFont({
+  src: [
+    {
+      path: '../../../../../node_modules/@fontsource-variable/eb-garamond/files/eb-garamond-latin-wght-normal.woff2',
+      weight: '400 800',
+      style: 'normal',
+    },
+    {
+      path: '../../../../../node_modules/@fontsource-variable/eb-garamond/files/eb-garamond-latin-wght-italic.woff2',
+      weight: '400 800',
+      style: 'italic',
+    },
+  ],
   variable: '--font-er-body',
 });
 
-const label = Jost({ weight: ['400', '500'], subsets: ['latin'], variable: '--font-er-label' });
+const label = localFont({
+  src: [
+    {
+      path: '../../../../../node_modules/@fontsource-variable/jost/files/jost-latin-wght-normal.woff2',
+      weight: '100 900',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-er-label',
+});
 
 export const FONT_VARIABLES = `${display.variable} ${body.variable} ${label.variable}`;
 

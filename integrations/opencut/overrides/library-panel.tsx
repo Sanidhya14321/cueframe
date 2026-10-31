@@ -8,6 +8,7 @@ import { canonicalSource, report } from './storage';
 type LibraryClip = { id: string; title: string; category: string; still: string };
 const CLIP_DRAG = 'application/x-clipkit-clip';
 const PIXELS_PER_SECOND = 50;
+const PAGE_SIZE = 24;
 
 const projectId = new URLSearchParams(location.search).get('project') ?? '';
 async function addLibraryClip(clipId: string, seconds: number) {
@@ -61,6 +62,7 @@ export function LibraryView() {
   const [clips, setClips] = useState<LibraryClip[] | null>(null);
   const [problem, setProblem] = useState('');
   const [query, setQuery] = useState('');
+  const [limit, setLimit] = useState(PAGE_SIZE);
   useEffect(() => {
     fetch('/api/library')
       .then((response) => {
@@ -82,13 +84,18 @@ export function LibraryView() {
         aria-label="Search library"
         placeholder="Search library"
         value={query}
-        onChange={(event) => setQuery(event.target.value)}
+        onChange={(event) => {
+          setQuery(event.target.value);
+          setLimit(PAGE_SIZE);
+        }}
       />
       {problem ? <p role="alert">{problem}</p> : null}
-      {shown ? null : problem ? null : <p role="status">Loading library</p>}
+      {shown || problem ? null : (
+        <div className="native-library-skeleton" role="status" aria-label="Loading library" />
+      )}
       {shown?.length === 0 ? <p role="status">No animations match this search.</p> : null}
       <div className="native-library-grid">
-        {shown?.map((clip) => (
+        {shown?.slice(0, limit).map((clip) => (
           // biome-ignore lint/a11y/noNoninteractiveElementInteractions: dragging mirrors the keyboard-reachable Add button
           <article
             key={clip.id}
@@ -111,6 +118,15 @@ export function LibraryView() {
           </article>
         ))}
       </div>
+      {shown && shown.length > limit ? (
+        <button
+          type="button"
+          className="native-library-more"
+          onClick={() => setLimit(limit + PAGE_SIZE)}
+        >
+          Load more ({shown.length - limit} left)
+        </button>
+      ) : null}
     </div>
   );
 }

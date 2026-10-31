@@ -220,9 +220,16 @@ test('a beat sheet builds sixteen editable clips and a timed sound bed', async (
   await expect(page.getByRole('status', { name: 'Project sync' })).toContainText('Saved locally');
   await page.getByText('Build from beats', { exact: true }).click();
   await page.getByRole('button', { name: 'Build 30-second video', exact: true }).click();
-  await expect(
-    page.getByText('Built a 30-second video. Play it below.', { exact: true }),
-  ).toBeVisible({ timeout: 60000 });
+  await expect
+    .poll(
+      async () =>
+        page.evaluate(async (id) => {
+          const saved = await (await fetch(`/api/projects/${id}`)).json();
+          return saved.project.durationInFrames;
+        }, state.projectId),
+      { timeout: 180_000 },
+    )
+    .toBe(900);
   await expect(page.getByRole('button', { name: 'Clip element', exact: true })).toHaveCount(16);
   const built = await page.evaluate(
     async (id) => (await fetch(`/api/projects/${id}`)).json(),

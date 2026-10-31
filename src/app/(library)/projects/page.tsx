@@ -1,30 +1,23 @@
-import Link from 'next/link';
 import { NewProject } from '@/components/clip-timeline/new-project';
+import { ProjectsTable } from '@/components/video/projects-table';
 import { listProjects } from '@/local/projects';
 export const dynamic = 'force-dynamic';
-const ProjectsPage = async () => (
-  <div className="mx-auto w-full max-w-3xl p-6">
-    <h1 className="mb-6 text-2xl font-semibold">Local projects</h1>
-    <NewProject />
-    <p className="mb-4 text-sm text-muted-foreground">
-      Open a clip from the gallery to start a project, or connect an agent.
-    </p>
-    <div className="flex flex-col gap-3">
-      {(await listProjects()).map((project) => (
-        <Link
-          className="rounded-lg border p-4 hover:bg-muted"
-          key={project.id}
-          href={`/video/${project.id}`}
-        >
-          {project.title}
-          <span className="ml-3 text-xs text-muted-foreground">
-            {project.nativeVideo
-              ? `OpenCut · ${project.nativeVideo.duration.toFixed(1)}s · Revision ${project.nativeVideo.revision}`
-              : `Animation source · Revision ${project.revision}`}
-          </span>
-        </Link>
-      ))}
+const ProjectsPage = async () => {
+  const rows = (await listProjects()).map((project) => ({
+    id: project.id,
+    title: project.title,
+    updated: project.updatedAt.getTime(),
+    seconds:
+      project.nativeVideo?.duration ?? project.project.durationInFrames / project.project.fps,
+    size: `${project.project.width}×${project.project.height}`,
+    engine: project.nativeVideo ? 'OpenCut' : 'Animation source',
+  }));
+  return (
+    <div className="mx-auto flex w-full max-w-5xl flex-col gap-4 p-6">
+      <h1 className="text-2xl font-semibold">Local projects</h1>
+      <NewProject />
+      <ProjectsTable rows={rows} />
     </div>
-  </div>
-);
+  );
+};
 export default ProjectsPage;
