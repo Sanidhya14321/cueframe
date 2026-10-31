@@ -75,6 +75,7 @@ describe('/mcp', () => {
         'list_sites',
         'list_videos',
         'search_clips',
+        'recommend_clips',
         ...Object.keys(projectTools),
       ].sort(),
     );

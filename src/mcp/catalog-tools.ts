@@ -13,6 +13,7 @@ import {
   getClipMeta,
   isClipId,
 } from '@/schemas';
+import { recommendClips } from './clip-recommend';
 import { ORIENTATIONS, orientationOf } from './clip-search';
 import { failure, json } from './results';
 
@@ -48,7 +49,11 @@ export const registerCatalogTools = (server: McpServer, appUrl: string): void =>
       annotations: { readOnlyHint: true },
     },
     ({ query, category, theme, orientation, role, limit }) => {
-      const hits = searchCatalog(query, isCategory(category) ? category : undefined, 113)
+      const hits = searchCatalog(
+        query,
+        isCategory(category) ? category : undefined,
+        CLIP_REGISTRY.length,
+      )
         .filter(
           (clip) =>
             (!theme || clip.theme === theme) &&
@@ -61,6 +66,29 @@ export const registerCatalogTools = (server: McpServer, appUrl: string): void =>
         categories: hits.length === 0 ? categoryCounts() : undefined,
       });
     },
+  );
+
+  server.registerTool(
+    'recommend_clips',
+    {
+      title: 'Recommend clips for a brief',
+      description:
+        'Turn a video brief into a storyboard: one distinct clip per story role, ranked from each clip\'s labels, with alternatives. Reads format and theme from the brief ("dark vertical reel") unless given. Use this before add_item.',
+      inputSchema: {
+        brief: z.string().min(1).describe('What the video is about, in plain language'),
+        roles: z.array(z.enum(CLIP_ROLES)).min(1).max(16).optional(),
+        orientation: z.enum(ORIENTATIONS).optional(),
+        theme: z.enum(CLIP_THEMES).optional(),
+      },
+      annotations: { readOnlyHint: true },
+    },
+    ({ brief, roles, orientation, theme }) =>
+      json({
+        storyboard: recommendClips(brief, { roles, orientation, theme }).map((step) => ({
+          ...step,
+          preview: step.clip ? previewUrl(appUrl, step.clip.id) : null,
+        })),
+      }),
   );
 
   server.registerTool(

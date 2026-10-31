@@ -225,11 +225,11 @@ test('a beat sheet builds sixteen editable clips and a timed sound bed', async (
       async () =>
         page.evaluate(async (id) => {
           const saved = await (await fetch(`/api/projects/${id}`)).json();
-          return saved.project.durationInFrames;
+          return saved.agent?.label;
         }, state.projectId),
       { timeout: 180_000 },
     )
-    .toBe(900);
+    .toBe('Video ready to edit');
   await expect(page.getByRole('button', { name: 'Clip element', exact: true })).toHaveCount(16);
   const built = await page.evaluate(
     async (id) => (await fetch(`/api/projects/${id}`)).json(),

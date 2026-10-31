@@ -63,21 +63,33 @@ export function LibraryView() {
   const [problem, setProblem] = useState('');
   const [query, setQuery] = useState('');
   const [limit, setLimit] = useState(PAGE_SIZE);
+  const term = query.trim();
   useEffect(() => {
-    fetch('/api/library')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Could not load the library');
-        }
-        return response.json();
-      })
-      .then((result: { clips: LibraryClip[] }) => setClips(result.clips))
-      .catch((error: Error) => setProblem(error.message));
-  }, []);
-  const term = query.trim().toLowerCase();
-  const shown = clips?.filter((clip) =>
-    `${clip.title} ${clip.category}`.toLowerCase().includes(term),
-  );
+    let current = true;
+    const timer = setTimeout(
+      () => {
+        fetch(`/api/library?q=${encodeURIComponent(term)}`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Could not load the library');
+            }
+            return response.json();
+          })
+          .then((result: { clips: LibraryClip[] }) => {
+            if (current) {
+              setClips(result.clips);
+            }
+          })
+          .catch((error: Error) => setProblem(error.message));
+      },
+      term ? 200 : 0,
+    );
+    return () => {
+      current = false;
+      clearTimeout(timer);
+    };
+  }, [term]);
+  const shown = clips;
   return (
     <div className="native-library">
       <input

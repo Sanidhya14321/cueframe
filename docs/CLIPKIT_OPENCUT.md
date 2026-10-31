@@ -20,7 +20,7 @@ While a shared revision hydrates (agent edits or animation previews regenerating
 
 Agent requests, Build from beats, comments, activity, Undo agent turn, Whisper/Fish, media import and local render remain reachable beside the native editor. Compact screens collect these under Project tools. Native selection and playhead time feed the existing tools.
 
-The Library tab lists catalog animations with search. Add inserts one at the playhead; dragging a card onto the timeline inserts it at the dropped time. Both flush native edits first, then use the same `add_item` action as MCP, so the animation stays an editable source layer. While a shared revision hydrates, the OpenCut status line names each layer being prepared, such as `Preparing typewriter (3 of 16)`.
+The Library tab lists catalog animations with search ranked from each clip's labels, so a phrase like "pricing for an app launch" finds matching clips. The `recommend_clips` MCP tool turns a brief into one clip per story role. Add inserts one at the playhead; dragging a card onto the timeline inserts it at the dropped time. Both flush native edits first, then use the same `add_item` action as MCP, so the animation stays an editable source layer. While a shared revision hydrates, the OpenCut status line names each layer being prepared, such as `Preparing typewriter (3 of 16)`.
 
 The Captions tab imports SRT and ASS files as editable native text. The voice bar records through local whisper.cpp for review before sending. Dictation apps such as Handy and Wispr Flow can type into the same field. Upstream's stickers and sounds panels need cloud services, and its caption generation downloads a browser model, so they stay excluded.
 

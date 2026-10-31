@@ -1,10 +1,10 @@
 node_modules
 .next
 .next-ui
-dist
-build
+/dist
+/build
 coverage
-out
+/out
 
 *.log
 .DS_Store
