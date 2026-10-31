@@ -1,0 +1,3197 @@
+[
+  {
+    "id": "gradient-flow",
+    "category": "imported",
+    "description": "A luminous gradient glides through a large centered headline.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/magicuidesign/magicui/blob/efe76fc5755eca1142dd4f74c1d6f0ace2887e3c/apps/www/registry/magicui/animated-gradient-text.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "blur-stagger",
+    "category": "imported",
+    "description": "Words rise out of a soft blur and settle into a crisp headline.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/ibelick/motion-primitives/blob/120f64f6ca60348e251f929e9c81f11ccbe45eda/components/core/text-effect.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "letter-cascade",
+    "category": "imported",
+    "description": "Individual letters cascade upward into a clean, tightly spaced title.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/ibelick/motion-primitives/blob/120f64f6ca60348e251f929e9c81f11ccbe45eda/components/core/text-effect.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "scramble-title",
+    "category": "imported",
+    "description": "A deterministic field of changing glyphs resolves into your headline.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/magicuidesign/magicui/blob/efe76fc5755eca1142dd4f74c1d6f0ace2887e3c/apps/www/registry/magicui/hyper-text.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "word-flip",
+    "category": "imported",
+    "description": "A bold headline folds vertically into place with a compact timing beat.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/ibelick/motion-primitives/blob/120f64f6ca60348e251f929e9c81f11ccbe45eda/components/core/text-loop.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "type-scan",
+    "category": "imported",
+    "description": "A glowing caret types your message one character at a time.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/magicuidesign/magicui/blob/efe76fc5755eca1142dd4f74c1d6f0ace2887e3c/apps/www/registry/magicui/typing-animation.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "shimmer-title",
+    "category": "imported",
+    "description": "A bright highlight travels across a calm, oversized line of text.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/ibelick/motion-primitives/blob/120f64f6ca60348e251f929e9c81f11ccbe45eda/components/core/text-shimmer.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "count-up",
+    "category": "imported",
+    "description": "An oversized statistic counts upward above a small caption.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["proof", "feature"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/magicuidesign/magicui/blob/efe76fc5755eca1142dd4f74c1d6f0ace2887e3c/apps/www/registry/magicui/number-ticker.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "rolling-digits",
+    "category": "imported",
+    "description": "A statistic rolls vertically through clipped digit columns.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["proof", "feature"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/ibelick/motion-primitives/blob/120f64f6ca60348e251f929e9c81f11ccbe45eda/components/core/sliding-number.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "spotlight-card",
+    "category": "imported",
+    "description": "A rounded feature card arrives with a moving light across its surface.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["proof", "feature"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/ibelick/motion-primitives/blob/120f64f6ca60348e251f929e9c81f11ccbe45eda/components/core/spotlight.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "border-orbit",
+    "category": "imported",
+    "description": "A thin luminous beam travels around a dark headline card.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["proof", "feature"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/magicuidesign/magicui/blob/efe76fc5755eca1142dd4f74c1d6f0ace2887e3c/apps/www/registry/magicui/border-beam.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "marquee-loop",
+    "category": "imported",
+    "description": "Two oversized rows of typography scroll in opposing directions.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/magicuidesign/magicui/blob/efe76fc5755eca1142dd4f74c1d6f0ace2887e3c/apps/www/registry/magicui/marquee.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "ripple-field",
+    "category": "imported",
+    "description": "Concentric circles pulse outward behind a centered message.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["background", "overlay", "opener"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/magicuidesign/magicui/blob/efe76fc5755eca1142dd4f74c1d6f0ace2887e3c/apps/www/registry/magicui/ripple.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "dot-wave",
+    "category": "imported",
+    "description": "A regular field of dots shimmers in waves beneath a clear headline.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["background", "overlay", "opener"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/magicuidesign/magicui/blob/efe76fc5755eca1142dd4f74c1d6f0ace2887e3c/apps/www/registry/magicui/dot-pattern.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "grid-flight",
+    "category": "imported",
+    "description": "An orderly illuminated grid drifts behind a minimal central headline.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["background", "overlay", "opener"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "",
+    "license": "MIT"
+  },
+  {
+    "id": "meteor-shower",
+    "category": "imported",
+    "description": "Slender diagonal light trails sweep across a dark stage.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["background", "overlay", "opener"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/magicuidesign/magicui/blob/efe76fc5755eca1142dd4f74c1d6f0ace2887e3c/apps/www/registry/magicui/meteors.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "orbit-marks",
+    "category": "imported",
+    "description": "Small geometric marks orbit a central statement at different speeds.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["background", "overlay", "opener"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/magicuidesign/magicui/blob/efe76fc5755eca1142dd4f74c1d6f0ace2887e3c/apps/www/registry/magicui/orbiting-circles.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "spring-cards",
+    "category": "imported",
+    "description": "Three rounded proof cards spring into a staggered stack.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["proof", "feature"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/magicuidesign/magicui/blob/efe76fc5755eca1142dd4f74c1d6f0ace2887e3c/apps/www/registry/magicui/animated-list.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "reveal-wipe",
+    "category": "imported",
+    "description": "A clean colored wipe unveils a strong editorial headline.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/magicuidesign/magicui/blob/efe76fc5755eca1142dd4f74c1d6f0ace2887e3c/apps/www/registry/magicui/blur-fade.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "browser-frame",
+    "category": "imported",
+    "description": "A crisp browser window rises into view with editable hero copy.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["feature", "proof", "opener"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/magicuidesign/magicui/blob/efe76fc5755eca1142dd4f74c1d6f0ace2887e3c/apps/www/registry/magicui/safari.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "phone-stack",
+    "category": "imported",
+    "description": "Two flat phone frames fan out around a bold editable message.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["feature", "proof", "opener"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/magicuidesign/magicui/blob/efe76fc5755eca1142dd4f74c1d6f0ace2887e3c/apps/www/registry/magicui/iphone.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "shine-callout",
+    "category": "imported",
+    "description": "A pill-shaped callout floats above a moving illuminated border.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "https://github.com/serafimcloud/21st/blob/b96d84dcf748d5e56f2f72f2bab9a4f7f33574cf/apps/web/components/ui/shimmer-button.tsx",
+    "license": "MIT"
+  },
+  {
+    "id": "aurora-ribbons",
+    "category": "imported",
+    "description": "Soft layered ribbons sweep behind large, high-contrast typography.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["background", "overlay", "opener"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "",
+    "license": "MIT"
+  },
+  {
+    "id": "particle-vortex",
+    "category": "imported",
+    "description": "Seeded particles orbit into a luminous vortex around a quiet center.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["background", "overlay", "opener"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "",
+    "license": "MIT"
+  },
+  {
+    "id": "prism-bars",
+    "category": "imported",
+    "description": "Tall colored bars rise and recede in a rhythmic, geometric field.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["background", "overlay", "opener"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 80
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 120
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape", "portrait", "square"],
+    "source": "",
+    "license": "MIT"
+  },
+  {
+    "id": "word-build",
+    "category": "kinetic-type",
+    "description": "Huge words scroll, sweep, zoom or step through the frame, then a line builds word by word with a walking accent.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 64
+      },
+      {
+        "path": "highlight",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 3,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/kinetic-type/word-build.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "word-punch",
+    "category": "kinetic-type",
+    "description": "One huge word at a time types on behind its full stop and deletes from the front, or punches in.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "transition"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 64
+      },
+      {
+        "path": "highlight",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 3.2,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/kinetic-type/word-punch.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "word-streams",
+    "category": "kinetic-type",
+    "description": "Serpentine streams of one repeated word flow up the frame like conveyors, each copy tilted along its curve, with a swell of bigger copies riding up every stream.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["background", "transition", "opener"],
+    "textSlots": [
+      {
+        "path": "word.text",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 5,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/kinetic-type/word-streams.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "outline-marquee",
+    "category": "kinetic-type",
+    "description": "Rows of huge outlined type glide in opposite directions behind a solid bold label.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "closer", "background"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 64
+      },
+      {
+        "path": "label",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/kinetic-type/outline-marquee.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "echo-stack",
+    "category": "kinetic-type",
+    "description": "One phrase repeats down the frame row by row, then the stack rolls away from the top.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "transition"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 4.2,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/kinetic-type/echo-stack.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "grid-stack",
+    "category": "kinetic-type",
+    "description": "Phrases build word by word into a punchy stack over a fisheye grid, with heavy motion blur and a swinging camera.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 64
+      },
+      {
+        "path": "highlight",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 8.333333333333334,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/kinetic-type/grid-stack.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "hanging-words",
+    "category": "kinetic-type",
+    "description": "Outlined words glitch in under a diamond bob on an acid lime field, a new line drops in and swings from the string, an indigo diamond bursts open for punchy one-word cuts, then a stack of repeats scrolls away into a final call to join.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "cta"],
+    "textSlots": [
+      {
+        "path": "greeting.word",
+        "maxLength": 64
+      },
+      {
+        "path": "hang.top",
+        "maxLength": 64
+      },
+      {
+        "path": "hang.bottom",
+        "maxLength": 64
+      },
+      {
+        "path": "stack.word",
+        "maxLength": 64
+      },
+      {
+        "path": "outro.word",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 7.766666666666667,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/kinetic-type/hanging-words.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "lens-orbit",
+    "category": "kinetic-type",
+    "description": "Big words ride an invisible sphere that tumbles from word to word with heavy motion blur, small words orbiting around each one.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "transition"],
+    "textSlots": [
+      {
+        "path": "words",
+        "maxLength": 64
+      },
+      {
+        "path": "satellites",
+        "maxLength": 64
+      },
+      {
+        "path": "highlight",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 6.133333333333334,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/kinetic-type/lens-orbit.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "word-field",
+    "category": "kinetic-type",
+    "description": "A tilted field of words rises in a ripple from the centre and slowly turns, each word bobbing on its own.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["background", "opener", "feature"],
+    "textSlots": [
+      {
+        "path": "words",
+        "maxLength": 64
+      },
+      {
+        "path": "highlight",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 6,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/kinetic-type/word-field.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "sticker-stack",
+    "category": "kinetic-type",
+    "description": "Word pills and icon badges pop in one after another along a diagonal while the camera chases the newest sticker.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature"],
+    "textSlots": [
+      {
+        "path": "stickers",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 5.2,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/kinetic-type/sticker-stack.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "chunky-type-stack",
+    "category": "kinetic-type",
+    "description": "Chunky hand-cut letters pop in one by one into a staggered headline stack, then a giant glyph punches through to an end tag.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "transition", "closer"],
+    "textSlots": [
+      {
+        "path": "burst.text",
+        "maxLength": 64
+      },
+      {
+        "path": "endTag",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 7.733333333333333,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/kinetic-type/chunky-type-stack.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "circle-pop",
+    "category": "kinetic-type",
+    "description": "A white disc springs open around a bold word, its edge turns into a wobbling blob, then it bursts past every corner to flood the frame white while the word swells to fill it and tilts into place.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "transition"],
+    "textSlots": [
+      {
+        "path": "word.text",
+        "maxLength": 64
+      },
+      {
+        "path": "subline.text",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 3.2,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/kinetic-type/circle-pop.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "branding-is-ticker",
+    "category": "kinetic-type",
+    "description": "A serif \"your brand is\" lead over a ticker of words easing through it, the active word lit in apricot with a sliding underline and its neighbours outlined, then the logo tile opens out into a contact end card.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "copy.lead",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.words",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.separator",
+        "maxLength": 64
+      },
+      {
+        "path": "brand.kicker",
+        "maxLength": 64
+      },
+      {
+        "path": "brand.name",
+        "maxLength": 64
+      },
+      {
+        "path": "card.button",
+        "maxLength": 64
+      },
+      {
+        "path": "card.website",
+        "maxLength": 64
+      },
+      {
+        "path": "card.phone",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 15.133333333333333,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/kinetic-type/branding-is-ticker.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "domino-words",
+    "category": "kinetic-type",
+    "description": "A striped mint orb rolls along an amber floor line and knocks over a row of hollow upright words that fill in as they topple like dominoes over a soft floor reflection, the last one landing flat in mint neon before the camera pulls back to show the whole fallen line.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "cta"],
+    "textSlots": [
+      {
+        "path": "brand.name",
+        "maxLength": 64
+      },
+      {
+        "path": "brand.tagline",
+        "maxLength": 64
+      },
+      {
+        "path": "footer.text",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 10.466666666666667,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/kinetic-type/domino-words.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "scroller-callout",
+    "category": "kinetic-type",
+    "description": "A tumbling coral tile knocks an outlined word solid, a word stacks and scrolls away, a mixed-weight block builds line by line around one accent word, then a coral full stop collapses the last word into two dots that land in a call to action before a navy end card with a sliding tile badge.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "intro.word",
+        "maxLength": 64
+      },
+      {
+        "path": "scroll.word",
+        "maxLength": 64
+      },
+      {
+        "path": "punch.words",
+        "maxLength": 64
+      },
+      {
+        "path": "contact.text",
+        "maxLength": 64
+      },
+      {
+        "path": "end.monogram",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 11.3,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/kinetic-type/scroller-callout.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "scroller-wall",
+    "category": "kinetic-type",
+    "description": "A violet rounded block tumbles across an outlined \"Psst\" to fill it in, then hard-cut violet frames stack bold words, two dots seed a wall of outlined call-to-action lines and an orchid wash opens onto a ringed lavender end card.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "intro.word",
+        "maxLength": 64
+      },
+      {
+        "path": "scroller.word",
+        "maxLength": 64
+      },
+      {
+        "path": "contact.text",
+        "maxLength": 64
+      },
+      {
+        "path": "card.brandTop",
+        "maxLength": 64
+      },
+      {
+        "path": "card.brandBottom",
+        "maxLength": 64
+      },
+      {
+        "path": "card.phone",
+        "maxLength": 64
+      },
+      {
+        "path": "card.email",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 10.233333333333333,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/kinetic-type/scroller-wall.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "ribbon-words",
+    "category": "kinetic-type",
+    "description": "A bold white ribbon draws a big S down a black frame, carrying a short phrase that settles mid-ribbon and drifts, then rides off as the ribbon retracts.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["transition", "opener", "overlay"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 64
+      },
+      {
+        "path": "highlight",
+        "maxLength": 64
+      },
+      {
+        "path": "second.text",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/kinetic-type/ribbon-words.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "anniversary-kinetic",
+    "category": "kinetic-type",
+    "description": "Fast anniversary kinetic type: glitchy, wavy, gradient, outlined and stacked words cut between aubergine, deep teal and cream grounds with a slanted texture band, ending on a 25th anniversary seal lockup.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "closer"],
+    "textSlots": [
+      {
+        "path": "logo.number",
+        "maxLength": 64
+      },
+      {
+        "path": "logo.ordinal",
+        "maxLength": 64
+      },
+      {
+        "path": "logo.caption",
+        "maxLength": 64
+      },
+      {
+        "path": "logo.name",
+        "maxLength": 64
+      },
+      {
+        "path": "logo.since",
+        "maxLength": 64
+      },
+      {
+        "path": "logo.tagline",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 14.866666666666667,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/kinetic-type/anniversary-kinetic.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "coming-soon-flips",
+    "category": "kinetic-type",
+    "description": "Condensed words with a growing underline hard cut between ink and tangerine plates, one flickering through typefaces, then a tracked-in title while slatted light sweeps a plaster wall to reveal a logo.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "closer"],
+    "textSlots": [
+      {
+        "path": "title.top",
+        "maxLength": 64
+      },
+      {
+        "path": "title.bottom",
+        "maxLength": 64
+      },
+      {
+        "path": "logo.mark",
+        "maxLength": 64
+      },
+      {
+        "path": "logo.caption",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 11.833333333333334,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/kinetic-type/coming-soon-flips.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "text-rings",
+    "category": "kinetic-type",
+    "description": "A small circle and looping scribble draw on, then rings of repeated words grow out from it, spinning in alternate directions until the frame fills into a vortex of type.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "background", "transition"],
+    "textSlots": [
+      {
+        "path": "words.text",
+        "maxLength": 64
+      },
+      {
+        "path": "words.separator",
+        "maxLength": 64
+      },
+      {
+        "path": "mark.word",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 5,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/kinetic-type/text-rings.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "typewriter",
+    "category": "text-reveals",
+    "description": "A block shrinks into a caret, the line types itself out, then a selection sweeps it away.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["opener", "transition"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 5,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/text-reveals/typewriter.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "letter-flip",
+    "category": "text-reveals",
+    "description": "Each letter swings in from its mirror image and lands in turn.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["opener", "transition"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 3,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/text-reveals/letter-flip.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "number-counter",
+    "category": "text-reveals",
+    "description": "A big number rolls up digit by digit out of a soft glow and settles.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["proof"],
+    "textSlots": [
+      {
+        "path": "prefix",
+        "maxLength": 64
+      },
+      {
+        "path": "suffix",
+        "maxLength": 64
+      },
+      {
+        "path": "separator",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 3,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/text-reveals/number-counter.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "printer-pages",
+    "category": "text-reveals",
+    "description": "A printer feeds out sheet after sheet onto its tray, each page carrying its own word or image.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["opener", "feature"],
+    "textSlots": [],
+    "typicalDuration": 7.5,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/text-reveals/printer-pages.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "magnifier-caption",
+    "category": "text-reveals",
+    "description": "A brass-rimmed magnifying glass glides over a blurred honeycomb of words; each word under the lens lights up as a serif caption types in, ending on an underlined amber keyword.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 3,
+    "roles": ["opener", "feature"],
+    "textSlots": [
+      {
+        "path": "caption.text",
+        "maxLength": 64
+      },
+      {
+        "path": "field.decoys",
+        "maxLength": 64
+      },
+      {
+        "path": "glow.accentWord",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 16,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/text-reveals/magnifier-caption.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "neon-sign-flicker",
+    "category": "text-reveals",
+    "description": "A pink neon word in rounded glass tubes glows under a swaying pendant lamp, then its first letter and the lamp stutter, flicker in shrinking bursts and burn out.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 3,
+    "roles": ["opener", "closer"],
+    "textSlots": [
+      {
+        "path": "copy.word",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.subtitle",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.brand",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.brandLine",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.website",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 10,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/text-reveals/neon-sign-flicker.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "going-live-teaser",
+    "category": "text-reveals",
+    "description": "A midnight-violet launch teaser: words zoom out of their own letters, a warm flashlight sweeps a website wall behind a glitching line, violet haze rolls under LIGHT UP, three-tone echoes stack on EYES OPEN and ARRIVING SHORTLY, then a URL blurs in and an arched monogram draws itself above a tagline and contact rows.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "closer", "cta"],
+    "textSlots": [
+      {
+        "path": "copy.opener",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.glitch",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.bridge",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.approach",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.live",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.liveAccent",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.stay",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.launch",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.tagline",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.taglineAccent",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.website",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.phone",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.email",
+        "maxLength": 64
+      },
+      {
+        "path": "wall.headline",
+        "maxLength": 64
+      },
+      {
+        "path": "wall.body",
+        "maxLength": 64
+      },
+      {
+        "path": "wall.stats",
+        "maxLength": 64
+      },
+      {
+        "path": "wall.statLabels",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 31.416666666666668,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/text-reveals/going-live-teaser.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "handwritten-note",
+    "category": "hand-drawn",
+    "description": "Marker lettering writes itself on letter by letter, underlines its accent word, then breaks apart.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["opener", "closer"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 64
+      },
+      {
+        "path": "highlight",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 6,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/hand-drawn/handwritten-note.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "scribble-caption",
+    "category": "hand-drawn",
+    "description": "A hand-drawn stroke sweeps across while a wide-tracked caption opens out behind it.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["opener", "overlay", "transition"],
+    "textSlots": [
+      {
+        "path": "text",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 3.2,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/hand-drawn/scribble-caption.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "doodle-arrows",
+    "category": "hand-drawn",
+    "description": "Hand-drawn ink arrows sketch themselves on with a red lead stroke, wobble while they hold, then break apart.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["overlay", "feature"],
+    "textSlots": [],
+    "typicalDuration": 6,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/hand-drawn/doodle-arrows.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "chalk-badge",
+    "category": "hand-drawn",
+    "description": "One hand-drawn connector badge sketches itself onto a chalkboard grid, holds, then wipes away stroke by stroke.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["overlay", "transition", "feature"],
+    "textSlots": [
+      {
+        "path": "badge.word",
+        "maxLength": 64
+      },
+      {
+        "path": "caption",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 3,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/hand-drawn/chalk-badge.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "chalk-badge-grid",
+    "category": "hand-drawn",
+    "description": "A full grid of hand-drawn connector badges sketches on in a scattered order, holds, then wipes away.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["background", "feature", "transition"],
+    "textSlots": [],
+    "typicalDuration": 7,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/hand-drawn/chalk-badge-grid.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "chalk-title",
+    "category": "hand-drawn",
+    "description": "Two script words write themselves on either side of a hand-drawn ampersand, then unwrite in reverse.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["opener", "transition"],
+    "textSlots": [
+      {
+        "path": "left",
+        "maxLength": 64
+      },
+      {
+        "path": "right",
+        "maxLength": 64
+      },
+      {
+        "path": "center.word",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/hand-drawn/chalk-title.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "chalk-badges-reel",
+    "category": "hand-drawn",
+    "description": "A chalkboard showcase: a script title, a full grid of connector badges, each badge solo, then a chunky type outro.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["feature", "opener", "closer"],
+    "textSlots": [
+      {
+        "path": "title.left",
+        "maxLength": 64
+      },
+      {
+        "path": "title.right",
+        "maxLength": 64
+      },
+      {
+        "path": "title.badge.word",
+        "maxLength": 64
+      },
+      {
+        "path": "caption",
+        "maxLength": 64
+      },
+      {
+        "path": "outro.burstText",
+        "maxLength": 64
+      },
+      {
+        "path": "outro.endTag",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 44.53333333333333,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/hand-drawn/chalk-badges-reel.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "phone-spin-in",
+    "category": "phone-reveals",
+    "description": "A single 3D phone rises with a gentle spin and settles into place, then floats.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature"],
+    "textSlots": [],
+    "typicalDuration": 5,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/phone-reveals/phone-spin-in.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "phone-turnaround",
+    "category": "phone-reveals",
+    "description": "A phone rises showing its camera module, then turns to reveal the screen.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature"],
+    "textSlots": [],
+    "typicalDuration": 6,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/phone-reveals/phone-turnaround.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "phone-pedestal",
+    "category": "phone-reveals",
+    "description": "A phone drops in and balances, tilted, on the peak of a big clay block while the camera rises.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "feature"],
+    "textSlots": [],
+    "typicalDuration": 5.5,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/phone-reveals/phone-pedestal.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "phone-flat-lay",
+    "category": "phone-reveals",
+    "description": "A phone lies on a field of wavy clay ribbons while the camera turns from oblique to top-down.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["feature", "opener"],
+    "textSlots": [],
+    "typicalDuration": 5.5,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/phone-reveals/phone-flat-lay.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "phone-fan",
+    "category": "phone-layouts",
+    "description": "Three phones rise one after another into a gentle fan while the camera orbits.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["feature", "opener"],
+    "textSlots": [],
+    "typicalDuration": 6,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/phone-layouts/phone-fan.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "phone-pair",
+    "category": "phone-layouts",
+    "description": "Two phones slide in from opposite sides and settle facing each other.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["feature"],
+    "textSlots": [],
+    "typicalDuration": 4.5,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/phone-layouts/phone-pair.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "phone-wall",
+    "category": "phone-layouts",
+    "description": "A tilted wall of phones glides in and drifts in alternating rows.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "background", "feature"],
+    "textSlots": [],
+    "typicalDuration": 7,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/phone-layouts/phone-wall.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "charge-compare",
+    "category": "phone-layouts",
+    "description": "Two outlined phones labeled going solo and teamed up take a rising charger each; one segmented battery stays coral while the other glows and fills to mint, then a rounded-square badge rises out and becomes the end card with wordmark, tagline and a typed URL in a button.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 3,
+    "roles": ["proof", "closer", "cta"],
+    "textSlots": [
+      {
+        "path": "copy.headline",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.highlight",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.leftLabel",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.rightLabel",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.monogram",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.brand",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.brandAccent",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.badgeLine",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.wordmark",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.tagline",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 7.333333333333333,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/phone-layouts/charge-compare.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "phone-scroll",
+    "category": "screen-demos",
+    "description": "A leaning phone scrolls smoothly through a long feed screen.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["feature"],
+    "textSlots": [],
+    "typicalDuration": 6,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/screen-demos/phone-scroll.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "phone-swap",
+    "category": "screen-demos",
+    "description": "A phone glides from side to side, crossfading to the next screen on every pass.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["feature"],
+    "textSlots": [],
+    "typicalDuration": 9,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/screen-demos/phone-swap.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "message-arise",
+    "category": "screen-demos",
+    "description": "A phone lies on a table while message notifications rise out of its screen and stack above it.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["feature"],
+    "textSlots": [
+      {
+        "path": "card.appName",
+        "maxLength": 24
+      },
+      {
+        "path": "headline.eyebrow",
+        "maxLength": 40
+      },
+      {
+        "path": "headline.text",
+        "maxLength": 64
+      },
+      {
+        "path": "headline.highlight",
+        "maxLength": 60
+      }
+    ],
+    "typicalDuration": 8,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/screen-demos/message-arise.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "incoming-call-teaser",
+    "category": "screen-demos",
+    "description": "A pulsing incoming call with a mint halo is swiped to pick up and turns into a coral hang-up button, then single words cut on the beat over a tilted cream slab, a steel-blue blind pulls down to a loading bar and a mint brush script signs off.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "transition"],
+    "textSlots": [
+      {
+        "path": "call.caller",
+        "maxLength": 32
+      },
+      {
+        "path": "call.subtitle",
+        "maxLength": 40
+      },
+      {
+        "path": "call.sliderLabel",
+        "maxLength": 32
+      },
+      {
+        "path": "words.glitchPattern",
+        "maxLength": 64
+      },
+      {
+        "path": "wall.title",
+        "maxLength": 64
+      },
+      {
+        "path": "wall.label",
+        "maxLength": 32
+      },
+      {
+        "path": "outro.text",
+        "maxLength": 40
+      }
+    ],
+    "typicalDuration": 14.566666666666666,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/screen-demos/incoming-call-teaser.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "keyboard-typing-cta",
+    "category": "screen-demos",
+    "description": "Two hands type any message on a frosted phone keyboard, each fingertip landing on its key and switching to the symbols layer or shift exactly when the text needs them, then tap send, and an iris from the send key opens onto a forest green end card whose headline types in above a coral call to action.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["feature", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "copy.typed",
+        "maxLength": 60
+      },
+      {
+        "path": "copy.placeholder",
+        "maxLength": 30
+      },
+      {
+        "path": "copy.watermark",
+        "maxLength": 40
+      },
+      {
+        "path": "copy.brand",
+        "maxLength": 20
+      },
+      {
+        "path": "copy.headline",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.button",
+        "maxLength": 28
+      }
+    ],
+    "typicalDuration": 9.7,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/screen-demos/keyboard-typing-cta.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "laptop-wipe-reveal",
+    "category": "desk-scenes",
+    "description": "A hand wipes a misted laptop screen with a paper towel to reveal a wordmark, then turns the towel to the camera to show a handwritten line.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "closer"],
+    "textSlots": [
+      {
+        "path": "screen.wordmark",
+        "maxLength": 64
+      },
+      {
+        "path": "screen.caption",
+        "maxLength": 64
+      },
+      {
+        "path": "cloth.note",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 7,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/desk-scenes/laptop-wipe-reveal.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "website-found-spotlight",
+    "category": "desk-scenes",
+    "description": "An ivory cone lamp flickers over a teal floor of crumpled paper, its beam finding the one gold ball under a glowing question mark, then irises out from that ball to a night contact card under a beam of light.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "copy.headline",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.highlight",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.body",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.markLetter",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.email",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.website",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.headline",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.subline",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.brand",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.brandAccent",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.phone",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.email",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.website",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 10,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/desk-scenes/website-found-spotlight.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "floating-cards",
+    "category": "overlays",
+    "description": "UI notification cards pop into 3D space and bob gently at different depths.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["overlay", "proof", "feature"],
+    "textSlots": [],
+    "typicalDuration": 5,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/overlays/floating-cards.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "film-dust",
+    "category": "overlays",
+    "description": "Flickering dust, stray hairs, faint scratches and a vignette like a worn film print.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["overlay", "background"],
+    "textSlots": [],
+    "typicalDuration": 5,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/overlays/film-dust.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "spider-web-services",
+    "category": "overlays",
+    "description": "A gloved hand drops a silk thread into a deep teal field, the camera whips down it past glinting amber 3D service titles wrapped in cobwebs with a crawling spider, and lands on a dewy hexagonal web over a brand end card.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "feature", "closer", "cta"],
+    "textSlots": [
+      {
+        "path": "brand.name",
+        "maxLength": 64
+      },
+      {
+        "path": "intro.headline",
+        "maxLength": 64
+      },
+      {
+        "path": "card.statement",
+        "maxLength": 64
+      },
+      {
+        "path": "card.punch",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 15.4,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/overlays/spider-web-services.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "word-picker",
+    "category": "list-pickers",
+    "description": "A vertical word list steps up one word at a time, each new pick growing into an indigo selection frame.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["feature", "opener", "transition"],
+    "textSlots": [],
+    "typicalDuration": 6,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/list-pickers/word-picker.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "pill-fan",
+    "category": "list-pickers",
+    "description": "A phrase completes itself with word pills that swing in on top and fan away around a hinge.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["opener", "feature"],
+    "textSlots": [
+      {
+        "path": "label",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 5.5,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/list-pickers/pill-fan.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "menu-stack",
+    "category": "list-pickers",
+    "description": "A drum of soft white menu cards rolls one row at a time, the picked card swelling to the front beside a pointer.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["feature"],
+    "textSlots": [
+      {
+        "path": "label",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 5.5,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/list-pickers/menu-stack.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "heading-list",
+    "category": "list-pickers",
+    "description": "A pixel arrow points from a heading into a scrolling menu, nudging each new item forward as it lands.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["feature", "transition"],
+    "textSlots": [
+      {
+        "path": "heading",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 5.5,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/list-pickers/heading-list.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "year-dial",
+    "category": "list-pickers",
+    "description": "A tilted timeline dial turns year by year under a fixed highlight, seen in deep perspective.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "transition", "feature"],
+    "textSlots": [
+      {
+        "path": "label",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 5,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/list-pickers/year-dial.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "mind-map",
+    "category": "list-pickers",
+    "description": "A root topic on the left links to a dashed arc of child nodes that scrolls past, lighting up each one as it reaches the middle.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["feature", "proof"],
+    "textSlots": [
+      {
+        "path": "root.title",
+        "maxLength": 64
+      },
+      {
+        "path": "root.subtitle",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 6,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/list-pickers/mind-map.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "color-pills",
+    "category": "list-pickers",
+    "description": "A column of bright color pills where a radio dot slides down one option at a time and nudges the chosen pill aside.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["feature", "transition"],
+    "textSlots": [],
+    "typicalDuration": 6,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/list-pickers/color-pills.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "skill-wheel",
+    "category": "list-pickers",
+    "description": "A radial wheel of words turns one notch at a time, lighting up the word beside the pointer.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["feature", "opener"],
+    "textSlots": [
+      {
+        "path": "title",
+        "maxLength": 64
+      },
+      {
+        "path": "subtitle",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 5,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/list-pickers/skill-wheel.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "product-cards",
+    "category": "list-pickers",
+    "description": "A vertical carousel of frosted glass product cards that steps one card at a time, with the centered card enlarged.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["feature", "proof"],
+    "textSlots": [],
+    "typicalDuration": 6,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/list-pickers/product-cards.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "list-pickers-reel",
+    "category": "list-pickers",
+    "description": "A grid of every list picker pops in, zooms into one tile, then each picker plays full screen in turn.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["feature", "opener"],
+    "textSlots": [],
+    "typicalDuration": 50,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/list-pickers/list-pickers-reel.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "mailinfra-dew-steps",
+    "category": "list-pickers",
+    "description": "A whip camera runs along one dewy silk strand from drop to drop, each glossy drop holding a swinging gold step number, then pulls back to the brand lockup.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["feature", "closer", "cta"],
+    "textSlots": [
+      {
+        "path": "intro.title",
+        "maxLength": 64
+      },
+      {
+        "path": "intro.highlight",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.brand",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.tagline",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.highlight",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 13,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/list-pickers/mailinfra-dew-steps.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "brand-reveal",
+    "category": "brand",
+    "description": "A ring mark draws itself, the wordmark rises letter by letter and a tagline follows.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["opener", "closer"],
+    "textSlots": [
+      {
+        "path": "eyebrow",
+        "maxLength": 64
+      },
+      {
+        "path": "brandName",
+        "maxLength": 64
+      },
+      {
+        "path": "tagline",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/brand/brand-reveal.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "app-icon-reveal",
+    "category": "brand",
+    "description": "A blank clay tile flips over to reveal the app icon while the name types on beneath it.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["opener", "closer"],
+    "textSlots": [
+      {
+        "path": "brandName",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 4,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/brand/app-icon-reveal.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "cta-end-card",
+    "category": "brand",
+    "description": "A closing card with the brand mark, a headline, two store buttons and a URL.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["cta", "closer"],
+    "textSlots": [
+      {
+        "path": "brandName",
+        "maxLength": 64
+      },
+      {
+        "path": "headline",
+        "maxLength": 64
+      },
+      {
+        "path": "highlight",
+        "maxLength": 64
+      },
+      {
+        "path": "subline",
+        "maxLength": 64
+      },
+      {
+        "path": "primaryCaption",
+        "maxLength": 64
+      },
+      {
+        "path": "primaryLabel",
+        "maxLength": 64
+      },
+      {
+        "path": "secondaryCaption",
+        "maxLength": 64
+      },
+      {
+        "path": "secondaryLabel",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 5,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/brand/cta-end-card.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "dot-wordmark-reveal",
+    "category": "brand",
+    "description": "A jade dot hops across a cream frame dropping a tagline word by word, swells into a full jade field where a rounded wordmark writes itself stroke by stroke, then the field morphs into a rounded tile badge that tumbles the lockup away.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 3,
+    "roles": ["opener", "closer"],
+    "textSlots": [
+      {
+        "path": "copy.tagline",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.wordmark",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.monogram",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 9.233333333333333,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/brand/dot-wordmark-reveal.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "puzzle-success",
+    "category": "brand",
+    "description": "Four ember-orange jigsaw pieces on teal neon cables step closer, snap into a square that reads MASTERY with a warm strobe, a ripple of rings and a spark burst, then drift apart again.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 3,
+    "roles": ["opener", "feature", "closer"],
+    "textSlots": [
+      {
+        "path": "copy.word",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.wordmark",
+        "maxLength": 64
+      },
+      {
+        "path": "topLeft.label",
+        "maxLength": 64
+      },
+      {
+        "path": "topRight.label",
+        "maxLength": 64
+      },
+      {
+        "path": "bottomLeft.label",
+        "maxLength": 64
+      },
+      {
+        "path": "bottomRight.label",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 5.933333333333334,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/brand/puzzle-success.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "mailinfra-inbox-web",
+    "category": "brand",
+    "description": "A spider drops in and weaves an orb web, envelopes fly in and stick to its junctions as glowing inboxes while a counter climbs, then a whip zoom lands on a swinging gold 3D wordmark.",
+    "theme": "dark",
+    "orientation": "square",
+    "energy": 5,
+    "roles": ["opener", "proof", "closer", "cta"],
+    "textSlots": [
+      {
+        "path": "headline",
+        "maxLength": 64
+      },
+      {
+        "path": "highlight",
+        "maxLength": 64
+      },
+      {
+        "path": "counterSuffix",
+        "maxLength": 64
+      },
+      {
+        "path": "wordmark.text",
+        "maxLength": 64
+      },
+      {
+        "path": "wordmark.tagline",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 14,
+    "aspectSupport": ["square"],
+    "source": "src/compositions/scenes/brand/mailinfra-inbox-web.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "helicopter-unveil",
+    "category": "ad-reveals",
+    "description": "A helicopter lifts a teal cloth off a highway billboard, the cloth streams away into the sky and the poster lands full screen over a blurred backdrop.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "cta"],
+    "textSlots": [
+      {
+        "path": "poster.eyebrow",
+        "maxLength": 64
+      },
+      {
+        "path": "poster.headline",
+        "maxLength": 64
+      },
+      {
+        "path": "poster.subline",
+        "maxLength": 64
+      },
+      {
+        "path": "poster.details",
+        "maxLength": 64
+      },
+      {
+        "path": "poster.footer",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 13,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/ad-reveals/helicopter-unveil.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "problem-strikeout",
+    "category": "ad-reveals",
+    "description": "A pencil strikes out business problems written in a spiral notebook on a dark desk, then cuts to a blue card where a solution puzzle piece snaps in above a rising growth chart.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "proof", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "page.problems",
+        "maxLength": 64
+      },
+      {
+        "path": "card.brand",
+        "maxLength": 64
+      },
+      {
+        "path": "card.monogram",
+        "maxLength": 64
+      },
+      {
+        "path": "card.kicker",
+        "maxLength": 64
+      },
+      {
+        "path": "card.headline",
+        "maxLength": 64
+      },
+      {
+        "path": "card.solution",
+        "maxLength": 64
+      },
+      {
+        "path": "card.contact",
+        "maxLength": 64
+      },
+      {
+        "path": "card.website",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 8.333333333333334,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/ad-reveals/problem-strikeout.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "spill-reveal",
+    "category": "ad-reveals",
+    "description": "A hand tips a paper cup over on a wooden desk, the water spreads and a napkin dropped on the puddle soaks through to reveal a hidden printed message.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener"],
+    "textSlots": [
+      {
+        "path": "message.text",
+        "maxLength": 64
+      },
+      {
+        "path": "cup.mark",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 10.4,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/ad-reveals/spill-reveal.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "crumpled-paper-reveal",
+    "category": "ad-reveals",
+    "description": "Two hands clap open and closed, a crumpled paper ball appears between them and is pulled open into a wrinkled sheet printed with a serif headline, then the camera pushes in.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener"],
+    "textSlots": [
+      {
+        "path": "print.headline",
+        "maxLength": 64
+      },
+      {
+        "path": "print.footer",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 6.8,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/ad-reveals/crumpled-paper-reveal.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "battery-charge-success",
+    "category": "ad-reveals",
+    "description": "Labeled charging cables rise from below and plug into a glowing battery with a bolt and level ticks, sparks run along them while the liquid fill wobbles from amber through gold to mint, the percentage counts to 100 with a pulse ring, then the cables unplug and it drains.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "proof"],
+    "textSlots": [
+      {
+        "path": "copy.title",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.suffix",
+        "maxLength": 64
+      },
+      {
+        "path": "cables.leftTop.label",
+        "maxLength": 64
+      },
+      {
+        "path": "cables.leftBottom.label",
+        "maxLength": 64
+      },
+      {
+        "path": "cables.rightTop.label",
+        "maxLength": 64
+      },
+      {
+        "path": "cables.rightBottom.label",
+        "maxLength": 64
+      },
+      {
+        "path": "cables.bottom.label",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 9.966666666666667,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/ad-reveals/battery-charge-success.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "billboard-reader",
+    "category": "ad-reveals",
+    "description": "A drone glides up to a dark roadside billboard over a dusky coastline as its lamps blink on one by one, while a caped hero sitting on top turns a page of his newspaper.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "cta"],
+    "textSlots": [
+      {
+        "path": "board.headline",
+        "maxLength": 64
+      },
+      {
+        "path": "board.tagline",
+        "maxLength": 64
+      },
+      {
+        "path": "board.brand",
+        "maxLength": 64
+      },
+      {
+        "path": "hero.masthead",
+        "maxLength": 64
+      },
+      {
+        "path": "hero.frontHeadline",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 10,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/ad-reveals/billboard-reader.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "burning-paper-reveal",
+    "category": "ad-reveals",
+    "description": "A hand holds a cream poster against a teal and slate wall while shader flames, sparks and smoke ride a glowing ember edge across it, burning in a serif headline with a handwritten accent.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 3,
+    "roles": ["opener", "closer"],
+    "textSlots": [
+      {
+        "path": "copy.kicker",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.headline",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.aside",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.footer",
+        "maxLength": 64
+      },
+      {
+        "path": "brandCard.name",
+        "maxLength": 64
+      },
+      {
+        "path": "brandCard.tagline",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 21.466666666666665,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/ad-reveals/burning-paper-reveal.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "mailinfra-spider-drop",
+    "category": "ad-reveals",
+    "description": "A spider holding a sealed envelope drops on its silk line while the camera whips down past dusty cobwebbed Promotions, Spam and Blocked signs, lowers the envelope into a glowing blue inbox tray, a gold 99.9% swings in and an end card with the brand settles.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 3,
+    "roles": ["opener", "proof", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "headline.text",
+        "maxLength": 64
+      },
+      {
+        "path": "headline.highlight",
+        "maxLength": 64
+      },
+      {
+        "path": "inbox.label",
+        "maxLength": 64
+      },
+      {
+        "path": "stat.value",
+        "maxLength": 64
+      },
+      {
+        "path": "stat.caption",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.brand",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.tagline",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 12,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/ad-reveals/mailinfra-spider-drop.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "mailinfra-deliverability-charge",
+    "category": "ad-reveals",
+    "description": "Five labeled cables (SPF, DKIM, DMARC, Warm-up, Dedicated IPs) rise and plug into a glowing envelope-shaped inbox under a spaced headline; sparks run up the wires, the glow turns from spam red to electric blue, a blue-violet liquid fills as the inbox rate counts to 99.9%, a pulse lands the \"Landed in the inbox\" badge under the mailinfra.co brand line, then the cables unplug and drop away while the inbox stays charged.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 3,
+    "roles": ["feature", "proof", "closer"],
+    "textSlots": [
+      {
+        "path": "brand.text",
+        "maxLength": 64
+      },
+      {
+        "path": "headline.text",
+        "maxLength": 64
+      },
+      {
+        "path": "counter.suffix",
+        "maxLength": 64
+      },
+      {
+        "path": "counter.caption",
+        "maxLength": 64
+      },
+      {
+        "path": "badge.text",
+        "maxLength": 64
+      },
+      {
+        "path": "cables.spf.label",
+        "maxLength": 64
+      },
+      {
+        "path": "cables.dkim.label",
+        "maxLength": 64
+      },
+      {
+        "path": "cables.dmarc.label",
+        "maxLength": 64
+      },
+      {
+        "path": "cables.warmup.label",
+        "maxLength": 64
+      },
+      {
+        "path": "cables.ips.label",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 10,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/ad-reveals/mailinfra-deliverability-charge.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "mailinfra-thread-features",
+    "category": "ad-reveals",
+    "description": "A spider abseils down a glinting silk thread, then the camera whips down it past four gold extruded feature titles wrapped in web cocoons, and dives to an orb web over a Mailinfra end card.",
+    "theme": "dark",
+    "orientation": "portrait",
+    "energy": 5,
+    "roles": ["opener", "feature", "cta", "closer"],
+    "textSlots": [
+      {
+        "path": "opening.label",
+        "maxLength": 64
+      },
+      {
+        "path": "opening.headline",
+        "maxLength": 64
+      },
+      {
+        "path": "opening.highlight",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.brandName",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.statement",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.highlight",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.tagline",
+        "maxLength": 64
+      },
+      {
+        "path": "endCard.buttonLabel",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 17,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/ad-reveals/mailinfra-thread-features.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "elevator-newspaper",
+    "category": "ad-reveals",
+    "description": "Elevator doors slide open on a woman hiding behind an open tabloid, the camera glides in to read its coming soon cover and new store page printed with your own copy, then eases back as the doors close.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 3,
+    "roles": ["opener", "feature"],
+    "textSlots": [
+      {
+        "path": "masthead.brand",
+        "maxLength": 64
+      },
+      {
+        "path": "masthead.edition",
+        "maxLength": 64
+      },
+      {
+        "path": "cover.headline",
+        "maxLength": 64
+      },
+      {
+        "path": "story.headline",
+        "maxLength": 64
+      },
+      {
+        "path": "story.subhead",
+        "maxLength": 64
+      },
+      {
+        "path": "story.teaserTitle",
+        "maxLength": 64
+      },
+      {
+        "path": "story.teaser",
+        "maxLength": 64
+      },
+      {
+        "path": "story.sidebarTitle",
+        "maxLength": 64
+      },
+      {
+        "path": "story.sidebar",
+        "maxLength": 64
+      },
+      {
+        "path": "story.caption",
+        "maxLength": 64
+      },
+      {
+        "path": "story.footer",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 7.708333333333333,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/ad-reveals/elevator-newspaper.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "street-sign-swap",
+    "category": "ad-reveals",
+    "description": "In one continuous take on a rainy Paris crosswalk, a woman walks past holding a white board asking when your website launches, then a woman in a green jersey walks in holding up an olive board that answers it is live now with your address.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 3,
+    "roles": ["opener", "cta"],
+    "textSlots": [
+      {
+        "path": "question.opening",
+        "maxLength": 64
+      },
+      {
+        "path": "question.brand",
+        "maxLength": 64
+      },
+      {
+        "path": "question.closing",
+        "maxLength": 64
+      },
+      {
+        "path": "answer.line",
+        "maxLength": 64
+      },
+      {
+        "path": "answer.address",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 7.125,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/ad-reveals/street-sign-swap.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "relief-backdrop",
+    "category": "backgrounds",
+    "description": "A clay wall carved with nested rounded squares; the camera pushes in and swings around its side.",
+    "theme": "light",
+    "orientation": "landscape",
+    "energy": 5,
+    "roles": ["background", "transition"],
+    "textSlots": [],
+    "typicalDuration": 8,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/backgrounds/relief-backdrop.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "scene-transition",
+    "category": "transitions",
+    "description": "A solid colour covers the frame and opens again, to bridge two clips on the timeline.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["transition", "overlay"],
+    "textSlots": [],
+    "typicalDuration": 1.3333333333333333,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/transitions/scene-transition.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "arch-save-the-date",
+    "category": "invitations",
+    "description": "The camera dollies through a rose pink palace colonnade of cusped arches, crystal chandeliers and jasmine garlands until the last arch frames a painted blue sky over a garden terrace, where a calligraphic save the date comes into focus and the wedding lines write in.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 3,
+    "roles": ["opener", "closer"],
+    "textSlots": [
+      {
+        "path": "copy.titleFirst",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.titleJoin",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.titleLast",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.intro",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.names",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.venue",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.closing",
+        "maxLength": 64
+      },
+      {
+        "path": "copy.family",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 24,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/invitations/arch-save-the-date.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "botanical-save-the-date",
+    "category": "invitations",
+    "description": "A vertical blush wedding invitation: watercolour leaf and blossom sprays slide in around typed verses, a bold save the date, the couple, eucalyptus, peony and tropical frames for each event, and a closing note.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 3,
+    "roles": ["opener", "feature", "closer"],
+    "textSlots": [
+      {
+        "path": "verseOne",
+        "maxLength": 64
+      },
+      {
+        "path": "verseTwo",
+        "maxLength": 64
+      },
+      {
+        "path": "saveTop",
+        "maxLength": 64
+      },
+      {
+        "path": "saveJoiner",
+        "maxLength": 64
+      },
+      {
+        "path": "saveBottom",
+        "maxLength": 64
+      },
+      {
+        "path": "coupleIntro",
+        "maxLength": 64
+      },
+      {
+        "path": "partnerOne",
+        "maxLength": 64
+      },
+      {
+        "path": "partnerJoiner",
+        "maxLength": 64
+      },
+      {
+        "path": "partnerTwo",
+        "maxLength": 64
+      },
+      {
+        "path": "inviteLine",
+        "maxLength": 64
+      },
+      {
+        "path": "inviteScript",
+        "maxLength": 64
+      },
+      {
+        "path": "partnerOneFamily",
+        "maxLength": 64
+      },
+      {
+        "path": "partnerTwoFamily",
+        "maxLength": 64
+      },
+      {
+        "path": "mehendi.title",
+        "maxLength": 64
+      },
+      {
+        "path": "mehendi.details",
+        "maxLength": 64
+      },
+      {
+        "path": "mehendi.note",
+        "maxLength": 64
+      },
+      {
+        "path": "ring.title",
+        "maxLength": 64
+      },
+      {
+        "path": "ring.details",
+        "maxLength": 64
+      },
+      {
+        "path": "ring.note",
+        "maxLength": 64
+      },
+      {
+        "path": "wedding.arcText",
+        "maxLength": 64
+      },
+      {
+        "path": "wedding.title",
+        "maxLength": 64
+      },
+      {
+        "path": "wedding.subtitle",
+        "maxLength": 64
+      },
+      {
+        "path": "wedding.details",
+        "maxLength": 64
+      },
+      {
+        "path": "wedding.note",
+        "maxLength": 64
+      },
+      {
+        "path": "closing",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 58,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/invitations/botanical-save-the-date.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "gold-monogram-invite",
+    "category": "invitations",
+    "description": "A royal wedding invite: a gold mandala panel and a sketched dancing couple carry the quote, a script title glows in, a satin veil lifts off a gold monogram among sparklers, then three event cards and a save the date.",
+    "theme": "dark",
+    "orientation": "landscape",
+    "energy": 3,
+    "roles": ["opener", "feature", "closer"],
+    "textSlots": [
+      {
+        "path": "quote.firstCaps",
+        "maxLength": 64
+      },
+      {
+        "path": "quote.firstScript",
+        "maxLength": 64
+      },
+      {
+        "path": "quote.secondScript",
+        "maxLength": 64
+      },
+      {
+        "path": "quote.secondCaps",
+        "maxLength": 64
+      },
+      {
+        "path": "quote.paperLead",
+        "maxLength": 64
+      },
+      {
+        "path": "quote.paperScript",
+        "maxLength": 64
+      },
+      {
+        "path": "title.eyebrow",
+        "maxLength": 64
+      },
+      {
+        "path": "title.word",
+        "maxLength": 64
+      },
+      {
+        "path": "title.tail",
+        "maxLength": 64
+      },
+      {
+        "path": "monogram.first",
+        "maxLength": 64
+      },
+      {
+        "path": "monogram.second",
+        "maxLength": 64
+      },
+      {
+        "path": "monogram.names",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 63.333333333333336,
+    "aspectSupport": ["landscape"],
+    "source": "src/compositions/scenes/invitations/gold-monogram-invite.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "miniature-panorama",
+    "category": "invitations",
+    "description": "A dot-painted Rajasthani miniature in five shots: a swan lake under overhanging branches, a wide lotus lake, a chandelier-lit night pavilion, a garden of sandstone chhatris and a baraat elephant procession, joined by whip pans and dolly moves.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 3,
+    "roles": ["background", "opener"],
+    "textSlots": [
+      {
+        "path": "invite.names",
+        "maxLength": 64
+      },
+      {
+        "path": "invite.line",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 42,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/invitations/miniature-panorama.tsx",
+    "license": "Repository asset; upstream notices apply"
+  },
+  {
+    "id": "wedding-itinerary-pages",
+    "category": "invitations",
+    "description": "A vertical wedding invite painted as a Mughal garden: a floral monogram cover that builds up from the lawn, a families page, one painted scene per event and a night garden RSVP, with every line typing on and titles swept in by a block.",
+    "theme": "light",
+    "orientation": "portrait",
+    "energy": 3,
+    "roles": ["opener", "feature", "closer"],
+    "textSlots": [
+      {
+        "path": "cover.monogram",
+        "maxLength": 64
+      },
+      {
+        "path": "cover.names",
+        "maxLength": 64
+      },
+      {
+        "path": "cover.hashtag",
+        "maxLength": 64
+      },
+      {
+        "path": "families.hosts",
+        "maxLength": 64
+      },
+      {
+        "path": "families.invite",
+        "maxLength": 64
+      },
+      {
+        "path": "families.bride",
+        "maxLength": 64
+      },
+      {
+        "path": "families.brideParents",
+        "maxLength": 64
+      },
+      {
+        "path": "families.joiner",
+        "maxLength": 64
+      },
+      {
+        "path": "families.groom",
+        "maxLength": 64
+      },
+      {
+        "path": "families.groomParents",
+        "maxLength": 64
+      },
+      {
+        "path": "closing.message",
+        "maxLength": 64
+      },
+      {
+        "path": "closing.visit",
+        "maxLength": 64
+      },
+      {
+        "path": "closing.rsvp",
+        "maxLength": 64
+      }
+    ],
+    "typicalDuration": 55,
+    "aspectSupport": ["portrait"],
+    "source": "src/compositions/scenes/invitations/wedding-itinerary-pages.tsx",
+    "license": "Repository asset; upstream notices apply"
+  }
+]
