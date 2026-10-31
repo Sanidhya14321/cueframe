@@ -33,7 +33,6 @@ test('Remotion animations remain separate source layers, editable from OpenCut, 
   const clip = editor.locator(`[data-element-id="${item.id}"]`);
   await expect(clip).toBeVisible({ timeout: 120000 });
   await clip.click();
-  await page.getByRole('button', { name: 'Animation controls', exact: true }).click();
   const text = page.getByRole('region', { name: 'Text', exact: true }).getByRole('textbox');
   await expect(text).toBeVisible();
   await text.fill('Shared animation');

@@ -97,8 +97,10 @@ button:disabled {
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 52px;
-  padding: 4px 12px;
+  height: 40px;
+  flex-shrink: 0;
+  padding: 0 8px;
+  font-size: 13px;
   border-bottom: 1px solid var(--border);
 }
 .native-header output {
@@ -107,34 +109,45 @@ button:disabled {
   margin-right: auto;
 }
 .native-header > button {
-  min-width: 44px;
-  min-height: 44px;
+  min-height: 32px;
+  padding: 0 8px;
 }
 .native-workspace {
   display: flex;
   flex: 1;
   min-height: 0;
-  gap: 4px;
+  gap: 0;
 }
 .native-assets {
-  width: 25%;
-  min-width: 220px;
+  border-right: 1px solid var(--border);
+  width: 280px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 .native-assets nav {
   display: flex;
-  flex-wrap: wrap;
+  flex-shrink: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
   border-bottom: 1px solid var(--border);
 }
 .native-timeline button {
-  min-height: 44px;
-  min-width: 44px;
+  min-height: 32px;
+  min-width: 32px;
+}
+.native-timeline [class*="playhead" i] button,
+.native-timeline button[class*="rounded-full"] {
+  min-height: 0;
+  min-width: 0;
 }
 .native-assets nav button {
-  min-height: 44px;
-  padding: 8px;
+  min-height: 36px;
+  padding: 0 10px;
+  font-size: 12px;
+  white-space: nowrap;
+  color: var(--muted-foreground);
 }
 .native-assets nav button[aria-pressed="true"] {
   color: var(--primary);
@@ -150,13 +163,14 @@ button:disabled {
   min-width: 0;
 }
 .native-properties {
-  width: 25%;
-  min-width: 220px;
+  width: 260px;
+  flex-shrink: 0;
   overflow: auto;
 }
 .native-timeline {
-  height: 34dvh;
-  min-height: 230px;
+  height: 38dvh;
+  min-height: 200px;
+  flex-shrink: 0;
   padding: 4px;
   overflow: hidden;
   border-top: 1px solid var(--border);
@@ -205,10 +219,11 @@ button:disabled {
 }
 
 .native-title {
+  field-sizing: content;
   width: 16ch;
   min-width: 80px;
   max-width: 30vw;
-  min-height: 44px;
+  min-height: 32px;
   background: transparent;
   color: var(--foreground);
   font-weight: 600;
@@ -296,4 +311,64 @@ button[data-agent-locked="true"]::after {
   padding: 0 8px;
   text-align: left;
   font-variant-numeric: tabular-nums;
+}
+.native-suggest {
+  display: grid;
+  gap: 6px;
+}
+.native-suggest textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 6px 8px;
+  font-size: 12px;
+  background: var(--input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.native-suggest button {
+  min-height: 32px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--primary-foreground);
+  background: var(--primary);
+  border-radius: 6px;
+}
+.native-suggest button:disabled {
+  opacity: 0.5;
+}
+.native-suggestions {
+  display: grid;
+  gap: 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.native-suggestions li {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.native-suggestions img {
+  width: 64px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.native-suggestions small {
+  display: block;
+  color: var(--muted-foreground);
+  text-transform: capitalize;
+}
+.native-suggestions button {
+  min-height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.native-editor .native-asset-content button[title^="Add"] {
+  min-width: 24px;
+  width: 24px;
+  height: 24px;
+  min-height: 24px;
 }

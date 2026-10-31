@@ -1,3 +1,4 @@
+/* biome-ignore-all lint/complexity/useLiteralKeys: native records require indexed access under strict TypeScript */
 /* biome-ignore-all lint/performance/noAwaitInLoops: full previews render one at a time */
 const projectId = new URLSearchParams(location.search).get('project') ?? '';
 export type PreviewFile = {
@@ -53,3 +54,17 @@ export async function upgradeDrafts(report: (status: string) => void, apply: () 
     upgrading = false;
   }
 }
+
+export const paintThumbnails = (project: {
+  tracks: { elements: { id: string; type: string; clipId?: string }[] }[];
+}) => {
+  const items = new Map(
+    project.tracks.flatMap((track) => track.elements).map((item) => [item.id, item]),
+  );
+  for (const button of document.querySelectorAll<HTMLButtonElement>('button[data-element-id]')) {
+    const item = items.get(button.dataset['elementId'] ?? '');
+    if (item?.clipId) {
+      button.style.background = `linear-gradient(#0009, #0009), url(/previews/${item.clipId}.still.jpg) left / auto 100% repeat-x`;
+    }
+  }
+};

@@ -13,7 +13,7 @@ import { processMediaAssets } from '@/media/processing';
 import type { MediaAsset } from '@/media/types';
 import type { TProject } from '@/project/types';
 import { TICKS_PER_SECOND } from '@/wasm';
-import { cachedPreview, draftIds, renderPreview, upgradeDrafts } from './draft-previews';
+import * as drafts from './draft-previews';
 import { setNativeLocks } from './locks';
 import { nativeToProject, needsSourcePreview, projectToNative } from './project-bridge';
 
@@ -252,7 +252,7 @@ export async function connectCanonical() {
       });
   };
   const upgrade = () => {
-    upgradeDrafts(report, () => accept(source, true)).catch(() => undefined);
+    drafts.upgradeDrafts(report, () => accept(source, true)).catch(() => undefined);
   };
   upgrade();
   events.onmessage = (event: MessageEvent<string>) =>
@@ -278,16 +278,16 @@ export async function hydrateCanonical(editor: EditorCore) {
     ) {
       continue;
     }
-    let preview: Awaited<ReturnType<typeof renderPreview>> | undefined;
+    let preview: Awaited<ReturnType<typeof drafts.renderPreview>> | undefined;
     let url: string;
     if (needsSourcePreview(item)) {
       previewNumber += 1;
       report(
         `Preparing ${item.type === 'composition' ? item.clipId : item.type} (${previewNumber} of ${previewCount})`,
       );
-      preview = item.type === 'composition' ? await cachedPreview(item.id) : undefined;
+      preview = item.type === 'composition' ? await drafts.cachedPreview(item.id) : undefined;
       if (item.type === 'composition' && !preview) {
-        draftIds.add(item.id);
+        drafts.draftIds.add(item.id);
         preview = {
           url: `/previews/${item.clipId}.mp4`,
           width: source.project.width,
@@ -297,8 +297,8 @@ export async function hydrateCanonical(editor: EditorCore) {
           hasAudio: false,
         };
       } else {
-        draftIds.delete(item.id);
-        preview ??= await renderPreview(item.id);
+        drafts.draftIds.delete(item.id);
+        preview ??= await drafts.renderPreview(item.id);
       }
       url = preview.url;
     } else if (item.type === 'video' || item.type === 'audio' || item.type === 'image') {
@@ -335,7 +335,7 @@ export async function hydrateCanonical(editor: EditorCore) {
     if (!processed) {
       throw new Error('Unsupported source media');
     }
-    if (!(url.startsWith(`/api/projects/${projectId}/media/`) || draftIds.has(item.id))) {
+    if (!(url.startsWith(`/api/projects/${projectId}/media/`) || drafts.draftIds.has(item.id))) {
       const upload = await fetch(`/api/projects/${projectId}/media`, {
         method: 'POST',
         headers: { 'content-type': mime },
@@ -389,6 +389,7 @@ function updateLocks() {
   if (tracks) {
     setNativeLocks(locked, tracks);
   }
+  drafts.paintThumbnails(source.project);
   for (const button of document.querySelectorAll<HTMLButtonElement>('button[data-element-id]')) {
     const active = locked.includes(button.dataset['elementId'] ?? '');
     button.dataset['agentLocked'] = String(active);

@@ -6,10 +6,12 @@ import { VideoEditorSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useLiveProject } from '@/lib/use-live-project';
-import type { Project } from '@/project';
+import { findElement, type Project } from '@/project';
+import { OpenCutFrameDock } from './opencut-frame-dock';
 import { OpenCutProjectTools } from './opencut-project-tools';
 import { useOpenCutContext } from './use-opencut-context';
 import { useOpenCutFrame } from './use-opencut-frame';
+import { VoiceRequest } from './voice-request';
 export const OpenCutEditor = ({
   id,
   title,
@@ -30,40 +32,47 @@ export const OpenCutEditor = ({
       setLoaded(true);
     }
   }, [frame]);
+  const selected = context.selectedId
+    ? findElement(editor.value, context.selectedId)?.element
+    : null;
   return (
     <LivePresence state={editor.state} undoAgent={editor.undoAgent} onSelect={context.select}>
-      <section className="flex h-[calc(100dvh-6.5rem)] min-h-0 flex-col" aria-label="Video editor">
-        <div className="flex min-h-12 shrink-0 flex-wrap items-center gap-3 border-b bg-sidebar px-3 py-2 text-xs">
-          <strong>OpenCut</strong>
-          {readOnly ? null : (
+      <section className="flex h-[calc(100dvh-7rem)] min-h-0 flex-col" aria-label="Video editor">
+        <div className="flex h-12 shrink-0 items-center gap-2 border-b bg-sidebar px-2 text-xs">
+          {readOnly || !editor.state ? null : (
             <>
-              <div className="lg:hidden">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="outline" className="min-h-11 text-xs">
-                      Project tools
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="flex max-h-[65dvh] w-[min(90vw,30rem)] flex-wrap gap-3 overflow-y-auto">
-                    <OpenCutProjectTools editor={editor} {...context} />
-                  </PopoverContent>
-                </Popover>
+              <div className="flex min-w-0 flex-1 items-center gap-2">
+                <VoiceRequest
+                  projectId={editor.state.id}
+                  frames={context.frames}
+                  selectedId={context.selectedId}
+                />
               </div>
-              <div className="hidden items-center gap-3 lg:contents">
-                <OpenCutProjectTools editor={editor} {...context} />
-              </div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    Project tools
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="flex max-h-[65dvh] w-[min(90vw,30rem)] flex-wrap gap-3 overflow-y-auto">
+                  <OpenCutProjectTools editor={editor} {...context} />
+                </PopoverContent>
+              </Popover>
+              <span
+                role="status"
+                aria-label="Project sync"
+                className="whitespace-nowrap text-muted-foreground"
+              >
+                {editor.status}
+              </span>
+              <Link
+                className="hidden whitespace-nowrap underline underline-offset-4 xl:inline"
+                href={`/video/${id}?workspace=animation`}
+              >
+                Animation workspace
+              </Link>
             </>
           )}
-          <Link
-            className="inline-flex min-h-11 items-center underline"
-            href={`/video/${id}?workspace=animation`}
-          >
-            Animation controls & agent tools
-          </Link>
-          <span className="hidden text-muted-foreground lg:inline">
-            Layers, media and agent edits share this local project. Remotion animations keep their
-            editable source controls.
-          </span>
           {problem ? <p role="alert">{problem}</p> : null}
         </div>
         {loaded ? null : (
@@ -71,16 +80,21 @@ export const OpenCutEditor = ({
             <VideoEditorSkeleton />
           </div>
         )}
-        {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions: load only reveals the frame */}
-        <iframe
-          ref={frame}
-          hidden={!loaded}
-          onLoad={() => setLoaded(true)}
-          title="OpenCut video editor"
-          src={`/opencut/index.html?project=${id}${readOnly ? '&mode=render' : ''}`}
-          className="min-h-0 w-full flex-1 border-0"
-          allow="clipboard-read; clipboard-write"
-        />
+        <div className="flex min-h-0 flex-1">
+          {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions: load only reveals the frame */}
+          <iframe
+            ref={frame}
+            hidden={!loaded}
+            onLoad={() => setLoaded(true)}
+            title="OpenCut video editor"
+            src={`/opencut/index.html?project=${id}${readOnly ? '&mode=render' : ''}`}
+            className="min-h-0 min-w-0 flex-1 border-0"
+            allow="clipboard-read; clipboard-write"
+          />
+          {selected?.type === 'composition' && !readOnly ? (
+            <OpenCutFrameDock key={selected.id} editor={editor} element={selected} />
+          ) : null}
+        </div>
       </section>
     </LivePresence>
   );

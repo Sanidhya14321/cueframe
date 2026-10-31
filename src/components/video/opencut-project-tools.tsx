@@ -9,7 +9,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import type { FrameStore } from '@/lib/frame-store';
 import type { useLiveProject } from '@/lib/use-live-project';
 import { findElement, removeElement, replaceElement } from '@/project';
-import { VoiceRequest } from './voice-request';
 
 type Props = {
   editor: ReturnType<typeof useLiveProject>;
@@ -26,7 +25,6 @@ export const OpenCutProjectTools = ({ editor, frames, selectedId, select, seek }
   const selected = selectedId ? findElement(editor.value, selectedId)?.element : null;
   return (
     <>
-      <VoiceRequest projectId={state.id} frames={frames} selectedId={selectedId} />
       <BuildVideo projectId={state.id} />
       <AgentRequests
         state={state}
@@ -51,7 +49,7 @@ export const OpenCutProjectTools = ({ editor, frames, selectedId, select, seek }
       {selected?.type === 'composition' ? (
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="min-h-11 text-xs">
+            <Button variant="outline" className="min-h-11 text-xs lg:hidden">
               Animation controls
             </Button>
           </PopoverTrigger>
@@ -64,9 +62,6 @@ export const OpenCutProjectTools = ({ editor, frames, selectedId, select, seek }
           </PopoverContent>
         </Popover>
       ) : null}
-      <span role="status" aria-label="Project sync">
-        {editor.status}
-      </span>
       {editor.problem ? (
         <button type="button" onClick={editor.clearProblem} className="text-destructive">
           {editor.problem}

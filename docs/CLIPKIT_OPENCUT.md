@@ -18,7 +18,7 @@ The existing loopback session and same-Origin rules protect every write. Stale n
 
 While a shared revision hydrates (agent edits or animation previews regenerating) the native editor is inert and reports Applying project changes, so an edit cannot land on a timeline about to be replaced. Failed saves stay dirty and show Retry saving / Reload saved version. Navigation, New video and command actions checkpoint native edits before leaving. Browser close/reload retains the unsaved-change guard. Cmd/Ctrl+K inside the native editor opens the host command palette.
 
-Agent requests, Build from beats, comments, activity, Undo agent turn, Whisper/Fish, media import and local render remain reachable beside the native editor. Compact screens collect these under Project tools. Native selection and playhead time feed the existing tools.
+Selecting an animation opens the Frame panel beside the editor: a live preview plus the same controls as the Library. Project tools collects agent requests, Build from beats, comments and media tools. The Library tab's Suggest frames box matches a video description to clips with local embeddings and clip metadata.
 
 When an animation has no full preview yet, the editor opens at once with its gallery video as a draft and swaps in full renders in the background. A layer that cannot render keeps its draft; use Local render for final output.
 

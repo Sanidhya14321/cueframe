@@ -207,7 +207,7 @@ test('existing source layers open in the actual native timeline and native local
     .toMatchObject({ status: 'done' });
   const native = await read(page, id);
   expect(native.source.project.tracks[0].elements[0].type).toBe('shape');
-  await page.getByRole('link', { name: 'Animation controls & agent tools', exact: true }).click();
+  await page.getByRole('link', { name: 'Animation workspace', exact: true }).click();
   await expect(page.getByRole('status', { name: 'Project sync' })).toContainText('Saved locally');
 });
 

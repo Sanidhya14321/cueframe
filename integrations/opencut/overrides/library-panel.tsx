@@ -6,6 +6,7 @@ import { TICKS_PER_SECOND } from '@/wasm';
 import { canonicalSource, report } from './storage';
 
 type LibraryClip = { id: string; title: string; category: string; still: string };
+type SuggestedClip = { id: string; title: string; role: string; still: string };
 const CLIP_DRAG = 'application/x-clipkit-clip';
 const PIXELS_PER_SECOND = 50;
 const PAGE_SIZE = 24;
@@ -63,6 +64,9 @@ export function LibraryView() {
   const [problem, setProblem] = useState('');
   const [query, setQuery] = useState('');
   const [limit, setLimit] = useState(PAGE_SIZE);
+  const [brief, setBrief] = useState('');
+  const [suggested, setSuggested] = useState<SuggestedClip[]>([]);
+  const [suggesting, setSuggesting] = useState(false);
   const term = query.trim();
   useEffect(() => {
     let current = true;
@@ -90,8 +94,55 @@ export function LibraryView() {
     };
   }, [term]);
   const shown = clips;
+  const suggest = () => {
+    setSuggesting(true);
+    fetch(`/api/library/suggest?brief=${encodeURIComponent(brief)}`)
+      .then((response) => response.json())
+      .then((result: { clips: SuggestedClip[] }) => setSuggested(result.clips))
+      .catch(() => setProblem('Could not suggest animations'))
+      .finally(() => setSuggesting(false));
+  };
   return (
     <div className="native-library">
+      <form
+        className="native-suggest"
+        onSubmit={(event) => {
+          event.preventDefault();
+          suggest();
+        }}
+      >
+        <textarea
+          aria-label="Describe your video"
+          placeholder="Describe your video for suggestions"
+          rows={2}
+          value={brief}
+          onChange={(event) => setBrief(event.target.value)}
+        />
+        <button type="submit" disabled={suggesting || brief.trim() === ''}>
+          {suggesting ? 'Matching' : 'Suggest frames'}
+        </button>
+      </form>
+      {suggested.length > 0 ? (
+        <ol className="native-suggestions" aria-label="Suggested frames">
+          {suggested.map((clip) => (
+            <li key={clip.id}>
+              {/* biome-ignore lint/performance/noImgElement: the static runtime has no image optimizer */}
+              <img src={clip.still} alt="" loading="lazy" />
+              <span>
+                <small>{clip.role}</small>
+                {clip.title}
+              </span>
+              <button
+                type="button"
+                aria-label={`Add suggested ${clip.title} at playhead`}
+                onClick={() => add(clip.id, editor.playback.getCurrentTime() / TICKS_PER_SECOND)}
+              >
+                Add
+              </button>
+            </li>
+          ))}
+        </ol>
+      ) : null}
       <input
         aria-label="Search library"
         placeholder="Search library"
