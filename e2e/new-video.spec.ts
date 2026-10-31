@@ -1,0 +1,17 @@
+import { expect, test } from '@playwright/test';
+
+test('a prompt from home reaches the agent queue and opens the editor', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Create from a prompt' }).click();
+  await page.getByLabel('What should this video show?').fill('A launch video');
+  await page.getByRole('button', { name: 'Start', exact: true }).click();
+  await page.waitForURL(/\/video\/[a-z0-9]{12}$/);
+  const id = new URL(page.url()).pathname.split('/').at(-1);
+  const state = await page.evaluate(
+    async (projectId) => (await fetch(`/api/projects/${projectId}`)).json(),
+    id,
+  );
+  expect(state.project.height).toBe(1920);
+  expect(state.events[0]).toMatchObject({ kind: 'job' });
+  expect(state.events[0].text).toContain('A launch video');
+});

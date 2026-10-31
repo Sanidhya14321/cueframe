@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LivePresence } from '@/components/clip-timeline/live-presence';
 import { VideoEditorSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,11 @@ export const OpenCutEditor = ({
   const editor = useLiveProject(title, `neuclip-video:${id}`, initialProject, id);
   const context = useOpenCutContext(frame);
   const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    if (frame.current?.contentDocument?.readyState === 'complete') {
+      setLoaded(true);
+    }
+  }, [frame]);
   return (
     <LivePresence state={editor.state} undoAgent={editor.undoAgent} onSelect={context.select}>
       <section className="flex h-[calc(100dvh-6.5rem)] min-h-0 flex-col" aria-label="Video editor">

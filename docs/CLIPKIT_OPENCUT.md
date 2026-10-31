@@ -47,4 +47,4 @@ The static runtime receives ClipKit's semantic colors, theme preference and bund
 
 Native export requires the browser's matching WebCodecs encoder. Local layer previews and local rendering use Chromium, installed automatically on first use if missing. First animation preparation can take longer than later cached opens. Downloaded binaries and media remain local; no provider call is required for rendering.
 
-Run `bun run verify`, `bun run opencut:typecheck`, `bun run build` and the Playwright suite for validation. Final evidence is in `CLIPKIT_UI_REVIEW.md`. Addendum C has not begun.
+Run `bun run verify`, `bun run opencut:typecheck`, `bun run build` and the Playwright suite for validation. Final evidence is in `CLIPKIT_UI_REVIEW.md`. Home start and New video exist; remaining addendum work is tracked in the PR.

@@ -1,58 +1,20 @@
 'use client';
 import { Mic, Square } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { FrameStore } from '@/lib/frame-store';
+import { useDictation } from '@/lib/use-dictation';
 
 type Props = { projectId: string; frames: FrameStore; selectedId: string | null };
 export const VoiceRequest = ({ projectId, frames, selectedId }: Props) => {
   const [text, setText] = useState('');
   const [message, setMessage] = useState('');
-  const [phase, setPhase] = useState<'idle' | 'recording' | 'transcribing' | 'sending'>('idle');
-  const recorder = useRef<MediaRecorder | null>(null);
-  const transcribe = async (audio: Blob) => {
-    setPhase('transcribing');
-    setMessage('Transcribing on this computer. First use also sets up Whisper.');
-    try {
-      const response = await fetch('/api/voice-input', { method: 'POST', body: audio });
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(result.problem);
-      }
-      setText((current) => `${current} ${result.text}`.trim());
-      setMessage(result.text ? 'Check the text, then send it.' : 'No speech was heard.');
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Could not transcribe that recording.');
-    } finally {
-      setPhase('idle');
-    }
-  };
-  const toggleRecording = async () => {
-    if (recorder.current) {
-      recorder.current.stop();
-      return;
-    }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const next = new MediaRecorder(stream);
-      const chunks: Blob[] = [];
-      next.ondataavailable = (event) => chunks.push(event.data);
-      next.onstop = () => {
-        recorder.current = null;
-        for (const track of stream.getTracks()) {
-          track.stop();
-        }
-        transcribe(new Blob(chunks, { type: next.mimeType })).catch(() => undefined);
-      };
-      recorder.current = next;
-      next.start();
-      setPhase('recording');
-      setMessage('Listening. Press stop when you finish.');
-    } catch {
-      setMessage('Allow microphone access in your browser, or type your request.');
-    }
-  };
+  const [phase, setPhase] = useState<'idle' | 'sending'>('idle');
+  const { recording, busy, toggle } = useDictation(
+    (spoken) => setText((current) => `${current} ${spoken}`.trim()),
+    setMessage,
+  );
   const send = async () => {
     setPhase('sending');
     try {
@@ -77,7 +39,6 @@ export const VoiceRequest = ({ projectId, frames, selectedId }: Props) => {
       setPhase('idle');
     }
   };
-  const recording = phase === 'recording';
   return (
     <form
       className="flex min-w-64 flex-1 flex-wrap items-center gap-2"
@@ -93,8 +54,8 @@ export const VoiceRequest = ({ projectId, frames, selectedId }: Props) => {
         className="size-11"
         aria-label={recording ? 'Stop recording' : 'Record voice request'}
         aria-pressed={recording}
-        disabled={phase === 'transcribing' || phase === 'sending'}
-        onClick={toggleRecording}
+        disabled={busy || phase === 'sending'}
+        onClick={toggle}
       >
         {recording ? <Square /> : <Mic />}
       </Button>
@@ -109,7 +70,7 @@ export const VoiceRequest = ({ projectId, frames, selectedId }: Props) => {
         type="submit"
         variant="outline"
         className="min-h-11 text-xs"
-        disabled={phase !== 'idle' || !text.trim()}
+        disabled={busy || recording || phase !== 'idle' || !text.trim()}
       >
         Send
       </Button>
