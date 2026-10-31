@@ -1,0 +1,22 @@
+pre-commit:
+  parallel: true
+  commands:
+    biome:
+      glob: "*.{js,jsx,ts,tsx,json,jsonc,css}"
+      run: bunx biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      stage_fixed: true
+    comments:
+      glob: "*.{ts,tsx}"
+      run: bun run scripts/strip-comments.ts --check {staged_files}
+    em-dashes:
+      run: bun run check:em-dashes
+    repository:
+      run: bun run check:repository
+
+pre-push:
+  parallel: true
+  commands:
+    typecheck:
+      run: bun run typecheck
+    lint:
+      run: bun run lint

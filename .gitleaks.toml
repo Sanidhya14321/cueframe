@@ -1,0 +1,17 @@
+title = "neuclip gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Ignore generated, vendored and build-output directories"
+paths = [
+  '''(^|/)node_modules/''',
+  '''(^|/)\.next/''',
+  '''(^|/)dist/''',
+  '''(^|/)build/''',
+  '''(^|/)coverage/''',
+  '''(^|/)playwright-report/''',
+  '''(^|/)test-results/''',
+  '''(^|/)bun\.lock$''',
+]

@@ -1,0 +1,29 @@
+accept = [200, 206, 429]
+
+timeout = 20
+max_retries = 2
+retry_wait_time = 2
+max_concurrency = 8
+
+cache = true
+max_cache_age = "2d"
+
+exclude_all_private = true
+exclude_loopback = true
+
+exclude = [
+  '^https?://localhost',
+  '^https?://127\.0\.0\.1',
+  '^https?://0\.0\.0\.0',
+  '^https?://example\.(com|org|net)',
+]
+
+exclude_path = [
+  "node_modules",
+  ".next",
+  "dist",
+  "build",
+  "coverage",
+  "playwright-report",
+  "test-results",
+]
