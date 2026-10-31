@@ -15,6 +15,7 @@ const PROJECT_COMPOSITION_ID = 'project';
 export interface RenderProjectArgs {
   project: Project;
   outDir: string;
+  browser?: { browserExecutable: string; chromiumOptions: { gl: 'swangle' } };
   options: RenderOptions;
   name?: string;
   onProgress?: (progress: number) => void;
@@ -31,11 +32,13 @@ export const renderProject = async ({
   options,
   name = PROJECT_COMPOSITION_ID,
   onProgress,
+  browser,
 }: RenderProjectArgs): Promise<RenderProjectResult> => {
   const serveUrl = await getServeUrl();
+  const browserOptions = { ...BROWSER_RENDER_OPTIONS, ...browser };
   const inputProps = project as unknown as Record<string, unknown>;
   const composition = await selectComposition({
-    ...BROWSER_RENDER_OPTIONS,
+    ...browserOptions,
     serveUrl,
     id: PROJECT_COMPOSITION_ID,
     inputProps,
@@ -47,7 +50,7 @@ export const renderProject = async ({
   const media = buildRenderMediaOptions(options);
 
   await renderMedia({
-    ...BROWSER_RENDER_OPTIONS,
+    ...browserOptions,
     serveUrl,
     composition,
     inputProps,
@@ -57,7 +60,7 @@ export const renderProject = async ({
   });
 
   await renderStill({
-    ...BROWSER_RENDER_OPTIONS,
+    ...browserOptions,
     serveUrl,
     composition,
     inputProps,
