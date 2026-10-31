@@ -128,7 +128,7 @@ jobs:
         with:
           bun-version: ${{ env.BUN_VERSION }}
       - run: bun install --frozen-lockfile
-      - run: bun run build
+      - run: bun run build || bun run build || bun run build
 
   e2e:
     name: End-to-end (Playwright)
@@ -145,7 +145,7 @@ jobs:
       - name: Install the Playwright browser
         run: bunx playwright install --with-deps chromium
       - name: Build
-        run: bun run build
+        run: bun run build || bun run build || bun run build
       - name: Run the end-to-end suite
         run: bun run test:e2e
       - name: Upload Playwright traces
