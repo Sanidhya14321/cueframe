@@ -13,6 +13,7 @@ import { writeJson } from './files';
 import { ProjectProblem, projectDirectory, readProject } from './projects';
 import { inlineProjectMedia } from './render';
 import { renderTurn } from './render-turn';
+import { workerEnvironment } from './worker-env';
 
 export const prepareOpenCutPreview = async (id: string, itemId: string, cachedOnly = false) => {
   const state = await readProject(id);
@@ -111,7 +112,7 @@ const renderLayer = (input: string, output: string) =>
       ['run', join(repoRoot(), 'src/render/render-layer.ts'), input, output],
       {
         cwd: repoRoot(),
-        env: { ...process.env, NODE_OPTIONS: '', BUN_OPTIONS: '' },
+        env: workerEnvironment(),
         stdio: ['ignore', 'ignore', 'pipe'],
       },
     );

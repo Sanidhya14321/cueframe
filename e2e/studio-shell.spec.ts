@@ -25,7 +25,7 @@ test('New video opens a disk-backed editable project from the shell', async ({ p
   await page.goto('/projects');
   await page.getByRole('button', { name: 'New video', exact: true }).click();
   await expect(page).toHaveURL(/\/video\/[a-z0-9]{12}$/);
-  await expect(page.frameLocator('iframe').getByLabel('OpenCut sync')).toContainText(
+  await expect(page.frameLocator('iframe').getByLabel('Editor sync')).toContainText(
     'Saved locally',
   );
   await page.keyboard.press('Control+k');

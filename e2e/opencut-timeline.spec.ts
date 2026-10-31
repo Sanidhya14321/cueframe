@@ -33,14 +33,14 @@ const create = async (page: Page) => {
         await fetch('/api/projects', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ title: 'OpenCut timeline proof', project }),
+          body: JSON.stringify({ title: 'Editor timeline proof', project }),
         })
       ).json()
     ).id as string;
   });
   await page.goto(`/video/${id}?workspace=animation`);
   await expect(page.getByRole('status', { name: 'Project sync' })).toContainText('Saved locally');
-  await expect(page.getByRole('region', { name: 'OpenCut timeline' })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Editor timeline' })).toBeVisible();
   return id;
 };
 const handleSelector = (edge: 'trim' | 'resize') => `[data-handle="${edge}"]`;
@@ -129,5 +129,5 @@ test('classic timeline supports keyboard selection, ruler seeking and toolbar sp
   await expect.poll(async () => (await read(page, id)).project.tracks[0].elements.length).toBe(1);
   await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
   await page.getByRole('button', { name: 'Fit timeline', exact: true }).click();
-  await expect(page.getByRole('region', { name: 'OpenCut timeline' })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Editor timeline' })).toBeVisible();
 });

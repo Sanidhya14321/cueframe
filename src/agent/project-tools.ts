@@ -15,6 +15,7 @@ import { addVoiceover, voiceInputSchema } from '@/local/voice';
 import { createCompositionElement, createTrack, findElement } from '@/project';
 import { getClipDefaults, getClipMeta, isClipId } from '@/schemas';
 import { beatsheetSchema, buildFromBeatsheet } from './beatsheet';
+import { composeFromBrief } from './compose';
 
 export interface ToolContext {
   origin: string;
@@ -97,6 +98,11 @@ export const projectTools = {
     async ({ projectId: pid, id, note }, ctx) => ({
       revision: (await resolveComment(pid, id, note, ctx.actor)).revision,
     }),
+  ),
+  compose_from_brief: defineProjectTool(
+    'Fill a project from a brief: picks one matching clip per story role with semantic search and clip labels, and places them on the timeline. Then use update_props to write copy.',
+    { projectId, brief: z.string().min(1).max(2000), confirmed },
+    async ({ projectId: pid, brief }, ctx) => composeFromBrief(pid, brief, ctx.actor),
   ),
   build_from_beatsheet: defineProjectTool(
     'Build 12-16 short segments live, with downbeat cuts, whooshes, hits and music. Use 16 segments for a 30-second video.',

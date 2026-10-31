@@ -22,7 +22,7 @@ const create = async (page: import('@playwright/test').Page) => {
   });
   await page.goto(`/video/${id}`);
   const editor = page.frameLocator('iframe');
-  await expect(editor.getByLabel('OpenCut sync')).toHaveText('Saved locally');
+  await expect(editor.getByLabel('Editor sync')).toHaveText('Saved locally');
   return { id, editor };
 };
 const items = (page: import('@playwright/test').Page, id: string) =>
@@ -43,7 +43,7 @@ test('adds a library animation to the open project from the Add button', async (
     .first()
     .click();
   await expect.poll(() => items(page, id)).toHaveLength(1);
-  await expect(editor.getByLabel('OpenCut sync')).toHaveText('Saved locally', { timeout: 150_000 });
+  await expect(editor.getByLabel('Editor sync')).toHaveText('Saved locally', { timeout: 150_000 });
   await expect(editor.locator('button[data-element-id]')).toHaveCount(1);
 });
 

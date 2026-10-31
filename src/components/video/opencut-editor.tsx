@@ -86,7 +86,7 @@ export const OpenCutEditor = ({
             ref={frame}
             hidden={!loaded}
             onLoad={() => setLoaded(true)}
-            title="OpenCut video editor"
+            title="Video editor"
             src={`/opencut/index.html?project=${id}${readOnly ? '&mode=render' : ''}`}
             className="min-h-0 min-w-0 flex-1 border-0"
             allow="clipboard-read; clipboard-write"

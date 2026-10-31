@@ -317,7 +317,7 @@ export async function hydrateCanonical(editor: EditorCore) {
     const mime = response.headers.get('content-type') ?? 'video/webm';
     const file = new File(
       [await response.blob()],
-      `${item.type}-${item.id}.${mime.split('/')[1] ?? 'webm'}`,
+      `${item.type === 'composition' ? item.clipId : item.type}.${mime.split('/')[1] ?? 'webm'}`,
       { type: mime },
     );
     const processed = preview

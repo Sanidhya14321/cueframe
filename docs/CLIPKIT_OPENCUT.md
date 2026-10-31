@@ -2,6 +2,8 @@
 
 ## Active editor
 
+ClipKit presents this as its own Video editor; OpenCut stays named only in licenses and source notes.
+
 Saved video pages at `/video/<id>` run the actual OpenCut classic `EditorCore`, timeline/commands, preview/compositor, media library, text/effects/settings panels, inspector and native export controls. This replaces the primary video editor, rather than renaming the old timeline.
 
 ClipKit's revisioned Project remains shared with agents. Native saves run through canonical project actions, revision checks, locks and history. The complete native document and media manifest are retained alongside the canonical layer projection. Agent actions arrive through SSE and hydrate the native timeline; pending revisions are queued during local work. Locked layers are checked in both native track updates and the server's canonical/native validation.

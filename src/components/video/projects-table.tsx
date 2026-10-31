@@ -44,23 +44,27 @@ export const ProjectsTable = ({ rows }: { rows: Row[] }) => {
         <table className="w-full text-left text-sm">
           <thead className="border-b text-xs text-muted-foreground">
             <tr>
-              <th scope="col" className="p-3" aria-sort={sort === 'title' ? 'ascending' : 'none'}>
+              <th
+                scope="col"
+                className="px-3 py-2"
+                aria-sort={sort === 'title' ? 'ascending' : 'none'}
+              >
                 <button type="button" className="min-h-11" onClick={() => setSort('title')}>
                   Name
                 </button>
               </th>
-              <th scope="col" className="p-3">
+              <th scope="col" className="px-3 py-2">
                 Length
               </th>
-              <th scope="col" className="p-3">
+              <th scope="col" className="px-3 py-2">
                 Size
               </th>
-              <th scope="col" className="p-3">
+              <th scope="col" className="px-3 py-2">
                 Type
               </th>
               <th
                 scope="col"
-                className="p-3"
+                className="px-3 py-2"
                 aria-sort={sort === 'updated' ? 'descending' : 'none'}
               >
                 <button type="button" className="min-h-11" onClick={() => setSort('updated')}>
@@ -72,15 +76,15 @@ export const ProjectsTable = ({ rows }: { rows: Row[] }) => {
           <tbody>
             {shown.slice(current * PAGE_SIZE, (current + 1) * PAGE_SIZE).map((row) => (
               <tr key={row.id} className="border-b last:border-0 hover:bg-muted">
-                <td className="p-3">
+                <td className="px-3 py-2">
                   <Link className="inline-flex min-h-11 items-center" href={`/video/${row.id}`}>
                     {row.title}
                   </Link>
                 </td>
-                <td className="p-3 tabular-nums">{row.seconds.toFixed(1)} s</td>
-                <td className="p-3 tabular-nums">{row.size}</td>
-                <td className="p-3">{row.engine}</td>
-                <td className="p-3 whitespace-nowrap" suppressHydrationWarning>
+                <td className="px-3 py-2 tabular-nums">{row.seconds.toFixed(1)} s</td>
+                <td className="px-3 py-2 tabular-nums">{row.size}</td>
+                <td className="px-3 py-2">{row.engine}</td>
+                <td className="px-3 py-2 whitespace-nowrap" suppressHydrationWarning>
                   {dateFormat.format(row.updated)}
                 </td>
               </tr>

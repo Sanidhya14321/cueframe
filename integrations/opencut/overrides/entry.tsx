@@ -254,7 +254,7 @@ function Runtime() {
           onChange={(event) => setName(event.target.value)}
           onBlur={rename}
         />
-        <output aria-label="OpenCut sync">{status}</output>
+        <output aria-label="Editor sync">{status}</output>
         <button
           type="button"
           disabled={!editor.command.canUndo()}
@@ -303,7 +303,7 @@ function Runtime() {
           </nav>
           <div className="native-asset-content">{panels[tab]}</div>
         </section>
-        <section className="native-preview" aria-label="OpenCut preview">
+        <section className="native-preview" aria-label="Editor preview">
           <PreviewPanel
             overlayControls={[]}
             overlayInstances={[]}
@@ -317,7 +317,7 @@ function Runtime() {
           <PropertiesPanel />
         </aside>
       </div>
-      <section className="native-timeline" aria-label="OpenCut timeline" {...libraryDropTarget}>
+      <section className="native-timeline" aria-label="Editor timeline" {...libraryDropTarget}>
         <Timeline />
       </section>
       <Toaster />
@@ -332,7 +332,7 @@ class EditorBoundary extends Component<{ children: ReactNode }, { problem: strin
   override render() {
     return this.state.problem ? (
       <div role="alert" className="native-loading">
-        <p>OpenCut could not display this project: {this.state.problem}</p>
+        <p>The video editor could not display this project: {this.state.problem}</p>
         <button type="button" onClick={() => location.reload()}>
           Reload saved project
         </button>
@@ -343,7 +343,7 @@ class EditorBoundary extends Component<{ children: ReactNode }, { problem: strin
   }
 }
 function App() {
-  const [state, setState] = useState('Loading OpenCut editor');
+  const [state, setState] = useState('Loading video editor');
   useEffect(() => {
     const progress = (event: Event) => setState((event as CustomEvent<string>).detail);
     window.addEventListener('clipkit-save', progress);
@@ -362,7 +362,7 @@ function App() {
   ) : (
     <div role="status" className="native-loading">
       {state}
-      {state === 'Loading OpenCut editor' ? null : (
+      {state === 'Loading video editor' ? null : (
         <button type="button" onClick={() => location.reload()}>
           Retry opening
         </button>

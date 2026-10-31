@@ -91,9 +91,9 @@ export const listProjectSummaries = async (): Promise<ProjectSummary[]> => {
         title: state.title,
         revision: state.revision,
         updated: state.updatedAt.getTime(),
-        seconds: state.nativeVideo?.duration ?? state.project.durationInFrames / state.project.fps,
+        seconds: state.nativeVideo?.duration || state.project.durationInFrames / state.project.fps,
         size: `${state.project.width}×${state.project.height}`,
-        engine: state.nativeVideo ? 'OpenCut' : 'Animation source',
+        engine: state.nativeVideo ? 'Edited video' : 'Animation source',
       };
       summaries.set(id, { modified: file.mtimeMs, summary });
       return summary;

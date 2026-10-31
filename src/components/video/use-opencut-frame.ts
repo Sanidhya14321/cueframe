@@ -40,7 +40,9 @@ const settle = (data: Extract<Reply, { type: 'clipkit-flushed' }>, pending: Pend
     request.resolve();
     return;
   }
-  request.reject(new Error('OpenCut could not save. Resolve the save error before switching.'));
+  request.reject(
+    new Error('The video editor could not save. Resolve the save error before switching.'),
+  );
 };
 export const useOpenCutFrame = () => {
   const frame = useRef<HTMLIFrameElement>(null);
@@ -82,7 +84,9 @@ export const useOpenCutFrame = () => {
         const requestId = crypto.randomUUID();
         const timer = setTimeout(() => {
           pending.current.delete(requestId);
-          reject(new Error('OpenCut did not respond. Keep this page open and retry saving.'));
+          reject(
+            new Error('The video editor did not respond. Keep this page open and retry saving.'),
+          );
         }, 15000);
         pending.current.set(requestId, {
           resolve: () => {
@@ -128,7 +132,9 @@ export const useOpenCutFrame = () => {
       flush()
         .then(() => location.assign(link.href))
         .catch((error: unknown) =>
-          setProblem(error instanceof Error ? error.message : 'Save OpenCut before leaving.'),
+          setProblem(
+            error instanceof Error ? error.message : 'Save the video editor before leaving.',
+          ),
         );
     };
     document.addEventListener('click', click, true);

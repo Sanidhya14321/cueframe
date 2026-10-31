@@ -139,7 +139,7 @@ export const OpenCutTimeline = (props: TimelineProps) => {
   const width = Math.max(project.durationInFrames * scale, viewportWidth - LABEL_WIDTH);
   return (
     <section
-      aria-label="OpenCut timeline"
+      aria-label="Editor timeline"
       data-timeline-engine="opencut-classic-adapter"
       className="flex h-full min-h-0 flex-col bg-sidebar"
     >

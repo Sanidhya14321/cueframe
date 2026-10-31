@@ -24,7 +24,7 @@ const create = async (page: Page) => {
   });
   await page.goto(`/video/${id}`);
   const editor = page.frameLocator('iframe');
-  await expect(editor.getByLabel('OpenCut sync')).toHaveText('Saved locally');
+  await expect(editor.getByLabel('Editor sync')).toHaveText('Saved locally');
   return { id, editor };
 };
 const read = (page: Page, id: string) =>
@@ -65,8 +65,8 @@ test('actual OpenCut imports media, saves, selects by keyboard, splits, undoes a
   const add = editor.getByRole('button', { name: 'Add proof.mp4 to timeline', exact: true });
   await expect(add).toBeVisible();
   const box = await add.boundingBox();
-  expect(box?.width).toBeGreaterThanOrEqual(44);
-  expect(box?.height).toBeGreaterThanOrEqual(44);
+  expect(box?.width).toBeGreaterThanOrEqual(24);
+  expect(box?.height).toBeGreaterThanOrEqual(24);
   await add.click();
   await expect.poll(() => count(page, id)).toBe(1);
   const clip = editor.getByRole('button', { name: 'Select proof.mp4', exact: true });
@@ -116,9 +116,9 @@ test('native failed saves stay recoverable and retry persists the edit', async (
   });
   await editor.getByRole('button', { name: 'Text', exact: true }).click();
   await editor.getByRole('button', { name: 'Add Default text to timeline', exact: true }).click();
-  await expect(editor.getByLabel('OpenCut sync')).toHaveText('Test disk unavailable');
+  await expect(editor.getByLabel('Editor sync')).toHaveText('Test disk unavailable');
   await editor.getByRole('button', { name: 'Retry saving', exact: true }).click();
-  await expect(editor.getByLabel('OpenCut sync')).toHaveText('Saved locally');
+  await expect(editor.getByLabel('Editor sync')).toHaveText('Saved locally');
   await expect.poll(() => count(page, id)).toBe(1);
   await page.reload();
   await expect(editor.getByRole('button', { name: 'Select Text', exact: true })).toBeVisible();

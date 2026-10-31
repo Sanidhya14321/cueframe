@@ -64,6 +64,10 @@ export const NewVideoForm = () => {
         });
       }
       if (prompt.trim()) {
+        await post(`/api/projects/${state.id}/compose`, {
+          headers: json,
+          body: JSON.stringify({ brief: prompt.trim() }),
+        });
         const text = `${prompt.trim()}\nLength: ${seconds}s. Aspect: ${aspect}.`;
         await post(`/api/projects/${state.id}/agent-events`, {
           headers: json,

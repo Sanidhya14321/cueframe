@@ -75,10 +75,13 @@ export const saveOpenCut = async (id: string, input: unknown) => {
   return serialDisk(path, async () => {
     const current = await readOpenCut(id);
     if (current.version !== change.version) {
-      throw new ProjectProblem('OpenCut changed in another tab. Reload before editing again.', 409);
+      throw new ProjectProblem(
+        'This video changed in another tab. Reload before editing again.',
+        409,
+      );
     }
     if (change.document && change.document.metadata.id !== id) {
-      throw new ProjectProblem('OpenCut project ID does not match.');
+      throw new ProjectProblem('Video project ID does not match.');
     }
     if (
       change.media?.some(
@@ -89,7 +92,7 @@ export const saveOpenCut = async (id: string, input: unknown) => {
           ),
       )
     ) {
-      throw new ProjectProblem('OpenCut media must be stored in this project.');
+      throw new ProjectProblem('Video media must be stored in this project.');
     }
     if (change.document && !change.project) {
       const existing = await readProject(id);

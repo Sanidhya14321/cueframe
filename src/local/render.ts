@@ -9,6 +9,7 @@ import { readOpenCut } from './opencut';
 import { renderNativeProject } from './opencut-render';
 import { projectDirectory, readProject } from './projects';
 import { renderTurn } from './render-turn';
+import { workerEnvironment } from './worker-env';
 
 export const inlineProjectMedia = async (value: unknown): Promise<unknown> => {
   if (typeof value === 'string') {
@@ -80,7 +81,7 @@ const runRenderWorker = (
       {
         cwd: repoRoot(),
         stdio: ['ignore', 'pipe', 'pipe'],
-        env: { ...process.env, NODE_OPTIONS: '', BUN_OPTIONS: '' },
+        env: workerEnvironment(),
       },
     );
     let buffer = '';
@@ -88,7 +89,7 @@ const runRenderWorker = (
     const timer = setTimeout(() => {
       child.kill();
       reject(new Error('The local render timed out.'));
-    }, 600000);
+    }, 3600000);
     child.stdout.on('data', (chunk: Buffer) => {
       buffer += chunk.toString();
       const lines = buffer.split('\n');

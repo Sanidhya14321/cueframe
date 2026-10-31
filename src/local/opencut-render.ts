@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { repoRoot } from '@/lib/repo-root';
 import { projectDirectory, readProject } from './projects';
 import { sessionToken } from './security';
+import { workerEnvironment } from './worker-env';
 
 export const renderNativeProject = async (
   id: string,
@@ -23,10 +24,7 @@ export const renderNativeProject = async (
         cwd: repoRoot(),
         stdio: ['ignore', 'ignore', 'pipe'],
         env: {
-          // biome-ignore lint/style/noProcessEnv: renderer inherits runtime configuration without logging credentials
-          ...process.env,
-          NODE_OPTIONS: '',
-          BUN_OPTIONS: '',
+          ...workerEnvironment(),
           CLIPKIT_RENDER_TOKEN: sessionToken(),
         },
       },

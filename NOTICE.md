@@ -101,3 +101,7 @@ Beat beds, whooshes and hits are synthesized by original deterministic code in `
 ## Website template fonts
 
 Bodoni Moda, EB Garamond, Jost, Fredoka, Nunito, Fraunces, Caveat, Poiret One and Gochi Hand are bundled from Fontsource packages under the SIL Open Font License 1.1.
+
+## Hugging Face Transformers.js
+
+`@huggingface/transformers` (Apache-2.0) runs the local clip embedding model. The Xenova/all-MiniLM-L6-v2 model (Apache-2.0) downloads on first search.
