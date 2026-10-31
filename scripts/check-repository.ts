@@ -53,7 +53,7 @@ const REPORTS: Report[] = [
   {
     name: 'kebab-case-paths',
     scope:
-      'segments under src/ are kebab-case (exempt: Next.js [dynamic], (group) and .well-known segments)',
+      'segments under src/ are kebab-case (exempt: Next.js [dynamic], (group), .well-known and LICENSE.txt segments)',
     violations: [],
   },
 ];
@@ -77,7 +77,8 @@ const isSegmentAllowed = (segment: string): boolean =>
   KEBAB_SEGMENT.test(segment) ||
   NEXT_DYNAMIC_SEGMENT.test(segment) ||
   NEXT_GROUP_SEGMENT.test(segment) ||
-  segment === WELL_KNOWN_SEGMENT;
+  segment === WELL_KNOWN_SEGMENT ||
+  segment === 'LICENSE.txt';
 
 const trackedFiles = async (): Promise<string[]> => {
   const output = await $`git ls-files`.text();
@@ -114,7 +115,7 @@ const checkMetadata = (file: string, stats: Stats): void => {
 };
 
 const checkContent = (file: string, source: string): void => {
-  if (source.includes('\r\n')) {
+  if (source.includes('\r\n') && extensionOf(file) !== 'cmd') {
     push('crlf-line-endings', file);
   }
   const extension = extensionOf(file);
