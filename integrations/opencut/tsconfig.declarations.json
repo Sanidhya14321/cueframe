@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "noCheck": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": ".types",
+    "rootDir": ".source/src",
+    "paths": { "@/*": ["./.source/src/*"] }
+  },
+  "include": [".source/src/**/*.ts", ".source/src/**/*.tsx"]
+}

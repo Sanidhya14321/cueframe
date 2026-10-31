@@ -1,0 +1,7 @@
+{
+  "repository": "https://github.com/opencut-app/opencut-classic",
+  "commit": "cf5e79e919144200294fb9fed22a222592a0aeea",
+  "archive": "apps/web/src",
+  "license": "MIT",
+  "sha256": "5331c3604c40a76fe43a7f4b09dbaa3e46003d61255e0fcae458a1817d676be3"
+}

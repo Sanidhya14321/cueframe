@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "incremental": false,
+    "paths": {
+      "@/*": ["./.types/*"],
+      "@/services/storage/service": ["./overrides/storage.ts"],
+      "@/services/renderer/scene-exporter": ["./overrides/scene-exporter.ts"],
+      "@/services/video-cache/service": ["./overrides/video-cache.ts"],
+      "@/services/storage/migrations": ["./overrides/migrations.ts"],
+      "mediabunny": ["./overrides/browser-media.ts"],
+      "@clipkit/*": ["../../src/*"],
+      "@clipkit/project": ["../../src/project/index.ts"],
+      "@clipkit/local/project-state": ["../../src/local/project-state.ts"]
+    }
+  },
+  "include": ["overrides/**/*.ts", "overrides/**/*.tsx", "build.ts", "license-audit.ts"],
+  "exclude": ["node_modules", ".source", "../../src"]
+}
