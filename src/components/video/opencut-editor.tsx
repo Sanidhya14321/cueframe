@@ -1,6 +1,8 @@
 'use client';
 import Link from 'next/link';
+import { useState } from 'react';
 import { LivePresence } from '@/components/clip-timeline/live-presence';
+import { VideoEditorSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useLiveProject } from '@/lib/use-live-project';
@@ -22,6 +24,7 @@ export const OpenCutEditor = ({
   const { frame, problem } = useOpenCutFrame();
   const editor = useLiveProject(title, `neuclip-video:${id}`, initialProject, id);
   const context = useOpenCutContext(frame);
+  const [loaded, setLoaded] = useState(false);
   return (
     <LivePresence state={editor.state} undoAgent={editor.undoAgent} onSelect={context.select}>
       <section className="flex h-[calc(100dvh-6.5rem)] min-h-0 flex-col" aria-label="Video editor">
@@ -58,8 +61,16 @@ export const OpenCutEditor = ({
           </span>
           {problem ? <p role="alert">{problem}</p> : null}
         </div>
+        {loaded ? null : (
+          <div className="min-h-0 flex-1">
+            <VideoEditorSkeleton />
+          </div>
+        )}
+        {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions: load only reveals the frame */}
         <iframe
           ref={frame}
+          hidden={!loaded}
+          onLoad={() => setLoaded(true)}
           title="OpenCut video editor"
           src={`/opencut/index.html?project=${id}${readOnly ? '&mode=render' : ''}`}
           className="min-h-0 w-full flex-1 border-0"

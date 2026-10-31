@@ -6,7 +6,7 @@ New imports are restricted to MIT, Apache-2.0, ISC, BSD, CC0, MIT-0 or Unlicense
 
 ## fast-uri 3.1.9
 
-- Source: https://github.com/fastify/fast-uri, npm release `3.1.9` (exact version pinned in the Bun lockfile and package override).
+- Source: <https://github.com/fastify/fast-uri>, npm release `3.1.9` (exact version pinned in the Bun lockfile and package override).
 - License: BSD-3-Clause; full text retained in `licenses/fast-uri-bsd-3-clause.txt`.
 - Used transitively by the existing MCP SDK and Remotion bundler. Updated from 3.1.8 to fix four URI-normalization audit findings. No upstream source modifications or vendored component files.
 
@@ -65,15 +65,15 @@ Beat beds, whooshes and hits are synthesized by original deterministic code in `
 
 ## Impeccable 4.8.0 (design tooling)
 
-- Source: https://github.com/pbakaus/impeccable at commit `df3a4abe7d0840d5f60324812c432e00b66a4e75`.
+- Source: <https://github.com/pbakaus/impeccable> at commit `df3a4abe7d0840d5f60324812c432e00b66a4e75`.
 - Apache-2.0; full license in `licenses/impeccable-apache-2.txt`, upstream attribution notice in `licenses/impeccable-upstream-notice.md`.
 - Installed the official `.agents/skills/impeccable` skill, references and launcher into the same project-local path. Upstream wording is unchanged; trailing newlines were normalized to satisfy repository hygiene. The launcher executable bit was restored after download. This is development tooling, not a browser dependency. PRODUCT.md, DESIGN.md and ClipKit UI code are project-specific work.
 - Impeccable's native-platform reference notes derive from ehmo/platform-design-skills (MIT); the upstream notice is retained above and the full MIT text is in `licenses/impeccable-platform-design-mit.txt`. These references are tooling only; ClipKit uses the web guidance.
 
 ## OpenCut editor integration
 
-- Requested repository cloned for review: https://github.com/opencut-app/opencut at `e668010778568641babef2cc40be4703ae6916d6`, MIT. This revision is a Rust-core rewrite; its README directs users to the working classic editor.
-- Adapted source: https://github.com/opencut-app/opencut-classic/blob/cf5e79e919144200294fb9fed22a222592a0aeea/apps/web/src/commands/timeline/element/split-elements.ts (MIT).
+- Requested repository cloned for review: <https://github.com/opencut-app/opencut> at `e668010778568641babef2cc40be4703ae6916d6`, MIT. This revision is a Rust-core rewrite; its README directs users to the working classic editor.
+- Adapted source: <https://github.com/opencut-app/opencut-classic/blob/cf5e79e919144200294fb9fed22a222592a0aeea/apps/web/src/commands/timeline/element/split-elements.ts> (MIT).
 - Adapted into `src/project/opencut/split-video.ts`: frame-based split bounds, left/right duration calculation and source-offset preservation. Replaced OpenCut singleton commands, WASM MediaTime, retiming and scene model with ClipKit's pure Project model, IDs and existing persistence/undo; restricted to normal-speed video. Punch-in regions are partitioned. This adapter uses no OpenCut brand assets or services; native runtime dependencies are documented below.
 - Full original classic license is retained alongside the adapter at `src/project/opencut/LICENSE.txt` (line endings normalized only).
 
@@ -85,10 +85,9 @@ Beat beds, whooshes and hits are synthesized by original deterministic code in `
 - Replaced EditorCore subscriptions, WASM time, scene managers and command history with typed ClipKit Project/FrameStore callbacks. Added pointer/touch capture, cancellation, keyboard seeking/selection, visible-range tick rendering, semantic design tokens and accessible track menus. ClipKit's canonical reducers, local persistence, agent locks, undo and Remotion rendering remain responsible for project behavior. This compatibility timeline does not use OpenCut storage/authentication or its native renderer; the separate native workspace below does.
 - The old timeline canvas, track and block renderers were removed from the active implementation. The old public timeline imports are compatibility entry points into the new adapter. Existing export controls are reused by the replacement toolbar.
 
-
 ### OpenCut classic native editor runtime
 
-- Source: https://github.com/opencut-app/opencut-classic/tree/cf5e79e919144200294fb9fed22a222592a0aeea/apps/web/src, MIT. Full source snapshot is `integrations/opencut/source.tgz`, integrity metadata in `source.json`, license in `integrations/opencut/LICENSE.txt`.
+- Source: <https://github.com/opencut-app/opencut-classic/tree/cf5e79e919144200294fb9fed22a222592a0aeea/apps/web/src>, MIT. Full source snapshot is `integrations/opencut/source.tgz`, integrity metadata in `source.json`, license in `integrations/opencut/LICENSE.txt`.
 - Bundled the actual EditorCore, timeline commands/UI, preview/compositor, media/text/effects/settings/inspector panels and export UI into `public/opencut`. ClipKit's host is a same-origin static runtime in the existing Next app. No OpenCut accounts, database, cloud endpoints, Pro icons or brand artwork are used.
 - `integrations/opencut/build.ts` applies the patches and `overrides/` contains ClipKit-authored disk storage, browser media, muxing, layout, theme/font bridge, navigation/save handshake and accessibility adaptations. Disabled unsupported pitch preservation; removed IndexedDB project migrations; propagated save failures and retained dirty state. Replaced the effect preview photo with an existing ClipKit still.
 - Mediabunny and SoundTouch are not installed or bundled. Browser APIs/WebCodecs plus MIT mp4-muxer 5.2.2 and webm-muxer 5.1.4 replace them. mp4-muxer/webm-muxer are Copyright (c) Vanilagy; full notices are in `licenses/opencut-runtime`.

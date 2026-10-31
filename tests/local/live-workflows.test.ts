@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'bun:test';
 import { buildFromBeatsheet } from '@/agent/beatsheet';
+import { projectTools } from '@/agent/project-tools';
 import { seedProjectForClip } from '@/core';
 import { addComment, resolveComment, waitForComments } from '@/local/comments';
 import {
@@ -16,6 +17,16 @@ import { resetTestHome } from './test-home';
 
 beforeEach(resetTestHome);
 describe('live editor workflows', () => {
+  it('adds a library clip to a project with no tracks', async () => {
+    const seed = seedProjectForClip('typewriter');
+    const state = await createProject({ title: 'Empty', project: { ...seed, tracks: [] } });
+    await projectTools.add_item.invoke(
+      { projectId: state.id, clipId: 'typewriter', start: 12, confirmed: true },
+      { origin: 'http://127.0.0.1', actor: 'browser:test' },
+    );
+    const elements = (await readProject(state.id)).project.tracks[0]?.elements;
+    expect(elements?.map((item) => item.from)).toEqual([12]);
+  });
   it('refuses all browser writes to locked items, including reset and undo', async () => {
     const state = await createProject({
       title: 'Locks',

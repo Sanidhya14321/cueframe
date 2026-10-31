@@ -9,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import type { FrameStore } from '@/lib/frame-store';
 import type { useLiveProject } from '@/lib/use-live-project';
 import { findElement, removeElement, replaceElement } from '@/project';
+import { VoiceRequest } from './voice-request';
 
 type Props = {
   editor: ReturnType<typeof useLiveProject>;
@@ -25,6 +26,7 @@ export const OpenCutProjectTools = ({ editor, frames, selectedId, select, seek }
   const selected = selectedId ? findElement(editor.value, selectedId)?.element : null;
   return (
     <>
+      <VoiceRequest projectId={state.id} frames={frames} selectedId={selectedId} />
       <BuildVideo projectId={state.id} />
       <AgentRequests
         state={state}

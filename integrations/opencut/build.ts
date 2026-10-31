@@ -141,6 +141,14 @@ await Bun.write(
     '<span className="px-3 text-xs">Main timeline</span>',
   ),
 );
+const timelineView = resolve(root, 'timeline/components/index.tsx');
+await Bun.write(
+  timelineView,
+  (await Bun.file(timelineView).text()).replace(
+    'ref={tracksScrollRef}',
+    'ref={tracksScrollRef} data-clipkit-timeline-zoom={zoomLevel}',
+  ),
+);
 const timelineManager = resolve(root, 'core/managers/timeline-manager.ts');
 const managerCode = await Bun.file(timelineManager).text();
 await Bun.write(

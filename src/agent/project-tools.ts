@@ -195,9 +195,13 @@ export const projectTools = {
         throw new Error('Unknown clip. Use search_clips.');
       }
       const state = await readProject(pid);
-      const track = state.project.tracks[0];
-      if (!track) {
-        throw new Error('Add a track first.');
+      const track = state.project.tracks[0] ?? createTrack('Clips');
+      if (!state.project.tracks[0]) {
+        await commitAction(
+          pid,
+          { type: 'add-track', track },
+          { actor: ctx.actor, label: 'Add track' },
+        );
       }
       const item = createCompositionElement(
         clipId,

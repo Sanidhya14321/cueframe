@@ -22,7 +22,9 @@ import { Timeline } from '@/timeline/components';
 import { buildElementFromMedia } from '@/timeline/element-utils';
 import { useTimelineStore } from '@/timeline/timeline-store';
 import { mediaTimeFromSeconds, ZERO_MEDIA_TIME } from '@/wasm';
+import { CaptionsView } from './captions-panel';
 import { HostContext } from './host-context';
+import { LibraryView, libraryDropTarget } from './library-panel';
 import { connectCanonical, hydrateCanonical, storageService } from './storage';
 import './style.css';
 
@@ -226,8 +228,10 @@ function Runtime() {
   }, [editor]);
   const panels: Record<string, React.ReactNode> = {
     Media: <MediaView />,
+    Library: <LibraryView />,
     Inspect: <PropertiesPanel />,
     Text: <TextView />,
+    Captions: <CaptionsView />,
     ...(editor.renderer.isDegraded ? {} : { Effects: <EffectsView /> }),
     Settings: <SettingsView />,
   };
@@ -311,7 +315,7 @@ function Runtime() {
           <PropertiesPanel />
         </aside>
       </div>
-      <section className="native-timeline" aria-label="OpenCut timeline">
+      <section className="native-timeline" aria-label="OpenCut timeline" {...libraryDropTarget}>
         <Timeline />
       </section>
       <Toaster />

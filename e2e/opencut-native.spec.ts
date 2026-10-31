@@ -373,7 +373,7 @@ test('native agent locks refuse edits and agent undo updates OpenCut', async ({ 
     },
   );
   expect(status).toBe(423);
-  await call('move_item', { projectId: id, id: 'native-locked-title', from: 12, confirmed: true });
+  await call('move_item', { projectId: id, id: 'native-locked-title', start: 12, confirmed: true });
   await call('set_agent_status', {
     projectId: id,
     status: 'idle',

@@ -95,3 +95,7 @@ Verification: full verify passed 716 tests across 66 files; the production build
 Step B review snapshot: `.impeccable/critique/2026-10-31T04-38-48Z__src-components-clip-timeline-agent-requests-tsx.md`. Baseline scores remain pre-fix. Snapshot/trend writes succeeded; temporary review body removed. No browser overlay was attempted in this bounded stage. Test servers are stopped after verification; the original user dev server is retained.
 
 Final B delivery: the latest production build passed; the complete verify gate passed all 716 tests. All 40 browser tests passed on the reviewed UI, including mobile header overlap checks. After the final legacy-comment compatibility change, the six event/live-editor cases were rerun against the final production build in another fresh data folder and all passed. `git diff --check` passed. Four final request-panel screenshots were inspected; test servers were stopped. Full OpenCut timeline replacement remains explicitly outstanding and authorized; do not mistake the initial split adapter for that migration.
+
+## OpenCut Library tab
+
+Added a Library tab beside Media using the existing panel navigation, semantic tokens, 44 px actions and visible focus. It has loading, empty and error states. Add is the keyboard path for dragging. Live agent progress uses the existing OpenCut status line and presence bar, with no extra layer. No screenshots were recorded for this change.

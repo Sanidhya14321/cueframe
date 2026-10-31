@@ -1,4 +1,4 @@
-import catalog from '../../catalog.json';
+import catalog from '../../catalog.json' with { type: 'json' };
 export const searchCatalog = (query: string, category?: string, limit = 5) => {
   const words = query.toLowerCase().split(/\s+/).filter(Boolean);
   return catalog

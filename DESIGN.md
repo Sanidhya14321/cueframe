@@ -38,7 +38,6 @@ Step A covers design records, tokens, shell, library access, a working blank-pro
 
 Step B extends this system with a shadcn/Radix request Popover: 44 px triggers, Escape/outside dismissal, correct form labels, plain queue feedback, and a Connect recovery link. Queue/brief/voice-text context is visible; recording and automatic execution are not implied. Its four-width screenshots and independent review are in the same UI review record.
 
-
 ## OpenCut workspace
 
 Saved video pages open the real classic editor core and native controls. The same-origin runtime inherits root semantic colors, theme preference and bundled font faces; the host reuses repository shadcn controls. Assets, preview, inspector and timeline retain familiar editor structure. Inspect remains available through a named tab on narrow screens. Native media insertion and timeline controls have visible labels/focus and 44 px actions. Status distinguishes saving, saved and failed; navigation checkpoints save before leaving. Source controls and native effects are distinguished when switching to the retained Remotion workspace. Compact screens collect shared project tools into one popover so the native preview remains usable. This does not advance addendum C-I.

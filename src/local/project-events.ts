@@ -1,11 +1,17 @@
+import { stat } from 'node:fs/promises';
+import { join } from 'node:path';
 import { publicProjectState } from './project-state';
-import { readProject } from './projects';
+import { projectDirectory, readProject } from './projects';
+
+const PRESENCE_CHECK_MS = 5000;
 export const projectEvents = (id: string, signal: AbortSignal) => {
   const encoder = new TextEncoder();
   let stop = () => undefined;
   return new ReadableStream<Uint8Array>({
     start(controller) {
       let revision = -1;
+      let modified = -1;
+      let checked = 0;
       let busy = false;
       let ended = false;
       const send = async () => {
@@ -14,6 +20,12 @@ export const projectEvents = (id: string, signal: AbortSignal) => {
         }
         busy = true;
         try {
+          const file = await stat(join(await projectDirectory(id), 'project.json'));
+          if (file.mtimeMs === modified && Date.now() - checked < PRESENCE_CHECK_MS) {
+            return;
+          }
+          modified = file.mtimeMs;
+          checked = Date.now();
           const state = await readProject(id);
           if (ended || state.revision === revision) {
             return;

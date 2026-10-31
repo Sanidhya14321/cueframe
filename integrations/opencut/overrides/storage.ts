@@ -28,6 +28,7 @@ let version = 0;
 let media: StoredAsset[] = [];
 let source: PublicProjectState;
 let linked = false;
+const mediaFiles = new Map<string, File>();
 let savedSignature = '';
 const clientId = crypto.randomUUID();
 let chain: Promise<unknown> = Promise.resolve();
@@ -135,14 +136,18 @@ export const storageService = {
   loadAllMediaAssets(): Promise<MediaAsset[]> {
     return Promise.all(
       media.map(async (asset) => {
-        const response = await fetch(asset.url);
-        if (!response.ok) {
-          throw new Error(`Cannot load ${asset.name}`);
+        let file = mediaFiles.get(asset.url);
+        if (!file) {
+          const response = await fetch(asset.url);
+          if (!response.ok) {
+            throw new Error(`Cannot load ${asset.name}`);
+          }
+          file = new File([await response.blob()], asset.name, {
+            type: asset.mime,
+            lastModified: asset.lastModified,
+          });
+          mediaFiles.set(asset.url, file);
         }
-        const file = new File([await response.blob()], asset.name, {
-          type: asset.mime,
-          lastModified: asset.lastModified,
-        });
         return { ...asset, file, url: URL.createObjectURL(file) };
       }),
     );
@@ -181,10 +186,21 @@ export const storageService = {
 };
 
 export const canonicalSource = () => source;
+const setHydrating = (active: boolean) => {
+  const root = document.getElementById('root');
+  if (root) {
+    root.inert = active;
+    root.dataset['hydratedRevision'] = active ? '' : String(source.revision);
+  }
+  if (active) {
+    report('Applying project changes');
+  }
+};
 export async function connectCanonical() {
   const editor = EditorCore.getInstance();
   await hydrateCanonical(editor);
   linked = true;
+  setHydrating(false);
   updateLocks();
   if (source.agent?.status !== 'working') {
     await editor.save.flush();
@@ -214,6 +230,7 @@ export async function connectCanonical() {
       return;
     }
     loading = true;
+    setHydrating(true);
     editor.save.pause();
     request('GET')
       .then(() => hydrateCanonical(editor))
@@ -228,6 +245,7 @@ export async function connectCanonical() {
       )
       .finally(() => {
         loading = false;
+        setHydrating(false);
         editor.save.resume();
       });
   };
@@ -242,6 +260,8 @@ export async function connectCanonical() {
 export async function hydrateCanonical(editor: EditorCore) {
   editor.save.pause();
   const items = source.project.tracks.flatMap((track) => track.elements);
+  const previewCount = items.filter(needsSourcePreview).length;
+  let previewNumber = 0;
   for (const item of items) {
     const id = `source-${item.id}`;
     if (
@@ -264,7 +284,10 @@ export async function hydrateCanonical(editor: EditorCore) {
       | undefined;
     let url: string;
     if (needsSourcePreview(item)) {
-      report(`Preparing ${item.type} preview`);
+      previewNumber += 1;
+      report(
+        `Preparing ${item.type === 'composition' ? item.clipId : item.type} (${previewNumber} of ${previewCount})`,
+      );
       const response = await fetch(
         `/api/projects/${projectId}/opencut/preview/${encodeURIComponent(item.id)}`,
         { method: 'POST' },

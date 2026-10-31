@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import labels from './clip-labels.json';
+import labels from './clip-labels.json' with { type: 'json' };
 import type { ClipId } from './clip-props';
 
 export const CLIP_ROLES = [

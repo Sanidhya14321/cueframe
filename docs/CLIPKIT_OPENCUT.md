@@ -16,9 +16,13 @@ Canonical `project.json` contains the editable layer projection and native snaps
 
 The existing loopback session and same-Origin rules protect every write. Stale native/canonical revisions are rejected. Document-only writes cannot bypass shared actions or locks. Cross-frame messages validate both origin and source window; only the native static entry permits same-origin framing.
 
-Failed saves stay dirty and show Retry saving / Reload saved version. Navigation, New video and command actions checkpoint native edits before leaving. Browser close/reload retains the unsaved-change guard. Cmd/Ctrl+K inside the native editor opens the host command palette.
+While a shared revision hydrates (agent edits or animation previews regenerating) the native editor is inert and reports Applying project changes, so an edit cannot land on a timeline about to be replaced. Failed saves stay dirty and show Retry saving / Reload saved version. Navigation, New video and command actions checkpoint native edits before leaving. Browser close/reload retains the unsaved-change guard. Cmd/Ctrl+K inside the native editor opens the host command palette.
 
 Agent requests, Build from beats, comments, activity, Undo agent turn, Whisper/Fish, media import and local render remain reachable beside the native editor. Compact screens collect these under Project tools. Native selection and playhead time feed the existing tools.
+
+The Library tab lists catalog animations with search. Add inserts one at the playhead; dragging a card onto the timeline inserts it at the dropped time. Both flush native edits first, then use the same `add_item` action as MCP, so the animation stays an editable source layer. While a shared revision hydrates, the OpenCut status line names each layer being prepared, such as `Preparing typewriter (3 of 16)`.
+
+The Captions tab imports SRT and ASS files as editable native text. The voice bar records through local whisper.cpp for review before sending. Dictation apps such as Handy and Wispr Flow can type into the same field. Upstream's stickers and sounds panels need cloud services, and its caption generation downloads a browser model, so they stay excluded.
 
 ## Reproducible source and licenses
 
@@ -37,7 +41,9 @@ The static runtime receives ClipKit's semantic colors, theme preference and bund
 2. In Media choose Import. Use the visible Add-to-timeline button, select the clip, scrub, split, undo and edit through Inspect.
 3. Reload to check persistence; choose Export for MP4/WebM.
 4. Open Project tools on compact screens for requests, comments, media processing and local render. On desktop these tools remain beside the editor.
-5. Open a clip from the library, then choose OpenCut editor. Each animation stays a separate source layer. Select one and use Animation controls to edit its schema properties.
+5. Connect Claude Code from `/connect`, keep `/video/<id>` open and ask it to edit that project. Its status shows above the editor and each edit appears in the timeline without a reload.
+6. Open Library, search and choose Add, or drag a card onto the timeline.
+7. Open a clip from the library, then choose OpenCut editor. Each animation stays a separate source layer. Select one and use Animation controls to edit its schema properties.
 
 Native export requires the browser's matching WebCodecs encoder. Local layer previews and local rendering use Chromium, installed automatically on first use if missing. First animation preparation can take longer than later cached opens. Downloaded binaries and media remain local; no provider call is required for rendering.
 

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { ClipId } from './clip-props';
-import updatedAt from './clip-updated-at.json';
+import updatedAt from './clip-updated-at.json' with { type: 'json' };
 
 export const clipUpdatedAtSchema = z.record(z.string(), z.iso.datetime());
 

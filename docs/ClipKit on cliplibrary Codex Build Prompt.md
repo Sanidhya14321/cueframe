@@ -166,6 +166,6 @@ Cut line if time runs short: steps 12, 11 and 10 shrink first (fewer imported cl
 
 ### 7.3 Kickoff message for Codex
 
-```
+```text
 Read this whole document (save it as docs/CLIPKIT_PROMPT.md in the repo first). Then do step 1: read AGENTS.md and the listed folders and write docs/CLIPKIT_PLAN.md; stop and show it to me. After I approve, go through steps 2 to 12 in order. After each step, tell me what to click or run to see it working, and wait for my go-ahead before the next. Keep the existing gallery, editor and export working. Import third-party code only under permissive licenses and record it in NOTICE.md.
 ```

@@ -1,4 +1,4 @@
-import track from '@/footage/street-sign-swap.track.json';
+import track from '@/footage/street-sign-swap.track.json' with { type: 'json' };
 import type { FootagePlate } from '../footage/footage-stage';
 import { parseTrack } from '../footage/footage-track';
 

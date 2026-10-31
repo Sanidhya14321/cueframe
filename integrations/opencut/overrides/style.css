@@ -228,3 +228,46 @@ button[data-agent-locked="true"]::after {
   padding: 4px;
   font-size: 12px;
 }
+.native-library {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+}
+.native-library input {
+  min-height: 44px;
+  padding: 0 8px;
+  border: 1px solid var(--input);
+  border-radius: 6px;
+  background: transparent;
+  font-size: 12px;
+}
+.native-library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+.native-library-grid article {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  cursor: grab;
+  font-size: 12px;
+}
+.native-library-grid img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--muted);
+}
+.native-library-grid article > button {
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.native-library-grid article > button:focus-visible,
+.native-library input:focus-visible {
+  outline: 2px solid var(--ring);
+}
