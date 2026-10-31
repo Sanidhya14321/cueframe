@@ -89,7 +89,7 @@ const runRenderWorker = (
     const timer = setTimeout(() => {
       child.kill();
       reject(new Error('The local render timed out.'));
-    }, 3600000);
+    }, 1200000);
     child.stdout.on('data', (chunk: Buffer) => {
       buffer += chunk.toString();
       const lines = buffer.split('\n');

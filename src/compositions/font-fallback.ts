@@ -1,5 +1,7 @@
 import { staticFile } from 'remotion';
 
+const FONT_TIMEOUT_MS = 4000;
+let fontsReachable = true;
 const nativeFetch = window.fetch.bind(window);
 
 const fontSafeFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -7,10 +9,15 @@ const fontSafeFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
   if (!url.startsWith('https://fonts.gstatic.com/')) {
     return nativeFetch(input, init);
   }
-  const response = await nativeFetch(input, init).catch(() => null);
+  const response = fontsReachable
+    ? await nativeFetch(input, { ...init, signal: AbortSignal.timeout(FONT_TIMEOUT_MS) }).catch(
+        () => null,
+      )
+    : null;
   if (response?.ok) {
     return response;
   }
+  fontsReachable = false;
   return nativeFetch(staticFile('fallback-font.woff2'));
 };
 

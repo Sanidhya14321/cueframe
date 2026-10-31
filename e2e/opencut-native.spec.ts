@@ -65,8 +65,8 @@ test('actual OpenCut imports media, saves, selects by keyboard, splits, undoes a
   const add = editor.getByRole('button', { name: 'Add proof.mp4 to timeline', exact: true });
   await expect(add).toBeVisible();
   const box = await add.boundingBox();
-  expect(box?.width).toBeGreaterThanOrEqual(24);
-  expect(box?.height).toBeGreaterThanOrEqual(24);
+  expect(box?.width).toBeGreaterThanOrEqual(44);
+  expect(box?.height).toBeGreaterThanOrEqual(44);
   await add.click();
   await expect.poll(() => count(page, id)).toBe(1);
   const clip = editor.getByRole('button', { name: 'Select proof.mp4', exact: true });

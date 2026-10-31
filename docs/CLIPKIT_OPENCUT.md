@@ -37,7 +37,7 @@ The Captions tab imports SRT and ASS files as editable native text. The voice ba
 - Every bundled npm module is checked against a permissive-license allowlist. The 93-package runtime inventory and full notices are under `licenses/opencut-runtime`; NOTICE.md records source and modifications. Playwright's separate local-render runtime has its Apache-2.0 license and notice under `licenses/`.
 - Mediabunny (MPL-2.0) and SoundTouch (LGPL) are not installed or bundled. Browser media APIs, WebCodecs and MIT mp4-muxer/webm-muxer replace them. No OpenCut accounts, database, cloud APIs, Pro icon packs or brand artwork are used.
 
-The static runtime receives ClipKit's semantic colors, theme preference and bundled font faces. The host uses repository shadcn components. Native insertion and timeline controls have visible names/focus and 44 px actions. Inspect remains available on compact screens. GPU effects initialize before opening and are disabled with an explanation if unavailable. Speed changes pitch; pitch preservation is disabled.
+The static runtime receives ClipKit's semantic colors, theme preference and bundled font faces. The host uses repository shadcn components. Asset insertion keeps a 44 px hit area; dense timeline controls are 32 px for desktop editing. Inspect remains available on compact screens. GPU effects initialize before opening and are disabled with an explanation if unavailable. Speed changes pitch; pitch preservation is disabled.
 
 ## Try it
 
@@ -52,3 +52,9 @@ The static runtime receives ClipKit's semantic colors, theme preference and bund
 Native export requires the browser's matching WebCodecs encoder. Local layer previews and local rendering use Chromium, installed automatically on first use if missing. First animation preparation can take longer than later cached opens. Downloaded binaries and media remain local; no provider call is required for rendering.
 
 Run `bun run verify`, `bun run opencut:typecheck`, `bun run build` and the Playwright suite for validation. Final evidence is in `CLIPKIT_UI_REVIEW.md`. Home start and New video exist; remaining addendum work is tracked in the PR.
+
+## Run in a container
+
+`docker build -t clipkit . && docker run -p 127.0.0.1:3000:3000 -v clipkit-data:/data clipkit`, then open `http://localhost:3000`. It is a single-user app: keep it on loopback or behind your own authenticated tunnel.
+
+On macOS the render browser is copied to `~/Library/Caches/clipkit`, because privacy controls can block its helpers from reading files in a project under Desktop or Documents.

@@ -367,8 +367,15 @@ button[data-agent-locked="true"]::after {
   border-radius: 6px;
 }
 .native-editor .native-asset-content button[title^="Add"] {
-  min-width: 24px;
-  width: 24px;
-  height: 24px;
-  min-height: 24px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  background: transparent;
+}
+.native-editor .native-asset-content button[title^="Add"] svg {
+  padding: 4px;
+  border-radius: 6px;
+  background: var(--background);
+  box-sizing: content-box;
 }

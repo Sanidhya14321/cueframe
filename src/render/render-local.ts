@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { parseProject } from '@/project';
-import { nativeBrowserPath } from './native-browser';
+import { renderBrowserOptions } from './render-browser';
 import { DEFAULT_RENDER_OPTIONS } from './render-options';
 import { renderProject } from './render-project';
 
@@ -16,7 +16,7 @@ await renderProject({
   outDir: dirname(input),
   name,
   options: DEFAULT_RENDER_OPTIONS,
-  browser: { browserExecutable: await nativeBrowserPath(), chromiumOptions: { gl: 'swangle' } },
+  browser: await renderBrowserOptions(),
   onProgress: (progress) => console.info(JSON.stringify({ progress })),
 });
 console.info(JSON.stringify({ done: true }));

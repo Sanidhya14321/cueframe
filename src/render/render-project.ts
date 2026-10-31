@@ -15,7 +15,7 @@ const PROJECT_COMPOSITION_ID = 'project';
 export interface RenderProjectArgs {
   project: Project;
   outDir: string;
-  browser?: { browserExecutable: string; chromiumOptions: { gl: 'swangle' } };
+  browser?: { browserExecutable?: string };
   options: RenderOptions;
   name?: string;
   onProgress?: (progress: number) => void;

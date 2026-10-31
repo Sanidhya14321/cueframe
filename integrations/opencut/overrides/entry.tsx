@@ -23,6 +23,7 @@ import { buildElementFromMedia } from '@/timeline/element-utils';
 import { useTimelineStore } from '@/timeline/timeline-store';
 import { mediaTimeFromSeconds, ZERO_MEDIA_TIME } from '@/wasm';
 import { CaptionsView } from './captions-panel';
+import { draftIds } from './draft-previews';
 import { HostContext } from './host-context';
 import { LibraryView, libraryDropTarget } from './library-panel';
 import { ScenesView } from './scenes-panel';
@@ -285,7 +286,13 @@ function Runtime() {
             Reload saved version
           </button>
         )}
-        <ExportButton />
+        {draftIds.size > 0 ? (
+          <button type="button" disabled={true} title="Full previews are still rendering">
+            Preparing export
+          </button>
+        ) : (
+          <ExportButton />
+        )}
       </header>
       <div className="native-workspace">
         <section className="native-assets">
