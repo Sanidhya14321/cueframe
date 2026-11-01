@@ -1,4 +1,4 @@
-# ClipKit design system
+# cueframe design system
 
 ## Direction
 
@@ -34,10 +34,14 @@ A connection is waiting, connected or unavailable with both text and an icon. On
 
 ## Current acceptance
 
-Step A covers design records, tokens, shell, library access, a working blank-project entry and commands. It does not implement the home redesign, AI brief, job queue, expanded settings or phone review mode. Impeccable critique/audit evidence and screenshots live in `docs/CLIPKIT_UI_REVIEW.md` and `docs/screenshots/step-a/`.
+Step A covers design records, tokens, shell, library access, a working blank-project entry and commands. It does not implement the home redesign, AI brief, job queue, expanded settings or phone review mode. Impeccable critique/audit evidence and screenshots live in `docs/CUEFRAME_UI_REVIEW.md` and `docs/screenshots/step-a/`.
 
 Step B extends this system with a shadcn/Radix request Popover: 44 px triggers, Escape/outside dismissal, correct form labels, plain queue feedback, and a Connect recovery link. Queue/brief/voice-text context is visible; recording and automatic execution are not implied. Its four-width screenshots and independent review are in the same UI review record.
 
 ## OpenCut workspace
 
 Saved video pages open the real classic editor core and native controls. The same-origin runtime inherits root semantic colors, theme preference and bundled font faces; the host reuses repository shadcn controls. Assets, preview, inspector and timeline retain familiar editor structure. Inspect remains available through a named tab on narrow screens. Native media insertion and timeline controls have visible labels/focus and 44 px actions. Status distinguishes saving, saved and failed; navigation checkpoints save before leaving. Source controls and native effects are distinguished when switching to the retained Remotion workspace. Compact screens collect shared project tools into one popover so the native preview remains usable. This does not advance addendum C-I.
+
+## Density modes
+
+Desktop chrome is compact: 32 px controls, 36 px editor bar, thin panel dividers. Touch and phone layouts keep 44 px targets. App chrome uses semantic primary and agent tokens; artwork keeps its own colors. Container roles: full-bleed editors, wide browsing and management pages (`max-w-6xl`), readable forms (`max-w-2xl`), all with 16 to 24 px gutters and 20 px top spacing.

@@ -54,6 +54,13 @@ export const OpenCutEditor = ({
   const selected = context.selectedId
     ? findElement(editor.value, context.selectedId)?.element
     : null;
+  const docked = selected?.type === 'composition' && !readOnly;
+  useEffect(() => {
+    frame.current?.contentWindow?.postMessage(
+      { type: 'cueframe-dock', open: docked && matchMedia('(min-width: 64rem)').matches },
+      location.origin,
+    );
+  }, [frame, docked]);
   return (
     <LivePresence
       hideBar
@@ -61,10 +68,7 @@ export const OpenCutEditor = ({
       undoAgent={editor.undoAgent}
       onSelect={context.select}
     >
-      <section
-        className="flex h-[calc(100dvh-2.75rem)] md:h-[calc(100dvh-2.75rem)] min-h-0 flex-col"
-        aria-label="Video editor"
-      >
+      <section className="flex h-[calc(100dvh-2.75rem)] min-h-0 flex-col" aria-label="Video editor">
         <div className="flex h-9 shrink-0 items-center gap-1 border-b px-2 text-xs">
           {readOnly || !editor.state ? null : (
             <>

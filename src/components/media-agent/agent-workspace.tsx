@@ -102,6 +102,7 @@ export const AgentWorkspace = <K extends MediaKind>({
           'fixed inset-x-0 bottom-0 z-50 flex-col overflow-hidden rounded-t-2xl border-t bg-background shadow-2xl',
           expanded ? 'top-11' : 'h-[62dvh]',
           'md:inset-x-auto md:top-11 md:right-0 md:h-auto md:w-[360px] md:rounded-none md:border-t-0 md:border-l min-[1600px]:static min-[1600px]:shrink-0 min-[1600px]:shadow-none',
+          kind === 'site' && 'lg:static lg:shrink-0 lg:shadow-none',
           open
             ? 'slide-in-from-bottom-8 md:slide-in-from-bottom-0 md:slide-in-from-right-4 fade-in-0 flex animate-in duration-300 ease-out motion-reduce:animate-none'
             : 'hidden',

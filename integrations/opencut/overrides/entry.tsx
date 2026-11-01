@@ -28,6 +28,7 @@ import { HostContext } from './host-context';
 import { LibraryView, libraryDropTarget } from './library-panel';
 import { ScenesView } from './scenes-panel';
 import { connectCanonical, hydrateCanonical, storageService } from './storage';
+import { TimelineDivider } from './workspace-split';
 import './style.css';
 
 function syncTheme() {
@@ -119,7 +120,7 @@ async function open() {
     if (!response.ok) {
       throw new Error('Cannot load the rendered source');
     }
-    const file = new File([await response.blob()], 'ClipKit source.mp4', { type: 'video/mp4' });
+    const file = new File([await response.blob()], 'cueframe source.mp4', { type: 'video/mp4' });
     const [processed] = await processMediaAssets({ files: [file] });
     if (!processed) {
       throw new Error('The rendered video could not be imported');
@@ -196,7 +197,7 @@ function Runtime() {
           message &&
           typeof message === 'object' &&
           'type' in message &&
-          message.type === 'clipkit-flush' &&
+          message.type === 'cueframe-flush' &&
           'requestId' in message &&
           typeof message.requestId === 'string'
         )
@@ -208,13 +209,13 @@ function Runtime() {
         .flush()
         .then(() =>
           window.parent.postMessage(
-            { type: 'clipkit-flushed', requestId: message.requestId, ok: true },
+            { type: 'cueframe-flushed', requestId: message.requestId, ok: true },
             location.origin,
           ),
         )
         .catch(() =>
           window.parent.postMessage(
-            { type: 'clipkit-flushed', requestId: message.requestId, ok: false },
+            { type: 'cueframe-flushed', requestId: message.requestId, ok: false },
             location.origin,
           ),
         );
@@ -223,16 +224,16 @@ function Runtime() {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault();
         event.stopImmediatePropagation();
-        window.parent.postMessage({ type: 'clipkit-command-menu' }, location.origin);
+        window.parent.postMessage({ type: 'cueframe-command-menu' }, location.origin);
       }
     };
     window.addEventListener('keydown', command, true);
     window.addEventListener('message', flushRequest);
-    window.parent.postMessage({ type: 'clipkit-ready' }, location.origin);
+    window.parent.postMessage({ type: 'cueframe-ready' }, location.origin);
     const handler = (event: Event) => setStatus((event as CustomEvent<string>).detail);
-    window.addEventListener('clipkit-save', handler);
+    window.addEventListener('cueframe-save', handler);
     return () => {
-      window.removeEventListener('clipkit-save', handler);
+      window.removeEventListener('cueframe-save', handler);
       window.removeEventListener('message', flushRequest);
       window.removeEventListener('keydown', command, true);
     };
@@ -329,6 +330,7 @@ function Runtime() {
           <PropertiesPanel />
         </aside>
       </div>
+      <TimelineDivider />
       <section className="native-timeline" aria-label="Editor timeline" {...libraryDropTarget}>
         <Timeline />
       </section>
@@ -358,8 +360,8 @@ function App() {
   const [state, setState] = useState('Loading video editor');
   useEffect(() => {
     const progress = (event: Event) => setState((event as CustomEvent<string>).detail);
-    window.addEventListener('clipkit-save', progress);
-    return () => window.removeEventListener('clipkit-save', progress);
+    window.addEventListener('cueframe-save', progress);
+    return () => window.removeEventListener('cueframe-save', progress);
   }, []);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);

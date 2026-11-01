@@ -54,7 +54,7 @@ export const TextEditOverlay = ({ element, zoom, offset, onCommit }: TextEditOve
         }
       }}
       spellCheck={false}
-      className="absolute resize-none overflow-hidden border-0 bg-transparent p-0 outline outline-2 outline-violet-500"
+      className="absolute resize-none overflow-hidden border-0 bg-transparent p-0 outline outline-2 outline-primary"
       style={{
         left: offset.x + element.x * zoom,
         top: offset.y + element.y * zoom,

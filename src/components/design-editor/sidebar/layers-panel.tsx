@@ -113,7 +113,7 @@ export const LayersPanel = ({ editor }: { editor: DesignEditorState }) => {
                     setRenamingId(null);
                   }
                 }}
-                className="absolute inset-y-1 right-16 left-8 rounded-md bg-background px-2 text-sm outline outline-violet-500"
+                className="absolute inset-y-1 right-16 left-8 rounded-md bg-background px-2 text-sm outline outline-primary"
               />
             ) : null}
             <button

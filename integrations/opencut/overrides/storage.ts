@@ -1,6 +1,6 @@
 /* biome-ignore-all lint/performance/noAwaitInLoops: source previews and media imports execute sequentially */
 /* biome-ignore-all lint/complexity/useLiteralKeys: native records require indexed access under strict TypeScript */
-import type { Project } from '@clipkit/project/project';
+import type { Project } from '@cueframe/project/project';
 
 type PublicProjectState = {
   project: Project;
@@ -34,7 +34,7 @@ let savedSignature = '';
 const clientId = crypto.randomUUID();
 let chain: Promise<unknown> = Promise.resolve();
 export const report = (status: string) =>
-  window.dispatchEvent(new CustomEvent('clipkit-save', { detail: status }));
+  window.dispatchEvent(new CustomEvent('cueframe-save', { detail: status }));
 async function request(method: string, data?: unknown) {
   const response = await fetch(endpoint, {
     method,
@@ -173,10 +173,10 @@ export const storageService = {
     return Promise.resolve([]);
   },
   deleteProjectMedia() {
-    throw new Error('Manage projects from ClipKit Projects');
+    throw new Error('Manage projects from cueframe Projects');
   },
   deleteProject() {
-    throw new Error('Manage projects from ClipKit Projects');
+    throw new Error('Manage projects from cueframe Projects');
   },
   loadSavedSounds() {
     return Promise.resolve([]);

@@ -428,3 +428,31 @@ button[data-agent-locked="true"]::after {
 .native-header output[data-idle="true"] {
   opacity: 0;
 }
+.native-editor .native-timeline {
+  height: var(--cueframe-timeline-height, 34dvh);
+  min-height: 140px;
+}
+.native-split {
+  flex-shrink: 0;
+  height: 6px;
+  cursor: row-resize;
+  background: var(--border);
+  touch-action: none;
+  transition: background 120ms ease-out;
+}
+.native-split:hover,
+.native-split:focus-visible {
+  background: var(--primary);
+}
+html[data-dock="true"] .native-properties {
+  display: none;
+}
+@media (max-width: 600px) {
+  .native-assets,
+  .native-properties {
+    width: 100%;
+  }
+  .native-assets nav {
+    scrollbar-width: thin;
+  }
+}

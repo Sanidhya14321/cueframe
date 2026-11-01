@@ -27,6 +27,7 @@ export const OpenCutFrameDock = ({
   open: boolean;
 }) => {
   const [draft, setDraft] = useState(element);
+  const [preview, setPreview] = useState(true);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (timer.current === null) {
@@ -63,23 +64,33 @@ export const OpenCutFrameDock = ({
       className={`${open ? 'fixed inset-x-0 bottom-0 z-40 flex max-h-[70dvh] border-t' : 'hidden'} shrink-0 flex-col overflow-hidden bg-card lg:static lg:flex lg:max-h-none lg:w-72 lg:border-t-0 lg:border-l`}
     >
       <div className="shrink-0 border-b p-2">
-        <Player
-          acknowledgeRemotionLicense
-          autoPlay
-          component={
-            (CLIP_COMPONENTS as unknown as Record<string, ComponentType<Record<string, unknown>>>)[
-              draft.clipId
-            ] as ComponentType<Record<string, unknown>>
-          }
-          compositionHeight={editor.value.height}
-          compositionWidth={editor.value.width}
-          controls
-          durationInFrames={Math.max(1, draft.durationInFrames)}
-          fps={editor.value.fps}
-          inputProps={draft.props}
-          loop
-          style={{ width: '100%' }}
-        />
+        <button
+          type="button"
+          aria-expanded={preview}
+          className="w-full text-left text-muted-foreground text-xs hover:text-foreground"
+          onClick={() => setPreview((shown) => !shown)}
+        >
+          {preview ? 'Hide frame preview' : 'Show frame preview'}
+        </button>
+        {preview ? (
+          <Player
+            acknowledgeRemotionLicense
+            autoPlay
+            component={
+              (
+                CLIP_COMPONENTS as unknown as Record<string, ComponentType<Record<string, unknown>>>
+              )[draft.clipId] as ComponentType<Record<string, unknown>>
+            }
+            compositionHeight={editor.value.height}
+            compositionWidth={editor.value.width}
+            controls
+            durationInFrames={Math.max(1, draft.durationInFrames)}
+            fps={editor.value.fps}
+            inputProps={draft.props}
+            loop
+            style={{ width: '100%' }}
+          />
+        ) : null}
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto">
         <ClipPropertySidebar
