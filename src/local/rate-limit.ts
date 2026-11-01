@@ -1,7 +1,38 @@
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { z } from 'zod';
 import { isHosted } from './security';
+import { configFolder } from './settings';
 
 const MAX_TRACKED_KEYS = 10000;
-const windows = new Map<string, { count: number; resetAt: number }>();
+const SAVE_DELAY_MS = 1000;
+const savedSchema = z.record(z.string(), z.object({ count: z.number(), resetAt: z.number() }));
+const statePath = () => join(configFolder(), 'rate-limits.json');
+
+const loadWindows = () => {
+  try {
+    return new Map(
+      Object.entries(savedSchema.parse(JSON.parse(readFileSync(statePath(), 'utf8')))),
+    );
+  } catch {
+    return new Map<string, { count: number; resetAt: number }>();
+  }
+};
+const windows = loadWindows();
+let saveTimer: ReturnType<typeof setTimeout> | null = null;
+
+const scheduleSave = () => {
+  saveTimer ??= setTimeout(() => {
+    saveTimer = null;
+    try {
+      mkdirSync(configFolder(), { recursive: true, mode: 0o700 });
+      writeFileSync(statePath(), JSON.stringify(Object.fromEntries(windows)), { mode: 0o600 });
+    } catch {
+      console.error('[cueframe] could not save rate limits');
+    }
+  }, SAVE_DELAY_MS);
+  saveTimer.unref?.();
+};
 
 export const takeRateLimit = (key: string, limit: number, windowMs: number): number | null => {
   const now = Date.now();
@@ -15,6 +46,7 @@ export const takeRateLimit = (key: string, limit: number, windowMs: number): num
       windows.clear();
     }
   }
+  scheduleSave();
   const current = windows.get(key);
   if (current === undefined || current.resetAt <= now) {
     windows.set(key, { count: 1, resetAt: now + windowMs });

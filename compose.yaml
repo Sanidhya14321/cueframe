@@ -1,6 +1,6 @@
 services:
   yugabyte:
-    image: yugabytedb/yugabyte:latest
+    image: yugabytedb/yugabyte:2026.1.2.0-b137
     command: ["bin/yugabyted", "start", "--background=false"]
     volumes:
       - yugabyte-data:/root/var

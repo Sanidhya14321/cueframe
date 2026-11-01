@@ -91,6 +91,16 @@ describe('rate limits', () => {
   });
 });
 
+describe('rate limit persistence', () => {
+  it('writes counts to the data folder for the next start', async () => {
+    const key = crypto.randomUUID();
+    takeRateLimit(key, 5, 60000);
+    await Bun.sleep(1100);
+    const { configFolder } = await import('@/local/settings');
+    expect(await Bun.file(`${configFolder()}/rate-limits.json`).text()).toContain(key);
+  });
+});
+
 describe('project API errors', () => {
   const statusOf = async (error: unknown) => {
     const request = new Request('http://127.0.0.1:3000/api/projects', {

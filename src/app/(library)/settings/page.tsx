@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import { SettingsForm } from '@/components/settings/settings-form';
+import { Button } from '@/components/ui/button';
+import { isHosted } from '@/local/security';
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = { title: 'Settings · cueframe' };
 
 const SettingsPage = () => (
@@ -10,6 +13,13 @@ const SettingsPage = () => (
       Your files and keys stay on this computer. No account is needed.
     </p>
     <SettingsForm />
+    {isHosted() ? (
+      <form action="/api/logout" method="post" className="mt-6">
+        <Button type="submit" variant="outline">
+          Sign out
+        </Button>
+      </form>
+    ) : null}
   </div>
 );
 

@@ -48,6 +48,7 @@ export const proxy = (request: NextRequest) => {
   if (
     pathname === '/login' ||
     pathname === '/api/login' ||
+    pathname === '/api/logout' ||
     (isHosted() && isPublicPath(pathname))
   ) {
     return harden(NextResponse.next(), pathname);

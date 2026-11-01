@@ -1,4 +1,4 @@
-import { readMedia } from '@/local/media';
+import { mediaFile } from '@/local/media';
 import { projectApi } from '@/local/project-api';
 export const GET = (
   request: Request,
@@ -6,7 +6,7 @@ export const GET = (
 ) =>
   projectApi(request, async () => {
     const { projectId, name } = await params;
-    const { data, mime } = await readMedia(projectId, name);
+    const { size, mime, open } = await mediaFile(projectId, name);
     const range = request.headers.get('range');
     const headers = {
       'content-type': mime,
@@ -20,18 +20,18 @@ export const GET = (
         return new Response(null, { status: 416 });
       }
       const start = Number(match[1]);
-      const end = Math.min(match[2] ? Number(match[2]) : data.length - 1, data.length - 1);
+      const end = Math.min(match[2] ? Number(match[2]) : size - 1, size - 1);
       if (start > end) {
         return new Response(null, { status: 416 });
       }
-      return new Response(data.subarray(start, end + 1), {
+      return new Response(open({ start, end }), {
         status: 206,
         headers: {
           ...headers,
-          'content-range': `bytes ${start}-${end}/${data.length}`,
+          'content-range': `bytes ${start}-${end}/${size}`,
           'content-length': String(end - start + 1),
         },
       });
     }
-    return new Response(data, { headers: { ...headers, 'content-length': String(data.length) } });
+    return new Response(open(), { headers: { ...headers, 'content-length': String(size) } });
   });
