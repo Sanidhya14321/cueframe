@@ -3,15 +3,13 @@ import { afterEach, describe, expect, it } from 'bun:test';
 import { z } from 'zod';
 import { projectApi } from '@/local/project-api';
 import { ProjectProblem } from '@/local/projects';
-import { hostedSpendProblem, takeRateLimit } from '@/local/rate-limit';
+import { clientAddress, hostedSpendProblem, takeRateLimit } from '@/local/rate-limit';
 import {
   browserSessionToken,
   canSeeAgentToken,
   hostedStartupProblems,
   isHosted,
   requireLocalSession,
-  roleCookie,
-  roleProblem,
   SESSION_COOKIE,
   sessionToken,
 } from '@/local/security';
@@ -30,43 +28,49 @@ const hostedRequest = (headers: Record<string, string>, method = 'POST', path = 
   }) as Request;
 
 afterEach(() => {
-  for (const key of ['CUEFRAME_PASSWORD', 'CUEFRAME_PUBLIC_URL', 'CUEFRAME_USERS']) {
+  for (const key of ['CUEFRAME_PASSWORD', 'CUEFRAME_PUBLIC_URL']) {
     Reflect.deleteProperty(process.env, key);
   }
 });
 
 describe('hosted session separation', () => {
-  it('never hands the agent token to the browser', () => {
+  it('keeps browser and agent tokens separate', () => {
     host();
     expect(browserSessionToken()).not.toBe(sessionToken());
-    const viewer = `${SESSION_COOKIE}=${browserSessionToken()}; cueframe-role=${roleCookie('viewer')}`;
-    expect(requireLocalSession(hostedRequest({ cookie: viewer }))?.status).toBe(403);
+    const owner = `${SESSION_COOKIE}=${browserSessionToken()}`;
+    expect(requireLocalSession(hostedRequest({ cookie: owner }))).toBeNull();
     const stolen = { authorization: `Bearer ${browserSessionToken()}` };
     expect(requireLocalSession(hostedRequest(stolen))?.status).toBe(401);
-    expect(canSeeAgentToken(hostedRequest({ cookie: viewer }, 'GET', '/api/connect'))).toBe(false);
+    expect(canSeeAgentToken(hostedRequest({}, 'GET', '/api/connect'))).toBe(false);
   });
 
-  it('shows the token to admins and keeps the local cookie unchanged', () => {
+  it('shows the connection token only to the signed-in owner or CLI', () => {
     expect(browserSessionToken()).toBe(sessionToken());
     host();
-    const admin = `cueframe-role=${roleCookie('admin')}`;
-    expect(canSeeAgentToken(hostedRequest({ cookie: admin }, 'GET', '/api/connect'))).toBe(true);
+    const owner = `${SESSION_COOKIE}=${browserSessionToken()}`;
+    expect(canSeeAgentToken(hostedRequest({ cookie: owner }, 'GET', '/api/connect'))).toBe(true);
+    expect(
+      canSeeAgentToken(
+        hostedRequest({ authorization: `Bearer ${sessionToken()}` }, 'GET', '/api/connect'),
+      ),
+    ).toBe(true);
   });
 
-  it('refuses writes from a session without a role', () => {
+  it('refuses anonymous writes', () => {
     host();
-    expect(roleProblem(hostedRequest({}))?.status).toBe(403);
+    expect(requireLocalSession(hostedRequest({}))?.status).toBe(401);
   });
 
-  it('reports invalid and weak hosted settings without leaking them', () => {
-    Object.assign(process.env, { CUEFRAME_PUBLIC_URL: ORIGIN, CUEFRAME_USERS: '{secret' });
+  it('reports invalid and weak owner settings without exposing credentials', () => {
+    Object.assign(process.env, {
+      CUEFRAME_PUBLIC_URL: 'invalid',
+      CUEFRAME_PASSWORD: 'private-owner-password',
+    });
     const invalid = hostedStartupProblems();
     expect(invalid.errors).toHaveLength(1);
-    expect(invalid.errors.join()).not.toContain('secret');
+    expect(invalid.errors.join()).not.toContain('private-owner-password');
     expect(() => isHosted()).toThrow();
-    Object.assign(process.env, {
-      CUEFRAME_USERS: JSON.stringify([{ email: 'a', password: 'short', role: 'admin' }]),
-    });
+    Object.assign(process.env, { CUEFRAME_PUBLIC_URL: ORIGIN, CUEFRAME_PASSWORD: 'short' });
     expect(hostedStartupProblems().warnings.join()).toContain('short');
   });
 });
@@ -88,6 +92,18 @@ describe('rate limits', () => {
     host();
     expect(hostedSpendProblem(request, name, 1)).toBeNull();
     expect(hostedSpendProblem(request, name, 1)?.status).toBe(429);
+  });
+});
+
+describe('client address', () => {
+  it('uses the entry the proxy appended, so clients cannot choose their own key', () => {
+    const spoofed = hostedRequest({
+      'x-real-ip': '9.9.9.9',
+      'x-forwarded-for': '8.8.8.8, 1.1.1.1:443',
+    });
+    expect(clientAddress(spoofed)).toBe('1.1.1.1');
+    expect(clientAddress(hostedRequest({ 'x-real-ip': '1.1.1.1' }))).toBe('1.1.1.1');
+    expect(clientAddress(hostedRequest({}))).toBe('unknown');
   });
 });
 

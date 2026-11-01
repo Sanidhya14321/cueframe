@@ -14,10 +14,12 @@ describe('agent connection', () => {
     await markConnected('claude-code');
     const before = (await connectionState()).lastSeen;
     const stream = new AbortController();
-    holdConnection(stream.signal, 5);
+    const closed = holdConnection(stream.signal, 5);
     await pause(40);
     stream.abort();
+    await closed;
     await pause(20);
+    expect((await connectionState()).connected).toBe(false);
     const held = (await connectionState()).lastSeen;
     expect(held).toBeGreaterThan(before);
     await pause(30);

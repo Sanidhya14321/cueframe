@@ -37,3 +37,15 @@ None identified in the reviewed local settings, file-store and request-protectio
 ## Other checks
 
 API schemas reject unknown settings fields and credential-bearing base URLs. Local data writes use serialized atomic replacement and private settings files. Tests cover corrupted-file preservation, concurrent updates, traversal IDs and symlinked project directories. Provider fetches refuse redirects; provider error bodies are not logged. Browser writes require a same-origin session and CLI calls require a runtime token. Dev and production scripts bind only to 127.0.0.1. Native packaging and persistent media uploads are deferred to their approved steps.
+
+## Chat execution audit, 2026-11-01
+
+Stack: Next.js, AI SDK, local JSON project actions and optional Yugabyte retrieval.
+
+- High, fixed: `AgentPanel` submitted only to the event queue; no in-app consumer executed its messages. The chat endpoint now selects an active external listener or runs the saved model with project-scoped tools. Regression tests exercise persistent edits, undo history, replies, external routing and missing configuration.
+- Medium, fixed: instrumentation destructured `NEXT_RUNTIME`, preventing Next from excluding Node-only security imports from its Edge bundle. A directly evaluated runtime guard keeps hosted startup checks in Node. The local dev server now serves pages and APIs successfully.
+- Access change requested by the owner: removed admin/creator/viewer authorization in favor of a single password-protected owner session. A new session signature invalidates previous role sessions. Origin checks, constant-time comparisons, HTTP-only cookies, separate agent tokens and login rate limits remain in place.
+
+The scoped chat tools revalidate input before invoking shared tools. A literal project ID prevents cross-project tool calls; existing project guards enforce pinned selections. Mutations remain atomic and undoable. Provider errors are reduced to safe messages, the turn has a timeout and heartbeat, and idle cleanup runs after success or failure. Docker provisioning imports credentials into private disk settings without printing their values.
+
+Live paid-provider verification requires an actual model and key. The local browser proof uses a fixture instead. No critical issue was found in this scoped audit; it is not a full hosted production audit.

@@ -1,11 +1,12 @@
-import './tests/server-http';
 import { afterEach, expect, mock } from 'bun:test';
 import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { GlobalRegistrator } from '@happy-dom/global-registrator';
+import { serverStreams } from './tests/server-http';
 
 GlobalRegistrator.register({ url: 'http://localhost:3000' });
+Object.assign(globalThis, serverStreams);
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -46,8 +47,8 @@ afterEach(() => {
 
 mock.module('server-only', () => ({}));
 
-for (const key of ['CUEFRAME_PUBLIC_URL', 'CUEFRAME_PASSWORD', 'CUEFRAME_USERS']) {
-  // biome-ignore lint/style/noProcessEnv: tests must not inherit hosted settings from a developer env file
+for (const key of ['CUEFRAME_PUBLIC_URL', 'CUEFRAME_PASSWORD', 'YUGABYTE_DATABASE_URL']) {
+  // biome-ignore lint/style/noProcessEnv: tests must not inherit hosted or database settings from a developer env file
   Reflect.deleteProperty(process.env, key);
 }
 // biome-ignore lint/style/noProcessEnv: local runtime configuration is isolated from provider credentials

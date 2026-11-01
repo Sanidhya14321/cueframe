@@ -26,8 +26,10 @@ export const embedQuery = async (text: string): Promise<readonly number[] | null
 const dot = (a: readonly number[], b: readonly number[]): number =>
   a.reduce((sum, value, index) => sum + value * (b[index] ?? 0), 0);
 
-export const semanticOrder = (query: readonly number[]): string[] =>
+export const semanticScores = (query: readonly number[]): { id: string; score: number }[] =>
   Object.entries(CLIP_VECTORS)
     .map(([id, vector]) => ({ id, score: dot(query, vector) }))
-    .sort((a, b) => b.score - a.score)
-    .map(({ id }) => id);
+    .sort((a, b) => b.score - a.score);
+
+export const semanticOrder = (query: readonly number[]): string[] =>
+  semanticScores(query).map(({ id }) => id);

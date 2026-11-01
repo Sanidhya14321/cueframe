@@ -16,7 +16,7 @@ bun run dev
 cueframe ships as a local app people install themselves and as a hosted server we
 run for customers, which is the business model. Both come from this codebase, so
 check that a change works in each mode: local loopback with no accounts, and
-hosted with `CUEFRAME_PUBLIC_URL` plus `CUEFRAME_PASSWORD` or `CUEFRAME_USERS`.
+hosted with `CUEFRAME_PUBLIC_URL` plus `CUEFRAME_PASSWORD`.
 
 Never commit credentials. `.env.example` lists variable names only, with empty
 values; real values go in `.env.local`, which git ignores.

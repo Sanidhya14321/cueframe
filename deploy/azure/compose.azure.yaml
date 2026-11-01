@@ -1,0 +1,27 @@
+services:
+  yugabyte:
+    restart: unless-stopped
+    stop_grace_period: 60s
+  cueframe:
+    image: ${CUEFRAME_IMAGE:?Run this stack through vm-stack.sh}
+    stop_grace_period: 30s
+  library-index:
+    image: ${CUEFRAME_IMAGE:?Run this stack through vm-stack.sh}
+    profiles: [jobs]
+  proxy:
+    image: caddy:2.10.2-alpine
+    restart: unless-stopped
+    command: ["caddy", "reverse-proxy", "--from", "${CUEFRAME_PUBLIC_URL:?Set the public HTTPS URL in .env}", "--to", "cueframe:3000"]
+    depends_on:
+      cueframe:
+        condition: service_healthy
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    volumes:
+      - proxy-data:/data
+      - proxy-config:/config
+volumes:
+  proxy-data:
+  proxy-config:

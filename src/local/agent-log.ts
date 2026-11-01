@@ -29,17 +29,17 @@ export const markListening = (projectId: string) =>
   updateLog(projectId, (log) => ({ ...log, listeningAt: Date.now() }));
 export const appendAgentLog = (
   projectId: string,
-  entry: Pick<AgentLogEntry, 'kind' | 'text'> & { itemIds?: string[] },
+  entry: Pick<AgentLogEntry, 'kind' | 'text'> & { id?: string; itemIds?: string[] },
 ) =>
   updateLog(projectId, (log) => ({
     ...log,
     entries: [
       ...log.entries,
       {
-        id: randomUUID(),
+        id: entry.id ?? randomUUID(),
         at: Date.now(),
         kind: entry.kind,
-        text: entry.text.slice(0, 1000),
+        text: entry.text.slice(0, entry.kind === 'reply' ? 8000 : 1000),
         itemIds: entry.itemIds ?? [],
       },
     ].slice(-MAX_ENTRIES),

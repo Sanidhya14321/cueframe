@@ -15,8 +15,10 @@ import { transcribeVideo } from '@/local/transcribe';
 import { addVoiceover, voiceInputSchema } from '@/local/voice';
 import { createCompositionElement, createTrack, findElement } from '@/project';
 import { getClipDefaults, getClipMeta, isClipId } from '@/schemas';
+import { suggestBeatClips, suggestInputSchema } from './beat-suggest';
 import { beatsheetSchema, buildFromBeatsheet } from './beatsheet';
 import { composeFromBrief } from './compose';
+import { editOperationSchema } from './edits';
 
 export interface ToolContext {
   origin: string;
@@ -67,10 +69,10 @@ export const projectTools = {
   ),
 
   share_update: defineProjectTool(
-    'Show the person a short plain-language update in the editor chat. Use thinking for what you are working out and decision for a choice you made and why. Call it before and between edits.',
+    'Show a concise update in the editor chat immediately. Use thinking for a progress summary, decision for a choice and why, and reply for user-facing answers. Call it before and between edits; reply before resolving the event.',
     {
       projectId,
-      kind: z.enum(['thinking', 'decision']),
+      kind: z.enum(['thinking', 'decision', 'reply']),
       text: z.string().min(1).max(1000),
       itemIds: z.array(z.string()).max(50).default([]),
     },
@@ -118,10 +120,28 @@ export const projectTools = {
     { projectId, brief: z.string().min(1).max(2000), confirmed },
     async ({ projectId: pid, brief }, ctx) => composeFromBrief(pid, brief, ctx.actor),
   ),
+  suggest_clips: defineProjectTool(
+    'Suggest library clips for each beat from metadata embeddings. Places nothing: an empty list means no clip fits, so author that section yourself. Use a suggestion only if it truly suits the beat.',
+    { projectId, ...suggestInputSchema.shape },
+    async ({ projectId: _, ...input }, ctx) => suggestBeatClips(input, ctx.origin),
+  ),
   build_from_beatsheet: defineProjectTool(
-    'Build 12-16 short segments live, with downbeat cuts, whooshes, hits and music. Use 16 segments for a 30-second video.',
+    'Build your own 12-16 section video live, with downbeat cuts, whooshes, hits and music. Set style to fit the brief. A segment becomes an editable section of separate backdrop, headline and subtitle layers. Set clipId and props only for a library clip you chose; fill every slot listed in unfilledSlots afterwards.',
     { ...beatsheetSchema.shape, confirmed },
     async (input, ctx) => buildFromBeatsheet(input, ctx.actor),
+  ),
+  edit_project: defineProjectTool(
+    'Author or change primitive text, shapes, images, audio and project settings with validated JSON Patch paths. Read get_project and get_item first. Edits outside a pinned item are rejected.',
+    { projectId, operations: z.array(editOperationSchema).min(1).max(100), confirmed },
+    async ({ projectId: pid, operations }, ctx) => ({
+      revision: (
+        await commitAction(
+          pid,
+          { type: 'patch', operations },
+          { actor: ctx.actor, label: 'Edit project' },
+        )
+      ).revision,
+    }),
   ),
   set_agent_status: defineProjectTool(
     'Set working before edits and idle when done. Heartbeat at least every 30 seconds; locks expire after 60 seconds.',

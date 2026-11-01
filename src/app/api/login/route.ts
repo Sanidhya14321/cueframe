@@ -1,13 +1,6 @@
 import { NextResponse } from 'next/server';
 import { clientAddress, takeRateLimit } from '@/local/rate-limit';
-import {
-  authenticate,
-  browserSessionToken,
-  localOrigin,
-  ROLE_COOKIE,
-  roleCookie,
-  SESSION_COOKIE,
-} from '@/local/security';
+import { authenticate, browserSessionToken, localOrigin, SESSION_COOKIE } from '@/local/security';
 
 const FAILURE_DELAY_MS = 1000;
 const ATTEMPT_WINDOW_MS = 15 * 60 * 1000;
@@ -26,8 +19,7 @@ export const POST = async (request: Request) => {
   }
   const form = await request.formData().catch(() => new FormData());
   const password = form.get('password');
-  const role = authenticate(String(form.get('email') ?? 'admin'), String(password ?? ''));
-  if (role === null) {
+  if (!authenticate(String(password ?? ''))) {
     await new Promise((resolve) => setTimeout(resolve, FAILURE_DELAY_MS));
     return toLogin('1');
   }
@@ -40,6 +32,5 @@ export const POST = async (request: Request) => {
     maxAge: 60 * 60 * 24 * 30,
   } as const;
   response.cookies.set(SESSION_COOKIE, browserSessionToken(), cookie);
-  response.cookies.set(ROLE_COOKIE, roleCookie(role), cookie);
   return response;
 };

@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { clipImage } from '@/og/clip-card';
 import { CLIP_IDS, isClipId } from '@/schemas';
 
-export const alt = 'A neuclip video clip';
+export const alt = 'A cueframe video clip';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 

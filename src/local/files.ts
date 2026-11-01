@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { chmod, lstat, mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
+import { notifyFile } from './file-events';
 
 const queues = new Map<string, Promise<unknown>>();
 
@@ -48,6 +49,7 @@ export const writeJson = async (path: string, value: unknown): Promise<void> => 
     await writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { mode: 0o600, flag: 'wx' });
     await rename(temporary, path);
     await chmod(path, 0o600);
+    notifyFile(path);
   } finally {
     await rm(temporary, { force: true });
   }

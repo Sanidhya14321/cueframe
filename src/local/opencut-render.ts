@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { repoRoot } from '@/lib/repo-root';
 import { projectDirectory, readProject } from './projects';
-import { browserSessionToken, roleCookie } from './security';
+import { browserSessionToken } from './security';
 import { workerEnvironment } from './worker-env';
 
 export const renderNativeProject = async (
@@ -30,7 +30,6 @@ export const renderNativeProject = async (
         env: {
           ...workerEnvironment(),
           CUEFRAME_RENDER_TOKEN: browserSessionToken(),
-          CUEFRAME_RENDER_ROLE: roleCookie('creator'),
         },
       },
     );

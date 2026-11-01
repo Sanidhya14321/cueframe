@@ -69,7 +69,7 @@ export const registerCatalogTools = (server: McpServer, appUrl: string): void =>
     {
       title: 'Search clips',
       description:
-        'Search the Neuclip library of animation clips by what a video needs, for example "app launch phone reveal", "logo outro" or "pricing list". Every clip is labelled with what is on screen, its beats, mood, use cases and the role it plays in a video (opener, feature, proof, cta, closer, transition, background, overlay). Leave query empty to browse with filters.',
+        'Search the cueframe library of animation clips by what a video needs, for example "app launch phone reveal", "logo outro" or "pricing list". Every clip is labelled with what is on screen, its beats, mood, use cases and the role it plays in a video (opener, feature, proof, cta, closer, transition, background, overlay). Leave query empty to browse with filters.',
       inputSchema: {
         query: z.string().describe('Plain-language description of the clip you want'),
         category: z.enum(CATEGORY_IDS).optional(),

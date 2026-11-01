@@ -1,0 +1,101 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      action:
+        description: What to do to the Azure server
+        required: true
+        default: recompose
+        type: choice
+        options:
+          - deploy
+          - recompose
+          - restart
+          - down
+          - up
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: CI
+    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || inputs.action == 'deploy') }}
+    uses: ./.github/workflows/ci.yml
+
+  publish:
+    name: Publish image
+    needs: ci
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image: ${{ steps.push.outputs.image }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build and push
+        id: push
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HTML_IN_CANVAS_ORIGIN_TRIAL_TOKEN: ${{ vars.HTML_IN_CANVAS_ORIGIN_TRIAL_TOKEN }}
+        run: |
+          image="ghcr.io/${GITHUB_REPOSITORY,,}:${GITHUB_SHA}"
+          printf '%s' "$GITHUB_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+          docker build --build-arg HTML_IN_CANVAS_ORIGIN_TRIAL_TOKEN --tag "$image" .
+          docker push "$image"
+          echo "image=$image" >>"$GITHUB_OUTPUT"
+
+  deploy:
+    name: Deploy to Azure
+    needs: publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: production
+    concurrency:
+      group: azure-production
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Replace the running stack
+        env:
+          AZURE_VM_HOST: ${{ secrets.AZURE_VM_HOST }}
+          AZURE_VM_USER: ${{ secrets.AZURE_VM_USER }}
+          AZURE_VM_SSH_KEY: ${{ secrets.AZURE_VM_SSH_KEY }}
+          AZURE_VM_KNOWN_HOSTS: ${{ secrets.AZURE_VM_KNOWN_HOSTS }}
+          REGISTRY_TOKEN: ${{ github.token }}
+          IMAGE: ${{ needs.publish.outputs.image }}
+        run: bash deploy/azure/run-on-vm.sh deploy "$IMAGE"
+
+  operate:
+    name: Run action on Azure
+    if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.action != 'deploy' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: production
+    concurrency:
+      group: azure-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Run the action
+        env:
+          AZURE_VM_HOST: ${{ secrets.AZURE_VM_HOST }}
+          AZURE_VM_USER: ${{ secrets.AZURE_VM_USER }}
+          AZURE_VM_SSH_KEY: ${{ secrets.AZURE_VM_SSH_KEY }}
+          AZURE_VM_KNOWN_HOSTS: ${{ secrets.AZURE_VM_KNOWN_HOSTS }}
+          ACTION: ${{ inputs.action }}
+        run: bash deploy/azure/run-on-vm.sh "$ACTION"

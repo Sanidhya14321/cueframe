@@ -11,18 +11,10 @@ const LoginPage = async ({ searchParams }: Props) => {
       method="post"
       className="mx-auto flex w-full max-w-sm flex-col gap-3 px-4 py-24"
     >
-      <h1 className="font-display text-3xl">Sign in to the video editor</h1>
+      <h1 className="font-display text-3xl">Unlock your video editor</h1>
       <p className="text-muted-foreground text-sm">
-        The hosted editor is for paid accounts. Prefer to run it yourself?{' '}
-        <a className="underline underline-offset-4" href="/pricing">
-          Download it free
-        </a>
-        .
+        Enter your owner password to access this private workspace.
       </p>
-      <label htmlFor="email" className="text-sm">
-        Email
-      </label>
-      <Input id="email" name="email" autoComplete="username" required={true} />
       <label htmlFor="password" className="text-sm">
         Password
       </label>

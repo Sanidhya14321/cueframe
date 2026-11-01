@@ -57,8 +57,13 @@ export const takeRateLimit = (key: string, limit: number, windowMs: number): num
 };
 
 export const clientAddress = (request: Request): string =>
-  request.headers.get('x-real-ip') ??
-  request.headers.get('x-forwarded-for')?.split(',').at(-1)?.trim() ??
+  request.headers
+    .get('x-forwarded-for')
+    ?.split(',')
+    .at(-1)
+    ?.trim()
+    .replace(/^([^:]+):\d+$/, '$1') ||
+  request.headers.get('x-real-ip') ||
   'unknown';
 
 export const hostedSpendProblem = (

@@ -32,7 +32,7 @@ export const Wordmark = ({ ink }: { ink: Ink }) => (
   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
     <BrandMark size={34} />
     <div style={{ fontSize: 26, fontWeight: 600, letterSpacing: -0.6, color: ink.text }}>
-      neuclip
+      cueframe
     </div>
   </div>
 );

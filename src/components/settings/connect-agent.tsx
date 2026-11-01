@@ -25,7 +25,7 @@ export const ConnectAgent = () => {
         command?: string;
       };
       if (data.command === undefined) {
-        setMessage('Only an admin can copy the connection command.');
+        setMessage('Sign in to copy the connection command.');
         return;
       }
       await navigator.clipboard.writeText(data.command);
@@ -40,6 +40,11 @@ export const ConnectAgent = () => {
     <div className="mx-auto flex max-w-2xl flex-col gap-4 px-4 py-5 sm:px-6">
       <h1 className="text-2xl font-semibold">Connect your agent</h1>
       <p>Keep this local app running while your agent edits. Every action appears in the editor.</p>
+      <p className="text-sm text-muted-foreground">
+        A connected coding agent has priority over the API model. In a project's Agent panel, copy
+        its listener prompt into your coding agent once to start receiving chat messages. Listening
+        confirms that it is ready to reply to that project.
+      </p>
       <p role="status">
         <span className={connection.connected ? 'text-emerald-600' : 'text-muted-foreground'}>
           {connection.connected ? '● Connected' : '○ Waiting for connection'}: {connection.name}

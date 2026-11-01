@@ -1,40 +1,39 @@
+import { join } from 'node:path';
 import { readAgentLog } from '@/local/agent-log';
+import { connectionState } from '@/local/connections';
 import { projectApi } from '@/local/project-api';
+import { projectDirectory } from '@/local/projects';
+import { readSettings } from '@/local/settings';
+import { snapshotStream } from '@/local/snapshot-stream';
 
-const CHECK_MS = 400;
-const encoder = new TextEncoder();
 export const dynamic = 'force-dynamic';
 export const GET = (request: Request, { params }: { params: Promise<{ projectId: string }> }) =>
   projectApi(request, async () => {
     const { projectId } = await params;
     await readAgentLog(projectId);
-    let timer: ReturnType<typeof setInterval>;
-    let closed = false;
-    const stream = new ReadableStream<Uint8Array>({
-      start(controller) {
-        let last = '';
-        const check = async () => {
-          const next = JSON.stringify(await readAgentLog(projectId));
-          if (next !== last && !request.signal.aborted && !closed) {
-            last = next;
-            controller.enqueue(encoder.encode(`data: ${next}\n\n`));
-          }
+    const stream = snapshotStream(
+      async () => {
+        const { dataFolder } = await readSettings();
+        return [
+          join(await projectDirectory(projectId), 'agent-log.json'),
+          join(dataFolder, 'settings.json'),
+          join(dataFolder, 'connection.json'),
+        ];
+      },
+      async () => {
+        const [log, external, settings] = await Promise.all([
+          readAgentLog(projectId),
+          connectionState(),
+          readSettings(),
+        ]);
+        return {
+          ...log,
+          external: { name: external.name, connected: external.connected },
+          modelReady: settings.providerType === 'openai-compatible' && settings.model !== '',
         };
-        check().catch(() => undefined);
-        timer = setInterval(() => check().catch(() => undefined), CHECK_MS);
-        request.signal.addEventListener('abort', () => {
-          clearInterval(timer);
-          if (!closed) {
-            closed = true;
-            controller.close();
-          }
-        });
       },
-      cancel() {
-        closed = true;
-        clearInterval(timer);
-      },
-    });
+      request.signal,
+    );
     return new Response(stream, {
       headers: {
         'content-type': 'text/event-stream',

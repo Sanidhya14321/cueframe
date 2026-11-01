@@ -10,7 +10,7 @@ import { findSiteTemplate } from '@/sites/templates';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'My websites · Neuclip' };
+export const metadata: Metadata = { title: 'My websites · cueframe' };
 
 const formatDate = (date: Date): string =>
   new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(date);

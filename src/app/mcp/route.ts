@@ -12,9 +12,11 @@ const handle = async (request: Request): Promise<Response> => {
     .clone()
     .json()
     .catch(() => null)) as { params?: { clientInfo?: { name?: string } } } | null;
-  await markConnected(
-    typeof body?.params?.clientInfo?.name === 'string' ? body.params.clientInfo.name : undefined,
-  ).catch(() => undefined);
+  if (request.method !== 'DELETE') {
+    await markConnected(
+      typeof body?.params?.clientInfo?.name === 'string' ? body.params.clientInfo.name : undefined,
+    ).catch(() => undefined);
+  }
   const transport = new WebStandardStreamableHTTPServerTransport({ enableJsonResponse: true });
   await createMcpServer(localOrigin(request) ?? new URL(request.url).origin).connect(transport);
   const response = await transport.handleRequest(request);

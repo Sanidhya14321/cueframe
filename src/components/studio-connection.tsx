@@ -26,7 +26,7 @@ const connectionDisplay = (state: Connection | null) => {
   }
   return state.connected
     ? {
-        label: `Connected: ${state.name}`,
+        label: `Agent available: ${state.name}. Check the project's chat for listening status`,
         shortLabel: state.name,
         compactLabel: 'Online',
         Icon: Plug,

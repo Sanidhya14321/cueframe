@@ -13,10 +13,11 @@ Object.assign(process.env, {
 
 const config: NextConfig = {
   reactStrictMode: true,
+  staticPageGenerationTimeout: 600,
   distDir: cueframeDistDir ?? '.next',
   serverExternalPackages: ['@remotion/renderer', '@remotion/bundler', '@huggingface/transformers'],
   agentRules: false,
-  experimental: { proxyClientMaxBodySize: '260mb' },
+  experimental: { proxyClientMaxBodySize: '260mb', cpus: 4 },
   transpilePackages: ['remotion', '@remotion/player', '@remotion/google-fonts', '@remotion/three'],
   headers: () =>
     Promise.resolve([

@@ -107,3 +107,21 @@ Small corrections from the end-to-end audit, not an addendum stage. Export now s
 ## Video editor agent panel, 1 November 2026
 
 Replaced the Agent popover with a docked chat column (a full-screen panel on phones) that shows messages, the agent's shared reasoning and decisions, tool actions, what is shared with the agent, and a copyable prompt when no agent is listening. Outside the addendum stages. No Impeccable critique score or screenshots were recorded.
+
+## Chat repair and owner access, 2026-11-01
+
+This repairs the existing video chat and login surfaces; it does not advance addendum C-I.
+
+The video chat previously only queued requests for an external MCP listener. Its new server path uses the saved in-app model when no listener is active. Configuration failures retain the draft and show a Settings link. Successful requests use the existing project actions, event scope, history and agent log. The idle in-app agent says Ready. Existing MCP listeners continue receiving queued messages.
+
+Owner access now uses one password, without an email field, user list or role cookie. Local installations remain account-free. The versioned owner session expires sessions issued by the previous multi-role system.
+
+Verification used Playwright Chromium with a local HTTP provider fixture, exercising the actual provider adapter, chat API, saved edit, visible reply and Undo agent turn. No paid provider was called. Captures at [375](screenshots/chat-repair/375.png), [768](screenshots/chat-repair/768.png), [1280](screenshots/chat-repair/1280.png) and [1920](screenshots/chat-repair/1920.png) show the existing responsive panel. Desktop uses the dock and narrow viewports use the existing full-screen panel. The mechanical detector reported no findings. Visual inspection confirmed readable replies, an accessible message field, visible send/close controls and preserved editor artwork. Physical-device gestures and a real paid-provider response remain unverified.
+
+## Realtime chat and coding-agent priority, 2026-11-01
+
+Automatic now checks the connected coding agent before loading the API model. A connected agent without a project listener gets a queued request and a copyable listener prompt. The panel distinguishes connection from listening, keeps explicit Coding agent and AI editor choices, and updates its delivery status when the listener starts. In-app replies stream immediately and offer Stop reply. Shared coding-agent replies appear before event completion. Project and chat updates use file notifications with recovery checks.
+
+The final production Docker image passed three Chromium browser tests covering owner login, MCP priority with an intentionally unreachable API model, live MCP replies before resolve_event, API text visible before provider completion, tool edits and undo. The provider was a local fixture; no paid API was called. All 777 unit/component tests passed, as did typecheck. Captures at [375](screenshots/chat-realtime/375.png), [768](screenshots/chat-realtime/768.png), [1280](screenshots/chat-realtime/1280.png) and [1920](screenshots/chat-realtime/1920.png) document MCP delivery. Visual inspection of phone and desktop captures confirmed readable updates, visible delivery status and accessible composer controls. This repairs the existing chat and does not advance addendum C-I.
+
+A 20-sample isolated local benchmark measured project notification delivery at 3.1 ms median and 5 ms p95, and coding-agent queue handoff at 5.1 ms median and 12.3 ms p95. These measure internal storage-to-event delivery only, excluding model generation, network and browser rendering. A connected idle Claude Code client still needs the project listener started once; the app cannot initiate a Claude Code model turn merely from an MCP connection.

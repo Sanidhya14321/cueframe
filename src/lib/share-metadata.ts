@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-const SITE_NAME = 'neuclip';
+const SITE_NAME = 'cueframe';
 
 export const shareMetadata = (title: string, description: string): Metadata => ({
   title,

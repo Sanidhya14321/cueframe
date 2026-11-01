@@ -21,6 +21,7 @@ animation clips, edit them on a timeline and export finished video.
 - AI editing through any OpenAI-compatible provider.
 - MCP tools that let agents create, edit and render projects.
 - Local transcription with Whisper and optional voiceover with Fish.
+- A project chat that edits the open video with your saved model or a connected agent.
 
 Projects are stored as files, on your machine or in your hosted instance's
 private storage. The local version has no accounts. YugabyteDB is optional and stores library metadata embeddings for agent search.
@@ -40,8 +41,9 @@ connections.
 
 ## Host it
 
-[docs/CUEFRAME_DEPLOY.md](docs/CUEFRAME_DEPLOY.md) covers Docker and private
-server instances, including the settings that turn on login.
+[docs/CUEFRAME_DEPLOY.md](docs/CUEFRAME_DEPLOY.md) covers Docker, private server
+instances and deploying the `Dockerfile` to Azure, including the settings that
+turn on login.
 
 ## Yugabyte and voice setup
 
@@ -98,6 +100,14 @@ voiceover request.
 - `src/agent`, `src/mcp`: agent tools and the MCP server.
 - `src/render`: rendering scripts.
 - `tests`, `e2e`: unit, component and end-to-end tests.
+
+## Documentation
+
+- [docs/CUEFRAME_DEPLOY.md](docs/CUEFRAME_DEPLOY.md): running and hosting.
+- [docs/CUEFRAME_OPENCUT.md](docs/CUEFRAME_OPENCUT.md): the video editor integration.
+- [docs/CUEFRAME_UI_ADDENDUM.md](docs/CUEFRAME_UI_ADDENDUM.md) and
+  [docs/CUEFRAME_UI_REVIEW.md](docs/CUEFRAME_UI_REVIEW.md): the UI plan and its review record.
+- [docs/archive](docs/archive): the original build prompt, plan, progress log and audits.
 
 ## Contributing
 

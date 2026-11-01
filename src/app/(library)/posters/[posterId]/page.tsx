@@ -15,7 +15,7 @@ export const generateMetadata = async ({
   const poster = findPoster(posterId);
   return poster === undefined
     ? { title: 'Poster' }
-    : shareMetadata(`${poster.meta.title} · Neuclip`, poster.meta.description);
+    : shareMetadata(`${poster.meta.title} · cueframe`, poster.meta.description);
 };
 
 const PosterEditorPage = async ({ params }: { params: Promise<{ posterId: string }> }) => {

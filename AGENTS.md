@@ -47,7 +47,7 @@ Everything lives in one package. Modules import each other through the `@/` alia
 - `src/sites` - website templates: per-template Zod content schemas, defaults, metadata and control
   layouts (`templates/<category>/<id>.ts`), slugs, event dates, `.ics` files and the published-site
   check and paths (`published-site.ts`). Pure.
-- `src/local` - local JSON stores, atomic file writes, settings and runtime session protection. The default data folder is `~/cueframe`; `CUEFRAME_HOME` chooses the initial folder. No accounts or database.
+- `src/local` - local JSON stores, atomic file writes, settings and runtime session protection. The default data folder is `~/cueframe`; `CUEFRAME_HOME` chooses the initial folder. No accounts; YugabyteDB is optional and holds only library search vectors.
 - `src/components/sites` - each template's React website (`templates/<id>/`), the shared canvas
   and the website editor (`editor/`).
 - `src/core` - domain types, the clip project seed and the Zod-schema-to-control introspection.
@@ -61,6 +61,8 @@ Everything lives in one package. Modules import each other through the `@/` alia
 - Tests: `bun test` with happy-dom + Testing Library for unit and component, Playwright for e2e.
 - lefthook runs Biome and the no-comments, em-dash and repository checks pre-commit; typecheck and
   lint pre-push.
+- `.github/workflows/deploy.yml` calls `ci.yml`, then deploys `main` to the hosted Azure VM with
+  `deploy/azure` (see `docs/CUEFRAME_DEPLOY.md`). `ci.yml` has no `push` trigger of its own.
 
 ## Commands
 
@@ -110,7 +112,7 @@ Clips are pluggable, category-organized modules so that parallel authors rarely 
 file. Categories group clips by the type of animation and are defined once in
 `src/schemas/taxonomy.ts` (`CLIP_CATEGORIES`): `kinetic-type`, `text-reveals`, `hand-drawn`,
 `phone-reveals`, `phone-layouts`, `screen-demos`, `desk-scenes`, `overlays`, `list-pickers`, `brand`,
-`ad-reveals`, `backgrounds`, `transitions`, `invitations`.
+`ad-reveals`, `backgrounds`, `transitions`, `invitations`, `imported`.
 Each category also lists search `keywords` (synonyms the gallery search matches). Every
 `ClipMeta` also carries `tags` (from `CLIP_TAGS`) and a `theme` (`light` or `dark`), which the
 gallery search and filters read.
@@ -321,13 +323,13 @@ To add a template:
 
 ## Local runtime and storage
 
-Clerk, approval roles, API keys, OAuth, Neon and Drizzle have been removed. `src/proxy.ts` permits only loopback hosts, refuses foreign Origins and boots the browser's HttpOnly SameSite runtime cookie. API writes require that cookie and the same Origin, or the app's runtime Bearer token for local CLI/MCP clients. `next.config.ts` generates the runtime token before server workers start. Do not expose or log it.
+`src/proxy.ts` permits only loopback hosts locally, or only the `CUEFRAME_PUBLIC_URL` host behind the single `CUEFRAME_PASSWORD` login when hosted, refuses foreign Origins and boots the browser's HttpOnly SameSite runtime cookie. API writes require that cookie and the same Origin, or the app's runtime Bearer token for local CLI/MCP clients. `next.config.ts` generates the runtime token before server workers start. Do not expose or log it.
 
 `src/local/settings.ts` reads settings from disk, with provider and Fish Audio keys confined to `settings.json` (mode 0600). The settings API returns only key-presence flags. Settings changes use serialized atomic writes; a location pointer contains only the chosen data-folder path. Never log provider error bodies or redirect credential-bearing provider requests.
 
 `src/local/videos.ts` saves videos to `projects/<id>/project.json` and creates `media/` and `out/`. `src/local/sites.ts` saves websites to `websites.json`. IDs are twelve lowercase alphanumeric characters; reject traversal and symlinked project paths. Video projects use revisioned disk actions and SSE; poster drafts remain in localStorage. `src/local/projects.ts` owns project history, presence and comments; uploads and full-fidelity outputs stay within each project folder.
 
-The existing `/mcp` SDK endpoint and video/site/catalog tools now use local stores with no owner argument. Live tools are defined once in `src/agent/project-tools.ts`, registered through `src/mcp/project-tools.ts` and use the same action dispatcher as the browser. `/connect` shows the Claude Code HTTP command. Agent instructions and the Codex bridge remain step 11. Preserve existing tool validation.
+The existing `/mcp` SDK endpoint and video/site/catalog tools now use local stores with no owner argument. Live tools are defined once in `src/agent/project-tools.ts`, registered through `src/mcp/project-tools.ts` and use the same action dispatcher as the browser. `/connect` shows the Claude Code HTTP command. Preserve existing tool validation.
 
 Tests use a temporary `CUEFRAME_HOME` initialized by `tests-preload.ts`; no test reads real user files or calls a database. `tests/local` covers storage, settings and request security. Playwright runs on loopback without sign-in or cloud credentials.
 

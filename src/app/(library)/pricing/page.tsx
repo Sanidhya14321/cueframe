@@ -14,7 +14,7 @@ const PLANS = [
     name: 'Hosted',
     price: 'Server cost + margin + 18% GST',
     note: 'A private cueframe instance on our servers, billed monthly',
-    features: ['Your own isolated workspace', 'Cloud rendering', 'Admin, creator and viewer roles'],
+    features: ['Your own isolated workspace', 'Cloud rendering', 'Private owner access'],
     action: { label: 'Request access', href: '/login' },
   },
 ] as const;

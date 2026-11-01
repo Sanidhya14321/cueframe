@@ -51,6 +51,8 @@ export const readSettings = async (): Promise<LocalSettings> => {
       await rename(path, `${path}.corrupt-${Date.now()}`);
       console.error('[cueframe] settings.json was unreadable and has been set aside.');
     }
+    // biome-ignore lint/style/noProcessEnv: the container stack supplies its private database address
+    const { YUGABYTE_DATABASE_URL: yugabyteUrl = '' } = process.env;
     const defaults: LocalSettings = {
       dataFolder: folder,
       providerType: 'openai-compatible',
@@ -58,7 +60,7 @@ export const readSettings = async (): Promise<LocalSettings> => {
       model: '',
       apiKey: '',
       fishAudioKey: '',
-      yugabyteUrl: '',
+      yugabyteUrl,
     };
     await writeJson(path, defaults);
     return defaults;

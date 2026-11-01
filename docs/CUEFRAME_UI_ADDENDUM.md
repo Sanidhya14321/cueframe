@@ -155,5 +155,5 @@ Cut line, in order: Review mode polish on phones, shortcut remapping, the start-
 ### 8.3 Kickoff message
 
 ```text
-Read docs/CUEFRAME_PROMPT.md and docs/CUEFRAME_UI_ADDENDUM.md. If steps 1 to 5 of the main prompt are not done, finish them first. Then do steps A to I of the addendum in order, using the Impeccable design skill for every screen. After each step, tell me which page to open and what to try, and wait for my go-ahead. Keep existing features working; reuse the repository's shadcn components and Tailwind; every feature must be reachable from the UI.
+Read docs/archive/CUEFRAME_PROMPT.md and docs/CUEFRAME_UI_ADDENDUM.md. If steps 1 to 5 of the main prompt are not done, finish them first. Then do steps A to I of the addendum in order, using the Impeccable design skill for every screen. After each step, tell me which page to open and what to try, and wait for my go-ahead. Keep existing features working; reuse the repository's shadcn components and Tailwind; every feature must be reachable from the UI.
 ```

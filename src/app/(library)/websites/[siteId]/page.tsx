@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 type Props = { params: Promise<{ siteId: string }> };
 
-export const metadata: Metadata = { title: 'Website · Neuclip' };
+export const metadata: Metadata = { title: 'Website · cueframe' };
 
 const WebsiteEditorPage = async ({ params }: Props) => {
   const { siteId } = await params;
