@@ -33,7 +33,7 @@ export const ConnectAgent = () => {
     }
   };
   return (
-    <div className="mx-auto flex max-w-2xl flex-col gap-5 p-6">
+    <div className="mx-auto flex max-w-2xl flex-col gap-4 px-4 py-5 sm:px-6">
       <h1 className="text-2xl font-semibold">Connect your agent</h1>
       <p>Keep this local app running while your agent edits. Every action appears in the editor.</p>
       <p role="status">

@@ -158,9 +158,7 @@ export const TextEffectsSection = ({ element, onChange, onCommit }: TextEffectsS
             onClick={() => onChange(effect.apply(element))}
             className={cn(
               'flex flex-col items-center gap-1 rounded-lg p-1.5 text-[11px] transition-colors hover:bg-accent',
-              active === effect.id
-                ? 'bg-violet-500/15 text-violet-700 dark:text-violet-300'
-                : 'bg-muted/60',
+              active === effect.id ? 'bg-primary/12 text-primary' : 'bg-muted/60',
             )}
           >
             <span className="font-black text-lg leading-none" style={previewStyle(effect.preview)}>

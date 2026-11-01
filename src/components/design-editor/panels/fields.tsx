@@ -140,7 +140,7 @@ export const ToggleButton = ({
     onClick={onClick}
     className={cn(
       'inline-flex h-8 min-w-8 items-center justify-center rounded-md px-2 text-xs transition-colors hover:bg-accent [&_svg]:size-4',
-      active ? 'bg-violet-500/15 text-violet-600 dark:text-violet-300' : 'bg-muted',
+      active ? 'bg-primary/12 text-primary' : 'bg-muted',
       className,
     )}
   >

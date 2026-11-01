@@ -19,7 +19,7 @@ export const SiteNavLinks = () => {
     <>
       <div className="hidden items-center gap-1 md:flex">
         {STUDIO_PAGES.filter((page) =>
-          ['/projects', '/library', '/websites'].includes(page.href),
+          ['/projects', '/library', '/websites', '/pricing'].includes(page.href),
         ).map((page) => (
           <Link
             key={page.href}

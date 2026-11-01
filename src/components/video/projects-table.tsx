@@ -56,15 +56,15 @@ export const ProjectsTable = ({ rows }: { rows: Row[] }) => {
               <th scope="col" className="px-3 py-1.5">
                 Length
               </th>
-              <th scope="col" className="px-3 py-1.5">
+              <th scope="col" className="hidden px-3 py-1.5 sm:table-cell">
                 Size
               </th>
-              <th scope="col" className="px-3 py-1.5">
+              <th scope="col" className="hidden px-3 py-1.5 sm:table-cell">
                 Type
               </th>
               <th
                 scope="col"
-                className="px-3 py-1.5"
+                className="hidden px-3 py-1.5 md:table-cell"
                 aria-sort={sort === 'updated' ? 'descending' : 'none'}
               >
                 <button type="button" className="min-h-8" onClick={() => setSort('updated')}>
@@ -76,15 +76,20 @@ export const ProjectsTable = ({ rows }: { rows: Row[] }) => {
           <tbody>
             {shown.slice(current * PAGE_SIZE, (current + 1) * PAGE_SIZE).map((row) => (
               <tr key={row.id} className="border-b last:border-0 hover:bg-muted">
-                <td className="px-3 py-1.5">
+                <td className="min-w-48 px-3 py-1.5">
                   <Link className="inline-flex min-h-8 items-center" href={`/video/${row.id}`}>
                     {row.title}
                   </Link>
                 </td>
-                <td className="px-3 py-1.5 tabular-nums">{row.seconds.toFixed(1)} s</td>
-                <td className="px-3 py-1.5 tabular-nums">{row.size}</td>
-                <td className="px-3 py-1.5">{row.engine}</td>
-                <td className="px-3 py-1.5 whitespace-nowrap" suppressHydrationWarning>
+                <td className="px-3 py-1.5 whitespace-nowrap tabular-nums">
+                  {row.seconds.toFixed(1)} s
+                </td>
+                <td className="hidden px-3 py-1.5 tabular-nums sm:table-cell">{row.size}</td>
+                <td className="hidden px-3 py-1.5 sm:table-cell">{row.engine}</td>
+                <td
+                  className="hidden px-3 py-1.5 whitespace-nowrap md:table-cell"
+                  suppressHydrationWarning
+                >
                   {dateFormat.format(row.updated)}
                 </td>
               </tr>

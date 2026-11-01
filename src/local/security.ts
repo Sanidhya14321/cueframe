@@ -1,4 +1,4 @@
-import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
+import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 
 export const SESSION_COOKIE = 'clipkit-session';
 
@@ -20,19 +20,64 @@ const equalToken = (value: string): boolean => {
   return expected.length === received.length && timingSafeEqual(expected, received);
 };
 
-const hostedConfig = (): { password: string; origin: string } | null => {
+const ROLES = ['admin', 'creator', 'viewer'] as const;
+export type Role = (typeof ROLES)[number];
+export const ROLE_COOKIE = 'clipkit-role';
+
+interface Account {
+  email: string;
+  password: string;
+  role: Role;
+}
+
+const hostedConfig = (): { accounts: Account[]; origin: string } | null => {
   // biome-ignore lint/style/noProcessEnv: hosted access is configured by the server operator
-  const { CLIPKIT_PASSWORD: password, CLIPKIT_PUBLIC_URL: url } = process.env;
-  return password && url ? { password, origin: new URL(url).origin } : null;
+  const { CLIPKIT_PASSWORD: password, CLIPKIT_USERS: users, CLIPKIT_PUBLIC_URL: url } = process.env;
+  if (!(url && (password || users))) {
+    return null;
+  }
+  const accounts: Account[] = users
+    ? (JSON.parse(users) as Account[])
+    : [{ email: 'admin', password: password ?? '', role: 'admin' }];
+  return { accounts, origin: new URL(url).origin };
 };
 
 export const isHosted = (): boolean => hostedConfig() !== null;
 
 const digest = (value: string): Buffer => createHash('sha256').update(value).digest();
 
-export const passwordMatches = (value: string): boolean => {
-  const config = hostedConfig();
-  return config !== null && timingSafeEqual(digest(value), digest(config.password));
+export const authenticate = (email: string, password: string): Role | null => {
+  const account = hostedConfig()?.accounts.find((entry) => entry.email === email.trim());
+  return account && timingSafeEqual(digest(password), digest(account.password))
+    ? account.role
+    : null;
+};
+
+export const roleCookie = (role: Role): string =>
+  `${role}.${createHmac('sha256', sessionToken()).update(role).digest('hex')}`;
+
+const cookieValue = (request: Request, name: string): string | undefined =>
+  request.headers
+    .get('cookie')
+    ?.split(';')
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(`${name}=`))
+    ?.slice(name.length + 1);
+
+export const requestRole = (request: Request): Role | null => {
+  const value = cookieValue(request, ROLE_COOKIE) ?? '';
+  return ROLES.find((role) => roleCookie(role) === value) ?? null;
+};
+
+export const roleProblem = (request: Request): Response | null => {
+  if (!isHosted() || ['GET', 'HEAD'].includes(request.method)) {
+    return null;
+  }
+  const role = requestRole(request);
+  const adminOnly = new URL(request.url).pathname.startsWith('/api/settings');
+  return role === 'viewer' || (adminOnly && role !== 'admin')
+    ? Response.json({ problem: 'Your role cannot make this change.' }, { status: 403 })
+    : null;
 };
 
 export const localOrigin = (request: Request): string | null => {
@@ -99,6 +144,10 @@ export const requireLocalSession = (request: Request): Response | null => {
   const browser = cookie !== undefined && equalToken(cookie);
   if (!(cli || browser)) {
     return Response.json({ problem: 'Open ClipKit locally to start a session.' }, { status: 401 });
+  }
+  const denied = cli ? null : roleProblem(request);
+  if (denied !== null) {
+    return denied;
   }
   if (
     !(cli || ['GET', 'HEAD'].includes(request.method)) &&

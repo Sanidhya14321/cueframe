@@ -36,7 +36,7 @@ export const DownloadMenu = ({ design, busy, run }: DownloadMenuProps) => {
           size="sm"
           disabled={busy}
           aria-label="Download"
-          className="bg-violet-600 text-white hover:bg-violet-600/90"
+          className="bg-primary text-primary-foreground hover:bg-primary/90"
         >
           {busy ? <Loader2 className="animate-spin" /> : <Download />}
           <span className="hidden sm:inline">Download</span>

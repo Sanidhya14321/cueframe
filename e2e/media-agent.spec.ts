@@ -69,6 +69,7 @@ const ask = async (page: Page, prompt: string): Promise<void> => {
 };
 
 test('the agent edits a clip, names the chat and keeps both after a reload', async ({ page }) => {
+  await page.setViewportSize({ width: 1700, height: 900 });
   const operations = [
     { op: 'replace', path: '/tracks/0/elements/0/props/text', value: 'HELLO FROM THE AGENT' },
   ];

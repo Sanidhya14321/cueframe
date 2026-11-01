@@ -81,17 +81,17 @@ export const AgentWorkspace = <K extends MediaKind>({
       className={cn(
         'inline-flex size-11 shrink-0 items-center justify-center sm:w-auto gap-1.5 rounded-full px-3 font-medium text-xs transition-colors disabled:opacity-60',
         open
-          ? 'bg-violet-600 text-white shadow-sm hover:bg-violet-600/90'
-          : 'border border-violet-500/40 text-violet-700 hover:bg-violet-500/10 dark:text-violet-300',
+          ? 'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90'
+          : 'border border-primary/40 text-primary hover:bg-accent',
       )}
     >
       <Sparkles className="size-3.5" />
-      <span className="hidden sm:inline">Edit with AI</span>
+      <span className="hidden lg:inline">Edit with AI</span>
     </button>
   );
 
   return (
-    <div className="flex h-[calc(100dvh-3.5rem)] min-h-0">
+    <div className="flex h-[calc(100dvh-2.75rem)] min-h-0">
       <div className="flex min-w-0 flex-1 flex-col">{children}</div>
       {slot === null ? null : createPortal(trigger, slot)}
       <section
@@ -100,8 +100,8 @@ export const AgentWorkspace = <K extends MediaKind>({
         aria-label="AI editor"
         className={cn(
           'fixed inset-x-0 bottom-0 z-50 flex-col overflow-hidden rounded-t-2xl border-t bg-background shadow-2xl',
-          expanded ? 'top-14' : 'h-[62dvh]',
-          'md:static md:h-auto md:w-[400px] md:shrink-0 md:rounded-none md:border-t-0 md:border-l md:shadow-none xl:w-[440px]',
+          expanded ? 'top-11' : 'h-[62dvh]',
+          'md:inset-x-auto md:top-11 md:right-0 md:h-auto md:w-[360px] md:rounded-none md:border-t-0 md:border-l min-[1600px]:static min-[1600px]:shrink-0 min-[1600px]:shadow-none',
           open
             ? 'slide-in-from-bottom-8 md:slide-in-from-bottom-0 md:slide-in-from-right-4 fade-in-0 flex animate-in duration-300 ease-out motion-reduce:animate-none'
             : 'hidden',

@@ -66,7 +66,7 @@ const JumpToLatest = () => {
 const Working = () => (
   <Appear>
     <p className="flex items-center gap-2 text-xs" data-testid="agent-working">
-      <Sparkles className="size-3.5 animate-pulse text-violet-500" />
+      <Sparkles className="size-3.5 animate-pulse text-primary" />
       <span className="text-shimmer">Thinking</span>
     </p>
   </Appear>
@@ -204,7 +204,7 @@ export const AgentChat = ({
                     key={suggestion}
                     type="button"
                     onClick={() => send(suggestion)}
-                    className="rounded-lg border bg-muted/30 px-3 py-2 text-left text-sm transition-colors hover:border-violet-500/50 hover:bg-violet-500/5"
+                    className="rounded-lg border bg-muted/30 px-3 py-2 text-left text-sm transition-colors hover:border-primary/40 hover:bg-primary/12"
                   >
                     {suggestion}
                   </button>
@@ -215,7 +215,7 @@ export const AgentChat = ({
             messages.map((message, index) =>
               message.role === 'user' ? (
                 <Appear key={message.id} className="flex justify-end">
-                  <p className="max-w-[85%] whitespace-pre-wrap break-words rounded-2xl rounded-br-md bg-violet-600 px-3.5 py-2 text-sm text-white">
+                  <p className="max-w-[85%] whitespace-pre-wrap break-words rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-sm text-primary-foreground">
                     {userText(message)}
                   </p>
                 </Appear>
@@ -250,7 +250,7 @@ export const AgentChat = ({
         onSubmit={onSubmit}
         className="border-t p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
       >
-        <div className="flex items-end gap-2 rounded-xl border bg-background px-3 py-2 transition-[border-color,box-shadow] focus-within:border-violet-500/60 focus-within:ring-2 focus-within:ring-violet-500/20">
+        <div className="flex items-end gap-2 rounded-xl border bg-background px-3 py-2 transition-[border-color,box-shadow] focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary">
           <textarea
             value={input}
             onChange={(event) => setInput(event.target.value)}
@@ -274,7 +274,7 @@ export const AgentChat = ({
             <Button
               type="submit"
               size="icon-sm"
-              className="bg-violet-600 text-white hover:bg-violet-600/90 disabled:bg-muted disabled:text-muted-foreground"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground"
               disabled={input.trim() === ''}
               aria-label="Send"
             >

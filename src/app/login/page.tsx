@@ -12,6 +12,10 @@ const LoginPage = async ({ searchParams }: Props) => {
       className="mx-auto flex w-full max-w-sm flex-col gap-3 px-4 py-24"
     >
       <h1 className="font-display text-3xl">Sign in to ClipKit</h1>
+      <label htmlFor="email" className="text-sm">
+        Email
+      </label>
+      <Input id="email" name="email" autoComplete="username" required={true} />
       <label htmlFor="password" className="text-sm">
         Password
       </label>

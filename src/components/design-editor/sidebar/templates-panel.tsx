@@ -59,7 +59,7 @@ export const TemplatesPanel = ({ onApply }: { onApply: (poster: Poster) => void 
               aria-label={`Use ${poster.meta.title}`}
               title={poster.meta.title}
               onClick={() => onApply(poster)}
-              className="relative w-full overflow-hidden rounded-md bg-muted ring-violet-500 transition hover:ring-2"
+              className="relative w-full overflow-hidden rounded-md bg-muted ring-primary transition hover:ring-2"
               style={{ aspectRatio: `${poster.meta.width} / ${poster.meta.height}` }}
             >
               <Image

@@ -2,7 +2,7 @@
 
 import { SearchX } from 'lucide-react';
 import type { ComponentType } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import type { GalleryMeta } from '@/lib/gallery-filters';
 import {
@@ -70,7 +70,11 @@ export const ClipGallery = ({
   const visible = filterClips(items, effective);
   const filterKey = JSON.stringify(effective);
   const [paging, setPaging] = useState({ filterKey, limit: PAGE_SIZE });
-  const limit = paging.filterKey === filterKey ? paging.limit : PAGE_SIZE;
+  const [batch, setBatch] = useState(PAGE_SIZE);
+  useEffect(() => {
+    setBatch(Math.max(PAGE_SIZE, Math.ceil(innerWidth / 224) * Math.ceil(innerHeight / 130)));
+  }, []);
+  const limit = Math.max(batch, paging.filterKey === filterKey ? paging.limit : PAGE_SIZE);
   const counts = {
     kinds: facetCounts(items, effective, 'kind', (meta) => [meta.kind]),
     categories: facetCounts(items, effective, 'category', (meta) => [meta.category]),
@@ -116,7 +120,7 @@ export const ClipGallery = ({
             <Button
               variant="outline"
               className="min-h-11 self-center"
-              onClick={() => setPaging({ filterKey, limit: limit + PAGE_SIZE })}
+              onClick={() => setPaging({ filterKey, limit: limit + batch })}
             >
               Load more ({visible.length - limit} left)
             </Button>

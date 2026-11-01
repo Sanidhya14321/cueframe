@@ -283,7 +283,7 @@ export const DesignEditor = ({
             type="button"
             onClick={() => setPropertiesOpen((open) => !open)}
             aria-expanded={propertiesOpen}
-            className="fixed right-4 bottom-20 z-50 inline-flex items-center gap-2 rounded-full bg-violet-600 px-4 py-2 font-medium text-sm text-white shadow-lg md:bottom-6 lg:hidden"
+            className="fixed right-4 bottom-20 z-50 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 font-medium text-sm text-primary-foreground shadow-lg md:bottom-6 lg:hidden"
           >
             <SlidersHorizontal className="size-4" /> {propertiesOpen ? 'Close' : 'Properties'}
           </button>
