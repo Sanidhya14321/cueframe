@@ -249,6 +249,20 @@ its current document and the chat's name with each message to `POST /api/agent` 
   `renameChat` tool. Reloaded turns never re-apply their edits.
 - `e2e/media-agent.spec.ts` replays recorded streams, so CI never calls the model.
 
+## Agent video pipeline
+
+cueframe sits between coding agents and video editing: the agent writes and directs the video, and
+every section stays editable until the person exports. Library clips are suggestions, never the
+default.
+
+- `suggest_clips` (`src/agent/beat-suggest.ts`) ranks clips per beat from the Yugabyte metadata
+  vectors, falling back to `src/mcp/clip-vectors.json`, then filters by aspect and a minimum score.
+  It places nothing, and an empty list means no clip fits.
+- `build_from_beatsheet` (`src/agent/beatsheet.ts`) never picks a clip. A segment becomes separate
+  backdrop, headline and subtitle layers (`src/agent/beat-sections.ts`) in the agent's `style`.
+  Only a segment with an explicit `clipId` uses a clip, and the result lists its `unfilledSlots`.
+- `edit_project` lets MCP agents and the in-app chat author primitives with validated JSON Patch.
+
 ## Poster packs and the image editor
 
 The home grid lists clips and poster packs together. A pack card shows a carousel of its pages,

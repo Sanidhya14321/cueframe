@@ -103,6 +103,7 @@ describe('live editor workflows', () => {
         projectId: state.id,
         aspect: 'landscape',
         targetSeconds: 30,
+        style: beatStyleSchema.parse({}),
         segments: Array.from({ length: 16 }, (_, index) => ({
           role:
             index === 0 ? ('hook' as const) : index === 15 ? ('cta' as const) : ('point' as const),
@@ -162,7 +163,7 @@ describe('live editor workflows', () => {
       background: style.background,
       font: style.font,
     });
-    expect(result.items[0]?.unfilledSlots).toEqual([]);
+    expect(result.items[0]).toMatchObject({ clipId: 'reveal-wipe', unfilledSlots: [] });
     expect(elements.filter((item) => item.type === 'shape')).toHaveLength(15);
   }, 20000);
   it('rejects a clip the agent names that does not exist', async () => {

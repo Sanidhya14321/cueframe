@@ -180,6 +180,7 @@ describe('in-app project chat', () => {
               toolCallId: 'edit-background',
               toolName: 'edit_project',
               input: JSON.stringify({
+                projectId: state.id,
                 confirmed: true,
                 operations: [{ op: 'replace', path: '/background', value: '#ffffff' }],
               }),
