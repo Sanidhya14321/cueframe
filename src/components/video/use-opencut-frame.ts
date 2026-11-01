@@ -41,7 +41,7 @@ const settle = (data: Extract<Reply, { type: 'clipkit-flushed' }>, pending: Pend
     return;
   }
   request.reject(
-    new Error('The video editor could not save. Resolve the save error before switching.'),
+    new Error('The video editor could not save. Resolve the save error and try again.'),
   );
 };
 export const useOpenCutFrame = () => {

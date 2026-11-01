@@ -99,3 +99,7 @@ Final B delivery: the latest production build passed; the complete verify gate p
 ## OpenCut Library tab
 
 Added a Library tab beside Media using the existing panel navigation, semantic tokens, 44 px actions and visible focus. It has loading, empty and error states. Add is the keyboard path for dragging. Live agent progress uses the existing OpenCut status line and presence bar, with no extra layer. No screenshots were recorded for this change.
+
+## End-to-end audit fixes, 1 November 2026
+
+Small corrections from the end-to-end audit, not an addendum stage. Export now shows Saving while it checkpoints edits, keeps polling through brief connection loss and returns to Export with a message if it loses the job. A prompt-created video shows a "Draft, waiting for an agent" link to Connect in the editor toolbar, and New video states that a connected agent writes the copy. The Agent menu width is capped to the viewport. `e2e/opencut-export.spec.ts` checks at 375 px that the toolbar controls do not intersect and stay on screen. On phones and tablets, a Frame controls button opens the animation controls as a bottom panel. No Impeccable critique score was recorded for these changes. Phone Review mode is addendum stage H and has not been built.

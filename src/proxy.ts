@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import {
   hasBrowserSession,
   isHosted,
+  localOrigin,
   localRequestProblem,
   requireLocalSession,
   SESSION_COOKIE,
@@ -23,7 +24,7 @@ export const proxy = (request: NextRequest) => {
     !pathname.startsWith('/api/') &&
     pathname !== '/mcp'
   ) {
-    return new NextResponse(null, { status: 307, headers: { location: '/login' } });
+    return NextResponse.redirect(new URL('/login', localOrigin(request) ?? request.url));
   }
   if (request.nextUrl.pathname.startsWith('/api/') || request.nextUrl.pathname === '/mcp') {
     return requireLocalSession(request) ?? NextResponse.next();

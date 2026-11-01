@@ -22,8 +22,23 @@ const jobPath = async (projectId: string, id: string) => {
   await ensureDirectory(folder);
   return join(folder, `${id}.job.json`);
 };
-export const readJob = async (projectId: string, id: string): Promise<LocalJob> =>
-  jobSchema.parse(await readJson(await jobPath(projectId, id)));
+const shared = globalThis as typeof globalThis & { clipkitRunningJobs?: Set<string> };
+const runningJobs = shared.clipkitRunningJobs ?? new Set<string>();
+shared.clipkitRunningJobs = runningJobs;
+export const readJob = async (projectId: string, id: string): Promise<LocalJob> => {
+  const path = await jobPath(projectId, id);
+  const job = jobSchema.parse(await readJson(path));
+  if (job.status === 'done' || job.status === 'error' || runningJobs.has(id)) {
+    return job;
+  }
+  const stranded = {
+    ...job,
+    status: 'error' as const,
+    label: 'ClipKit restarted during this task. Start it again.',
+  };
+  await serial(path, () => writeJson(path, stranded));
+  return stranded;
+};
 export const startJob = async (
   projectId: string,
   kind: string,
@@ -38,6 +53,7 @@ export const startJob = async (
     createdAt: Date.now(),
   };
   const path = await jobPath(projectId, job.id);
+  runningJobs.add(job.id);
   await writeJson(path, job);
   const update = (progress: number, label: string) =>
     serial(path, async () => {
@@ -60,7 +76,8 @@ export const startJob = async (
           });
           await writeJson(path, job);
         });
-      });
+      })
+      .finally(() => runningJobs.delete(job.id));
   }, 0);
   return job;
 };

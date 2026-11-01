@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { projectTools } from '@/agent/project-tools';
 import { projectApi, requestActor } from '@/local/project-api';
+import { localOrigin } from '@/local/security';
 
 const input = z.object({
   clipId: z.string(),
@@ -14,7 +15,10 @@ export const POST = (request: Request, { params }: { params: Promise<{ projectId
     return Response.json(
       await projectTools.add_item.invoke(
         { projectId, clipId, start, confirmed: true },
-        { origin: new URL(request.url).origin, actor: requestActor(request, clientId) },
+        {
+          origin: localOrigin(request) ?? new URL(request.url).origin,
+          actor: requestActor(request, clientId),
+        },
       ),
     );
   });

@@ -180,6 +180,11 @@ export const NewVideoForm = () => {
           </select>
         </label>
       </div>
+      {upload ? null : (
+        <p className="text-muted-foreground text-sm">
+          Start builds a draft from library clips. A connected agent then writes your copy.
+        </p>
+      )}
       <Button
         type="submit"
         className="min-h-11 self-start"

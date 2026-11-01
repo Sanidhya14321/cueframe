@@ -28,7 +28,7 @@ export const AgentMenu = ({ editor, frames, selectedId, select }: Props) => {
           {working ? <span className="size-1.5 animate-pulse rounded-full bg-current" /> : null}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="flex w-96 flex-col gap-3 text-xs">
+      <PopoverContent align="end" className="flex w-[min(90vw,24rem)] flex-col gap-3 text-xs">
         <p className="text-muted-foreground">
           {state.agent?.name ?? 'Agent'} · {state.agent?.status ?? 'idle'}
           {state.agent?.label ? ` · ${state.agent.label}` : ''}

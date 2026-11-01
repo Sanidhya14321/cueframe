@@ -6,6 +6,7 @@ import { useKeybindingsStore } from '@/actions/keybindings-store';
 import { useEditorActions } from '@/actions/use-editor-actions';
 import { useKeybindingsListener } from '@/actions/use-keybindings';
 import { ExportButton } from '@/components/editor/export-button';
+import { useAssetsPanelStore } from '@/components/editor/panels/assets/assets-panel-store';
 import { MediaView } from '@/components/editor/panels/assets/views/assets';
 import { SettingsView } from '@/components/editor/panels/assets/views/settings';
 import { PropertiesPanel } from '@/components/editor/panels/properties';
@@ -174,6 +175,15 @@ function Runtime() {
   };
   const [tab, setTab] = useState('Media');
   const [status, setStatus] = useState('Saved locally');
+  useEffect(
+    () =>
+      useAssetsPanelStore.subscribe((panel) => {
+        if (panel.activeTab === 'effects') {
+          setTab('Effects');
+        }
+      }),
+    [],
+  );
   useEffect(() => {
     useKeybindingsStore.getState().setLoadingProject(false);
     const flushRequest = (event: MessageEvent<unknown>) => {
@@ -352,10 +362,14 @@ function App() {
     return () => window.removeEventListener('clipkit-save', progress);
   }, []);
   const [ready, setReady] = useState(false);
+  const [failed, setFailed] = useState(false);
   useEffect(() => {
     open()
       .then(() => setReady(true))
-      .catch((error) => setState(error instanceof Error ? error.message : 'Could not open editor'));
+      .catch((error) => {
+        setState(error instanceof Error ? error.message : 'Could not open editor');
+        setFailed(true);
+      });
   }, []);
   return ready ? (
     <EditorBoundary>
@@ -364,11 +378,11 @@ function App() {
   ) : (
     <div role="status" className="native-loading">
       {state}
-      {state === 'Loading video editor' ? null : (
+      {failed ? (
         <button type="button" onClick={() => location.reload()}>
           Retry opening
         </button>
-      )}
+      ) : null}
     </div>
   );
 }

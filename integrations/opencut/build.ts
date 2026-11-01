@@ -31,6 +31,31 @@ await cp(
   resolve(overrides, 'scene-exporter.ts'),
   resolve(root, 'services/renderer/scene-exporter.ts'),
 );
+const patch = async (path: string, pattern: RegExp, replacement: string) => {
+  const code = await Bun.file(path).text();
+  if (!pattern.test(code)) {
+    throw new Error(`OpenCut patch no longer applies to ${path}`);
+  }
+  await Bun.write(path, code.replace(pattern, replacement));
+};
+await patch(
+  resolve(root, 'services/renderer/compositor/frame-descriptor.ts'),
+  /type: "sceneEffect",\s+effectPassGroups:/,
+  'type: "sceneEffect", effect_pass_groups:',
+);
+await patch(
+  resolve(root, 'services/renderer/compositor/types.ts'),
+  /type: "sceneEffect";\s+effectPassGroups:/,
+  'type: "sceneEffect"; effect_pass_groups:',
+);
+const textPath = resolve(root, 'text/primitives.ts');
+await patch(textPath, /\tconst lines = text\.content\.split\("\\n"\);\r?\n/, '');
+await patch(
+  textPath,
+  /const lineMetrics = lines\.map\(/,
+  'const lines = wrapTextLines({ content: text.content, canvasHeight, ctx });\n\tconst lineMetrics = lines.map(',
+);
+await patch(textPath, /^/, 'import { wrapTextLines } from "@clipkit-text-wrap";\n');
 const managerPath = resolve(root, 'core/managers/project-manager.ts');
 const manager = await Bun.file(managerPath).text();
 await Bun.write(
@@ -51,6 +76,11 @@ await Bun.write(
       'if (this.hasPendingSave && !this.isPaused) {\r\n\t\t\t\tthis.queueSave();',
     )
     .replace('void this.saveNow();', 'void this.saveNow().catch(() => undefined);'),
+);
+await patch(
+  savePath,
+  /async flush\(\): Promise<void> \{\s+this\.hasPendingSave = true;/,
+  'async flush(): Promise<void> { this.hasPendingSave = true; while (this.isSaving) { await new Promise((settle) => setTimeout(settle, 25)); }',
 );
 const effectPath = resolve(root, 'services/renderer/effect-preview.ts');
 const effects = await Bun.file(effectPath).text();
@@ -176,6 +206,7 @@ await build({
       'next/link': resolve(overrides, 'link.tsx'),
       'next/navigation': resolve(overrides, 'navigation.ts'),
       '@clipkit-native-locks': resolve(overrides, 'locks.ts'),
+      '@clipkit-text-wrap': resolve(overrides, 'text-wrap.ts'),
       '@clipkit': resolve(here, '../../src'),
       '@': root,
     },

@@ -60,3 +60,24 @@ export const readMedia = async (id: string, name: string) => {
     'application/octet-stream';
   return { data, mime };
 };
+export const inlineProjectMedia = async (value: unknown): Promise<unknown> => {
+  if (typeof value === 'string') {
+    const match = /^\/api\/projects\/([a-z0-9]{12})\/media\/([a-f0-9]+\.[a-z0-9]+)$/.exec(value);
+    if (match?.[1] && match[2]) {
+      const { data, mime } = await readMedia(match[1], match[2]);
+      return `data:${mime};base64,${data.toString('base64')}`;
+    }
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return Promise.all(value.map(inlineProjectMedia));
+  }
+  if (typeof value === 'object' && value !== null) {
+    return Object.fromEntries(
+      await Promise.all(
+        Object.entries(value).map(async ([key, entry]) => [key, await inlineProjectMedia(entry)]),
+      ),
+    );
+  }
+  return value;
+};

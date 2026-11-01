@@ -10,8 +10,8 @@ import { identityTransform, type Project } from '@/project';
 import { ffmpegPath, runProcess } from './audio';
 import { serialDisk } from './file-lock';
 import { writeJson } from './files';
+import { inlineProjectMedia } from './media';
 import { ProjectProblem, projectDirectory, readProject } from './projects';
-import { inlineProjectMedia } from './render';
 import { renderTurn } from './render-turn';
 import { workerEnvironment } from './worker-env';
 

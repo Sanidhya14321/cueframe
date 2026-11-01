@@ -1,6 +1,8 @@
 'use client';
+import { SlidersHorizontal } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { LivePresence } from '@/components/clip-timeline/live-presence';
 import { VideoEditorSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
@@ -9,10 +11,15 @@ import { useLiveProject } from '@/lib/use-live-project';
 import { findElement, type Project } from '@/project';
 import { AgentMenu } from './agent-menu';
 import { ExportVideo } from './export-video';
-import { OpenCutFrameDock } from './opencut-frame-dock';
 import { OpenCutProjectTools } from './opencut-project-tools';
 import { useOpenCutContext } from './use-opencut-context';
 import { useOpenCutFrame } from './use-opencut-frame';
+
+const OpenCutFrameDock = dynamic(
+  () => import('./opencut-frame-dock').then((module) => module.OpenCutFrameDock),
+  { ssr: false },
+);
+
 export const OpenCutEditor = ({
   id,
   title,
@@ -24,10 +31,21 @@ export const OpenCutEditor = ({
   initialProject: Project;
   readOnly?: boolean;
 }) => {
-  const { frame, problem } = useOpenCutFrame();
+  const { frame, flush, problem } = useOpenCutFrame();
   const editor = useLiveProject(title, `neuclip-video:${id}`, initialProject, id);
   const context = useOpenCutContext(frame);
   const [loaded, setLoaded] = useState(false);
+  const [frameOpen, setFrameOpen] = useState(false);
+  const dockFlush = useRef<(() => void) | null>(null);
+  const { settled } = editor;
+  const checkpoint = useCallback(async () => {
+    await flush();
+    dockFlush.current?.();
+    await settled();
+  }, [flush, settled]);
+  const waiting = editor.state?.events.some(
+    (event) => event.kind === 'job' && event.status !== 'done',
+  );
   useEffect(() => {
     if (frame.current?.contentDocument?.readyState === 'complete') {
       setLoaded(true);
@@ -50,6 +68,14 @@ export const OpenCutEditor = ({
         <div className="flex h-9 shrink-0 items-center gap-1 border-b px-2 text-xs">
           {readOnly || !editor.state ? null : (
             <>
+              {waiting ? (
+                <Link
+                  href="/connect"
+                  className="min-w-0 truncate text-agent underline-offset-2 hover:underline"
+                >
+                  Draft, waiting for an agent
+                </Link>
+              ) : null}
               <span className="mr-auto" />
               <span
                 role="status"
@@ -64,6 +90,18 @@ export const OpenCutEditor = ({
                 selectedId={context.selectedId}
                 select={context.select}
               />
+              {selected?.type === 'composition' ? (
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="lg:hidden"
+                  aria-label="Frame controls"
+                  aria-pressed={frameOpen}
+                  onClick={() => setFrameOpen((current) => !current)}
+                >
+                  <SlidersHorizontal />
+                </Button>
+              ) : null}
               <Popover>
                 <PopoverTrigger asChild>
                   <Button variant="ghost" size="sm">
@@ -77,7 +115,7 @@ export const OpenCutEditor = ({
               <Button asChild variant="ghost" size="sm" className="hidden xl:inline-flex">
                 <Link href={`/video/${id}?workspace=animation`}>Animation workspace</Link>
               </Button>
-              <ExportVideo projectId={editor.state.id} />
+              <ExportVideo projectId={editor.state.id} checkpoint={checkpoint} />
             </>
           )}
           {problem ? <p role="alert">{problem}</p> : null}
@@ -99,7 +137,13 @@ export const OpenCutEditor = ({
             allow="clipboard-read; clipboard-write"
           />
           {selected?.type === 'composition' && !readOnly ? (
-            <OpenCutFrameDock key={selected.id} editor={editor} element={selected} />
+            <OpenCutFrameDock
+              key={selected.id}
+              editor={editor}
+              element={selected}
+              flushRef={dockFlush}
+              open={frameOpen}
+            />
           ) : null}
         </div>
       </section>
