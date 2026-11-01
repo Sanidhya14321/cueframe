@@ -3,6 +3,14 @@
 A video studio built on [Remotion](https://www.remotion.dev). Browse a library of
 animation clips, edit them on a timeline and export finished video.
 
+## Team
+
+Built by **something dot exe**: Sanidhya Vats and Sonal Nautiyal.
+
+## Pitch deck
+
+[Download the cueframe pitch deck (PPTX)](docs/cueframe-pitch-deck.pptx)
+
 ## Two ways to use cueframe
 
 - **Local (free):** download cueframe and run it on your own computer with your
@@ -103,6 +111,7 @@ voiceover request.
 
 ## Documentation
 
+- [docs/cueframe-pitch-deck.pptx](docs/cueframe-pitch-deck.pptx): the pitch deck.
 - [docs/CUEFRAME_DEPLOY.md](docs/CUEFRAME_DEPLOY.md): running and hosting.
 - [docs/CUEFRAME_OPENCUT.md](docs/CUEFRAME_OPENCUT.md): the video editor integration.
 - [docs/CUEFRAME_UI_ADDENDUM.md](docs/CUEFRAME_UI_ADDENDUM.md) and
