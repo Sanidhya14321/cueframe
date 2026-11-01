@@ -1,8 +1,16 @@
 # cueframe
 
-A local-first video studio built on [Remotion](https://www.remotion.dev). Browse
-a library of animation clips, edit them on a timeline and export finished video
-from your own machine.
+A video studio built on [Remotion](https://www.remotion.dev). Browse a library of
+animation clips, edit them on a timeline and export finished video.
+
+## Two ways to use cueframe
+
+- **Local (free):** download cueframe and run it on your own computer with your
+  own AI and voice keys. Your projects stay on your machine as files.
+- **Hosted (paid):** we run a private cueframe server for you, end to end, so you
+  need no installation or configuration. Each customer gets an isolated instance.
+  This is how the project is funded. See `/pricing` in the app; online payments
+  are not enabled yet.
 
 ## Features
 
@@ -14,10 +22,10 @@ from your own machine.
 - MCP tools that let agents create, edit and render projects.
 - Local transcription with Whisper and optional voiceover with Fish.
 
-Projects are stored as files on your machine without accounts. YugabyteDB is
-optional and stores library metadata embeddings for agent search.
+Projects are stored as files, on your machine or in your hosted instance's
+private storage. The local version has no accounts. YugabyteDB is optional and stores library metadata embeddings for agent search.
 
-## Getting started
+## Run it locally
 
 You need [Bun](https://bun.sh) 1.4 or newer.
 
@@ -27,8 +35,13 @@ bun run dev
 ```
 
 Open <http://127.0.0.1:3000>. To use AI features, open **Settings** and add your
-provider base URL, API key and model. Keep the server local: it only accepts
-loopback connections.
+provider base URL, API key and model. A local install only accepts loopback
+connections.
+
+## Host it
+
+[docs/CUEFRAME_DEPLOY.md](docs/CUEFRAME_DEPLOY.md) covers Docker and private
+server instances, including the settings that turn on login.
 
 ## Yugabyte and voice setup
 

@@ -1,4 +1,6 @@
-# neuclip
+# cueframe
+
+Two versions ship from this codebase: a free local app users install and run themselves, and a hosted server we run for customers end to end, which is the business model. Keep both working.
 
 A single Next.js project for a library of Remotion animation clips, editable poster packs and
 website templates, with a deep, schema-driven video editor, a canvas image editor and a website

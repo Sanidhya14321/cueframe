@@ -1,7 +1,7 @@
 {
   "name": "cueframe",
   "version": "0.0.0",
-  "description": "An open library of Remotion animation clips with a schema-driven in-browser editor.",
+  "description": "A Remotion video studio with an agent-editable timeline, available to run locally or hosted.",
   "license": "MIT",
   "repository": {
     "type": "git",

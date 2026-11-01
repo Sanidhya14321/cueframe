@@ -1,5 +1,7 @@
 # Deploying cueframe
 
+cueframe has two versions. Local is what people install themselves. Hosted is the private server we run for paying customers, which is the business model; see "One private server" below.
+
 ## Local, for one person
 
 Install Bun, then `bun install` and `bun run local`. Open `http://127.0.0.1:3000`.

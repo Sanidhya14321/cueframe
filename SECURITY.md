@@ -4,6 +4,9 @@
 
 Only the latest `main` is supported.
 
+Both the local app and hosted instances are in scope. A report that crosses
+between customers' hosted instances is treated as the highest severity.
+
 ## Reporting a vulnerability
 
 Please report security issues privately. Open a draft security advisory from the
