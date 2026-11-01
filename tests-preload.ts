@@ -46,5 +46,9 @@ afterEach(() => {
 
 mock.module('server-only', () => ({}));
 
+for (const key of ['CUEFRAME_PUBLIC_URL', 'CUEFRAME_PASSWORD', 'CUEFRAME_USERS']) {
+  // biome-ignore lint/style/noProcessEnv: tests must not inherit hosted settings from a developer env file
+  Reflect.deleteProperty(process.env, key);
+}
 // biome-ignore lint/style/noProcessEnv: local runtime configuration is isolated from provider credentials
 Object.assign(process.env, { CUEFRAME_HOME: mkdtempSync(join(tmpdir(), 'cueframe-tests-')) });
