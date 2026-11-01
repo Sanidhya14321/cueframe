@@ -133,7 +133,7 @@ const renderLayer = (input: string, output: string) =>
       if (code === 0) {
         resolve();
       } else {
-        console.error(`[ClipKit preview] ${detail}`);
+        console.error(`[cueframe preview] ${detail}`);
         reject(
           new Error('Could not render this source layer. Open Animation workspace to inspect it.'),
         );

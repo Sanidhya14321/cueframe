@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('studio commands navigate by keyboard and preserve the library', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('link', { name: 'ClipKit home' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'cueframe home' })).toBeVisible();
   await page.keyboard.press('Control+k');
   const palette = page.getByRole('dialog');
   await expect(palette).toBeVisible();

@@ -15,7 +15,7 @@ None identified in the reviewed local settings, file-store and request-protectio
 - Symptom: the browser received HTTP 403 when opening the local gallery.
 - Root cause: NextURL rewrites loopback IPs to `localhost`, while the actual Host and Origin retain `127.0.0.1`.
 - Fix: independently validate both hosts as loopback with matching ports, then compare Origin against the validated actual Host. Never trust forwarded headers. Preserve token requirements, constant-time token comparison, HttpOnly/SameSite cookies and rejection of cross-site requests.
-- Verification: regression tests cover normalized URLs, foreign hosts, wrong ports, null/foreign origins, missing/incorrect tokens and authenticated browser/CLI requests. Browser acceptance is recorded in `CLIPKIT_PLAN.md`.
+- Verification: regression tests cover normalized URLs, foreign hosts, wrong ports, null/foreign origins, missing/incorrect tokens and authenticated browser/CLI requests. Browser acceptance is recorded in `CUEFRAME_PLAN.md`.
 
 ## Medium findings
 

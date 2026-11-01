@@ -1,8 +1,8 @@
 /* biome-ignore-all lint/complexity/useLiteralKeys: native parameter records require indexed access under strict TypeScript */
 /* biome-ignore-all lint/complexity/noExcessiveCognitiveComplexity: typed conversion explicitly covers each source and native element variant */
-import type { Element } from '@clipkit/project/element';
-import type { Project } from '@clipkit/project/project';
-import { needsSourcePreview } from '@clipkit/project/source-preview';
+import type { Element } from '@cueframe/project/element';
+import type { Project } from '@cueframe/project/project';
+import { needsSourcePreview } from '@cueframe/project/source-preview';
 import type { MediaAsset } from '@/media/types';
 import type { TProject } from '@/project/types';
 import { FONT_SIZE_SCALE_REFERENCE } from '@/text/typography';

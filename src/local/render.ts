@@ -109,7 +109,7 @@ const runRenderWorker = (
       if (code === 0) {
         resolve();
       } else {
-        console.error(`[ClipKit render] ${detail}`);
+        console.error(`[cueframe render] ${detail}`);
         reject(new Error('Local rendering failed. Check the project media and available memory.'));
       }
     });

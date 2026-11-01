@@ -13,7 +13,7 @@ const PLANS = [
   {
     name: 'Hosted',
     price: 'Server cost + margin + 18% GST',
-    note: 'A private ClipKit instance on our servers, billed monthly',
+    note: 'A private cueframe instance on our servers, billed monthly',
     features: ['Your own isolated workspace', 'Cloud rendering', 'Admin, creator and viewer roles'],
     action: { label: 'Request access', href: '/login' },
   },

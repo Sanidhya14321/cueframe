@@ -45,7 +45,7 @@ Everything lives in one package. Modules import each other through the `@/` alia
 - `src/sites` - website templates: per-template Zod content schemas, defaults, metadata and control
   layouts (`templates/<category>/<id>.ts`), slugs, event dates, `.ics` files and the published-site
   check and paths (`published-site.ts`). Pure.
-- `src/local` - local JSON stores, atomic file writes, settings and runtime session protection. The default data folder is `~/ClipKit`; `CLIPKIT_HOME` chooses the initial folder. No accounts or database.
+- `src/local` - local JSON stores, atomic file writes, settings and runtime session protection. The default data folder is `~/cueframe`; `CUEFRAME_HOME` chooses the initial folder. No accounts or database.
 - `src/components/sites` - each template's React website (`templates/<id>/`), the shared canvas
   and the website editor (`editor/`).
 - `src/core` - domain types, the clip project seed and the Zod-schema-to-control introspection.
@@ -304,7 +304,7 @@ driven by the template's `defineControls` layout, and the AI editor (media kind 
 `{ templateId, content }`, edits only under `/content`, `src/agent/site.ts`). Drafts autosave to
 `localStorage`. `/preview/<templateId>` shows a template with its defaults.
 
-Saved websites live in `websites.json` in the selected local data folder. The existing `/api/sites` routes validate content and save, draft, rename or delete local websites. `/websites` lists them; `/websites/<id>` edits one; `/s/<slug>` opens a local preview only while ClipKit runs. Template drafts still autosave in localStorage. All saves require the runtime session and matching browser Origin. No cloud publishing is available.
+Saved websites live in `websites.json` in the selected local data folder. The existing `/api/sites` routes validate content and save, draft, rename or delete local websites. `/websites` lists them; `/websites/<id>` edits one; `/s/<slug>` opens a local preview only while cueframe runs. Template drafts still autosave in localStorage. All saves require the runtime session and matching browser Origin. No cloud publishing is available.
 
 To add a template:
 
@@ -327,8 +327,8 @@ Clerk, approval roles, API keys, OAuth, Neon and Drizzle have been removed. `src
 
 The existing `/mcp` SDK endpoint and video/site/catalog tools now use local stores with no owner argument. Live tools are defined once in `src/agent/project-tools.ts`, registered through `src/mcp/project-tools.ts` and use the same action dispatcher as the browser. `/connect` shows the Claude Code HTTP command. Agent instructions and the Codex bridge remain step 11. Preserve existing tool validation.
 
-Tests use a temporary `CLIPKIT_HOME` initialized by `tests-preload.ts`; no test reads real user files or calls a database. `tests/local` covers storage, settings and request security. Playwright runs on loopback without sign-in or cloud credentials.
+Tests use a temporary `CUEFRAME_HOME` initialized by `tests-preload.ts`; no test reads real user files or calls a database. `tests/local` covers storage, settings and request security. Playwright runs on loopback without sign-in or cloud credentials.
 
 ## UI design workflow
 
-For every app screen use the project-local Impeccable skill at `.agents/skills/impeccable/SKILL.md`, reading its relevant references. Read `PRODUCT.md` and `DESIGN.md`; use the semantic tokens in `src/app/globals.css` and existing shadcn components. Record critique/audit evidence and screenshots per approved addendum stage in `docs/CLIPKIT_UI_REVIEW.md`. Work through `docs/CLIPKIT_UI_ADDENDUM.md` A-I in order and wait for user go-ahead after each stage. Keep existing artwork and editor behavior intact.
+For every app screen use the project-local Impeccable skill at `.agents/skills/impeccable/SKILL.md`, reading its relevant references. Read `PRODUCT.md` and `DESIGN.md`; use the semantic tokens in `src/app/globals.css` and existing shadcn components. Record critique/audit evidence and screenshots per approved addendum stage in `docs/CUEFRAME_UI_REVIEW.md`. Work through `docs/CUEFRAME_UI_ADDENDUM.md` A-I in order and wait for user go-ahead after each stage. Keep existing artwork and editor behavior intact.

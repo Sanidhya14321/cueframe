@@ -5,7 +5,7 @@ const POLL_MS = 15_000;
 const request = async (path: string, init: RequestInit = {}): Promise<Response> => {
   const settings = await readSettings();
   if (!settings.apiKey) {
-    throw new Error('Save a provider API key in ClipKit Settings to generate footage.');
+    throw new Error('Save a provider API key in cueframe Settings to generate footage.');
   }
   const response = await fetch(`${settings.baseUrl.replace(/\/$/, '')}${path}`, {
     ...init,

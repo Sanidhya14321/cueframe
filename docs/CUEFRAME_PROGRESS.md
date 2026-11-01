@@ -1,10 +1,10 @@
-# ClipKit steps 3-10
+# cueframe steps 3-10
 
-The latest request approved steps 3-10 as one batch. Steps 11 (shared in-app project chat and Codex bridge) and 12 (launcher/package) are pending. The original prompt remains in `CLIPKIT_PROMPT.md`.
+The latest request approved steps 3-10 as one batch. Steps 11 (shared in-app project chat and Codex bridge) and 12 (launcher/package) are pending. The original prompt remains in `CUEFRAME_PROMPT.md`.
 
 ## Run and try each step
 
-Run `bun install` if needed, then `bun run dev`. Open <http://127.0.0.1:3000>. Existing gallery, poster and website editing remain available. All project data stays under the folder selected in Settings, initially `~/ClipKit`.
+Run `bun install` if needed, then `bun run dev`. Open <http://127.0.0.1:3000>. Existing gallery, poster and website editing remain available. All project data stays under the folder selected in Settings, initially `~/cueframe`.
 
 | Step | What to click or run | Expected result |
 | --- | --- | --- |

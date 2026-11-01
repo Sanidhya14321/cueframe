@@ -29,7 +29,7 @@ export const renderNativeProject = async (
         stdio: ['ignore', 'ignore', 'pipe'],
         env: {
           ...workerEnvironment(),
-          CLIPKIT_RENDER_TOKEN: sessionToken(),
+          CUEFRAME_RENDER_TOKEN: sessionToken(),
         },
       },
     );

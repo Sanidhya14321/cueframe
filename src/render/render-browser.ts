@@ -12,7 +12,7 @@ export const renderBrowserOptions = async (): Promise<{ browserExecutable?: stri
   if (process.platform !== 'darwin' || browser.type !== 'local-puppeteer-browser') {
     return {};
   }
-  const cache = join(homedir(), 'Library/Caches/clipkit', SHELL_FOLDER);
+  const cache = join(homedir(), 'Library/Caches/cueframe', SHELL_FOLDER);
   const executable = join(cache, SHELL);
   if (!existsSync(executable)) {
     const temporary = `${cache}.${process.pid}`;

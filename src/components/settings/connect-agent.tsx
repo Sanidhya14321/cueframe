@@ -44,14 +44,14 @@ export const ConnectAgent = () => {
       <section className="rounded-xl border p-5">
         <h2 className="mb-3 font-semibold">Claude Code</h2>
         <code className="mb-4 block break-all text-xs">
-          claude mcp add --transport http clipkit http://127.0.0.1:&lt;port&gt;/mcp --header
+          claude mcp add --transport http cueframe http://127.0.0.1:&lt;port&gt;/mcp --header
           "Authorization: Bearer &lt;runtime token&gt;"
         </code>
         <Button type="button" onClick={copy}>
           Copy Claude Code command
         </Button>
         <p className="mt-3 text-xs text-muted-foreground">
-          The copied command includes this app session’s token. Restarting ClipKit rotates it; copy
+          The copied command includes this app session’s token. Restarting cueframe rotates it; copy
           a fresh command after restarting.
         </p>
       </section>

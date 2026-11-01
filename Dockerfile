@@ -5,7 +5,7 @@ COPY . .
 RUN bun install --frozen-lockfile
 RUN bunx playwright install --with-deps chromium
 RUN bun run build
-ENV CLIPKIT_HOME=/data
+ENV CUEFRAME_HOME=/data
 VOLUME /data
 EXPOSE 3000
 CMD ["bunx", "next", "start", "--hostname", "0.0.0.0", "--port", "3000"]

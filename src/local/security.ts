@@ -1,16 +1,16 @@
 import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 
-export const SESSION_COOKIE = 'clipkit-session';
+export const SESSION_COOKIE = 'cueframe-session';
 
 export const sessionToken = (): string => {
   // biome-ignore lint/style/noProcessEnv: local runtime configuration is isolated from provider credentials
-  const { CLIPKIT_SESSION_TOKEN: existing } = process.env;
+  const { CUEFRAME_SESSION_TOKEN: existing } = process.env;
   if (existing) {
     return existing;
   }
   const token = randomBytes(32).toString('hex');
   // biome-ignore lint/style/noProcessEnv: local runtime configuration is isolated from provider credentials
-  Object.assign(process.env, { CLIPKIT_SESSION_TOKEN: token });
+  Object.assign(process.env, { CUEFRAME_SESSION_TOKEN: token });
   return token;
 };
 
@@ -22,7 +22,7 @@ const equalToken = (value: string): boolean => {
 
 const ROLES = ['admin', 'creator', 'viewer'] as const;
 export type Role = (typeof ROLES)[number];
-export const ROLE_COOKIE = 'clipkit-role';
+export const ROLE_COOKIE = 'cueframe-role';
 
 interface Account {
   email: string;
@@ -32,7 +32,8 @@ interface Account {
 
 const hostedConfig = (): { accounts: Account[]; origin: string } | null => {
   // biome-ignore lint/style/noProcessEnv: hosted access is configured by the server operator
-  const { CLIPKIT_PASSWORD: password, CLIPKIT_USERS: users, CLIPKIT_PUBLIC_URL: url } = process.env;
+  const env = process.env;
+  const { CUEFRAME_PASSWORD: password, CUEFRAME_USERS: users, CUEFRAME_PUBLIC_URL: url } = env;
   if (!(url && (password || users))) {
     return null;
   }
@@ -105,14 +106,14 @@ export const localOrigin = (request: Request): string | null => {
 export const localRequestProblem = (request: Request): Response | null => {
   const origin = localOrigin(request);
   if (origin === null) {
-    return Response.json({ problem: 'ClipKit accepts local requests only.' }, { status: 403 });
+    return Response.json({ problem: 'cueframe accepts local requests only.' }, { status: 403 });
   }
   const incoming = request.headers.get('origin');
   if (
     (incoming !== null && incoming !== origin) ||
     request.headers.get('sec-fetch-site') === 'cross-site'
   ) {
-    return Response.json({ problem: 'This website cannot access ClipKit.' }, { status: 403 });
+    return Response.json({ problem: 'This website cannot access cueframe.' }, { status: 403 });
   }
   return null;
 };
@@ -143,7 +144,7 @@ export const requireLocalSession = (request: Request): Response | null => {
   const cli = token !== null && equalToken(token);
   const browser = cookie !== undefined && equalToken(cookie);
   if (!(cli || browser)) {
-    return Response.json({ problem: 'Open ClipKit locally to start a session.' }, { status: 401 });
+    return Response.json({ problem: 'Open cueframe locally to start a session.' }, { status: 401 });
   }
   const denied = cli ? null : roleProblem(request);
   if (denied !== null) {

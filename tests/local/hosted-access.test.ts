@@ -10,9 +10,9 @@ import {
 } from '@/local/security';
 
 afterEach(() => {
-  Reflect.deleteProperty(process.env, 'CLIPKIT_PASSWORD');
-  Reflect.deleteProperty(process.env, 'CLIPKIT_PUBLIC_URL');
-  Reflect.deleteProperty(process.env, 'CLIPKIT_USERS');
+  Reflect.deleteProperty(process.env, 'CUEFRAME_PASSWORD');
+  Reflect.deleteProperty(process.env, 'CUEFRAME_PUBLIC_URL');
+  Reflect.deleteProperty(process.env, 'CUEFRAME_USERS');
 });
 
 describe('hosted access', () => {
@@ -23,8 +23,8 @@ describe('hosted access', () => {
 
   it('accepts only its public host and the right password', () => {
     Object.assign(process.env, {
-      CLIPKIT_PASSWORD: 'correct',
-      CLIPKIT_PUBLIC_URL: 'https://studio.example.com',
+      CUEFRAME_PASSWORD: 'correct',
+      CUEFRAME_PUBLIC_URL: 'https://studio.example.com',
     });
     const request = (host: string) => new Request(`http://${host}/`);
     expect(localOrigin(request('studio.example.com'))).toBe('https://studio.example.com');
@@ -35,15 +35,15 @@ describe('hosted access', () => {
 
   it('blocks viewer writes and creator settings changes', () => {
     Object.assign(process.env, {
-      CLIPKIT_USERS: JSON.stringify([{ email: 'v', password: 'p', role: 'viewer' }]),
-      CLIPKIT_PUBLIC_URL: 'https://studio.example.com',
+      CUEFRAME_USERS: JSON.stringify([{ email: 'v', password: 'p', role: 'viewer' }]),
+      CUEFRAME_PUBLIC_URL: 'https://studio.example.com',
     });
     expect(authenticate('v', 'p')).toBe('viewer');
     const write = (path: string, role: 'viewer' | 'creator') =>
       ({
         url: `https://studio.example.com${path}`,
         method: 'POST',
-        headers: new Headers({ cookie: `clipkit-role=${roleCookie(role)}` }),
+        headers: new Headers({ cookie: `cueframe-role=${roleCookie(role)}` }),
       }) as Request;
     expect(requestRole(write('/api/projects', 'viewer'))).toBe('viewer');
     expect(roleProblem(write('/api/projects', 'viewer'))?.status).toBe(403);

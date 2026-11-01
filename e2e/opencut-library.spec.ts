@@ -55,7 +55,7 @@ test('drops a library animation at the timeline position', async ({ page }) => {
   await editor
     .locator('.native-library-grid article')
     .first()
-    .dragTo(editor.locator('[data-clipkit-timeline-zoom]'), {
+    .dragTo(editor.locator('[data-cueframe-timeline-zoom]'), {
       targetPosition: { x: 200, y: 20 },
     });
   await expect.poll(() => items(page, id)).toHaveLength(1);

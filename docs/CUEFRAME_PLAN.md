@@ -1,8 +1,8 @@
-# ClipKit implementation plan
+# cueframe implementation plan
 
 ## Scope and approval gates
 
-- Main steps 1-10 are implemented. Current request: UI addendum A-I, one stage per go-ahead. Stages A-B are complete after reviews and checks. The actual OpenCut classic editor and shared Project bridge are integrated; current verification is recorded in CLIPKIT_UI_REVIEW.md. C has not begun. Main steps 11-12 remain pending. See `CLIPKIT_UI_REVIEW.md` and `CLIPKIT_PROGRESS.md` for proof and demos.
+- Main steps 1-10 are implemented. Current request: UI addendum A-I, one stage per go-ahead. Stages A-B are complete after reviews and checks. The actual OpenCut classic editor and shared Project bridge are integrated; current verification is recorded in CUEFRAME_UI_REVIEW.md. C has not begun. Main steps 11-12 remain pending. See `CUEFRAME_UI_REVIEW.md` and `CUEFRAME_PROGRESS.md` for proof and demos.
 - Preserve gallery clips, poster packs, website template previews/editing, properties, timeline layering, gesture undo/redo and browser export. Replace cloud website publishing with local saving/viewing, clearly labelled as local.
 - Use Bun, strict TypeScript, Zod-derived types, Biome, comment-free code and modules under 400 lines. Implementation changes must stay within the approved step.
 
@@ -19,7 +19,7 @@
 
 ## Shared implementation decisions
 
-- Add server-only `src/local/` for settings, storage, session protection, media and events; default to `~/ClipKit/settings.json` and `projects/<safe-name>/{project.json,media/,out/}`. Keep secrets out of client responses/logs and restrict settings-file permissions.
+- Add server-only `src/local/` for settings, storage, session protection, media and events; default to `~/cueframe/settings.json` and `projects/<safe-name>/{project.json,media/,out/}`. Keep secrets out of client responses/logs and restrict settings-file permissions.
 - Generate one runtime token per app start; bootstrap it only to the local browser, protect reads of private data and all writes/MCP, validate browser Origin and Host, and explicitly support authenticated CLI requests without Origin. Bind dev, production, tests and launcher to `127.0.0.1` from step 2.
 - Validate path containment and uploads, serialize writes per project, atomically replace JSON files, reject stale revisions and resync on reconnect. Browser and tools use one Zod action dispatcher around existing mutations; server enforces locks, including undo/reset/bulk writes.
 - Preserve gesture history while making undo/redo revisioned server actions; agent-turn undo must preserve unrelated user edits. Import existing browser drafts without overwriting newer disk projects; persist uploaded files before saving references.
@@ -27,7 +27,7 @@
 
 ## Ordered steps and acceptance proof
 
-1. Documentation: saved the entire original as `docs/CLIPKIT_PROMPT.md`; this file records the repository review and proposed work. Proof: review these two files; stop here for approval.
+1. Documentation: saved the entire original as `docs/CUEFRAME_PROMPT.md`; this file records the repository review and proposed work. Proof: review these two files; stop here for approval.
 2. Local-only foundation: change `src/app/layout.tsx`, `(library)/layout.tsx`, account/integration/auth pages, `src/proxy.ts`, `src/components/auth/`, agent/site gates, `src/lib/{session,api-keys,mcp-auth,site-api}.ts`, account-backed API/pages/MCP stores, `package.json`, `bun.lock`, `.env.example`, test preload/setup; remove `src/auth/`, `src/db/`, `drizzle/` and migration tooling after replacing consumers with local stores. Add `src/local/{settings,paths,security,stores}.ts` and a minimal settings route/UI; configure local provider credentials, remove legacy cloud env use without printing secrets. Proof: gallery, all editor types and local saves open with no login or database.
 3. Live disk projects: add `src/project/actions.ts`, `src/local/{projects,events,media}.ts`, project/action/SSE/media API routes, a project-open page and client synchronization hook; adapt `clip-timeline-editor.tsx`, `saved-video-editor.tsx`, `use-undoable.ts` and saved-project routes. Proof: authenticated curl action changes the open editor, browser edits reach disk, reload/reconnect retains media and revisions, undo/redo synchronize.
 4. Shared tools and MCP: add `src/agent/project-tools.ts` and `src/mcp/project-tools.ts`; adapt `src/mcp/{server,catalog-tools,video-tools}.ts`, `src/app/mcp/route.ts`; add connect screen/header access and connection indicator. Define all tool contracts once, with honest unavailable responses until later steps implement them. Verify current Claude Code HTTP setup docs at implementation. Proof: Claude Code connects and adds a visible item.
@@ -38,7 +38,7 @@
 9. Voice and rendering: add Fish client/cache/jobs, voice alignment/music ducking and server render tool/UI using `src/render/render-project.ts`; adapt render asset URLs and progress events. Verify current Fish API; skip voice clearly when no key exists. Proof: voice plays aligned with ducked music; full-fidelity render progresses and writes a playable file to project `out/`; browser export still works.
 10. Imported clips: broaden discovery to React Bits, 21st.dev-linked components, Magic UI, Motion Primitives, Animata, Cult UI and other GitHub collections as requested; inspect each upstream/component license before copying; add source/license records and badges in `NOTICE.md`, `src/schemas/registry.ts`, gallery tiles and catalog. Add permissive source modules under imported schema/scene folders, taxonomy, both registries, `clip-props.ts`, schema exports, lazy scene map, labels, timestamps and committed previews. Proof: aim for 25-30 polished frame-driven clips from the expanded source list, deterministic frames and long/short text checked; document any approved count reduction.
 11. In-app agent and Codex: adapt `src/agent/model.ts`, `/api/agent`, `src/components/media-agent/` and settings to Anthropic/OpenAI-compatible providers using the same project tools; preserve poster/site AI validation. Add stdio bridge, short agent skill and matching `AGENTS.md` instructions. Verify current official Codex MCP config. Proof: equivalent build/edit/comment flow from chat and Codex, with keys confined to selected provider requests.
-12. Launcher/package: update `next.config.ts`, `package.json`, add launcher/build scripts, standalone media/render bundles and platform archives; update `README.md`. Check ffmpeg, choose port, create data directory, open browser and print token-aware connection commands; support developer `bunx clipkit` distribution. Proof: launch from fresh extracted folder without a source checkout; test each OS natively where available and label untested targets.
+12. Launcher/package: update `next.config.ts`, `package.json`, add launcher/build scripts, standalone media/render bundles and platform archives; update `README.md`. Check ffmpeg, choose port, create data directory, open browser and print token-aware connection commands; support developer `bunx cueframe` distribution. Proof: launch from fresh extracted folder without a source checkout; test each OS natively where available and label untested targets.
 
 ## Verification, time boxes and known constraints
 
@@ -56,4 +56,4 @@
 
 ## Steps 3-10 delivery
 
-- Implemented revisioned disk actions/SSE, shared MCP tools and Connect, presence/locks/selective undo, catalog/beat-sheet builds, scoped comments, native English Whisper, Fish caching/ducking and full-fidelity render, plus 25 licensed Web Motion clips. Exact demos, evidence and limits are in `CLIPKIT_PROGRESS.md`. Full verify passed 711 tests; production build passed; all 29 Playwright checks passed, with the four live workflows repeated in two more fresh folders. Native Whisper and MP4 rendering ran successfully; Fish uses a mocked response test and external Claude execution remains unverified. Stop before step 11.
+- Implemented revisioned disk actions/SSE, shared MCP tools and Connect, presence/locks/selective undo, catalog/beat-sheet builds, scoped comments, native English Whisper, Fish caching/ducking and full-fidelity render, plus 25 licensed Web Motion clips. Exact demos, evidence and limits are in `CUEFRAME_PROGRESS.md`. Full verify passed 711 tests; production build passed; all 29 Playwright checks passed, with the four live workflows repeated in two more fresh folders. Native Whisper and MP4 rendering ran successfully; Fish uses a mocked response test and external Claude execution remains unverified. Stop before step 11.

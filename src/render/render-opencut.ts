@@ -4,7 +4,7 @@ import { nativeBrowserPath } from './native-browser';
 
 const [origin, id, output] = process.argv.slice(2);
 // biome-ignore lint/style/noProcessEnv: native render worker receives runtime authentication through its private environment
-const { CLIPKIT_RENDER_TOKEN: token } = process.env;
+const { CUEFRAME_RENDER_TOKEN: token } = process.env;
 if (!(origin && id && output && token)) {
   throw new Error('Native render arguments are missing.');
 }

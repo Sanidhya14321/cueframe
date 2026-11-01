@@ -11,7 +11,7 @@ export const registerProjectTools = (server: McpServer, origin: string) => {
         if (!allowToolCall()) {
           return failure('Please wait a minute before making more tool calls.');
         }
-        console.info(`[ClipKit tool] ${name} ${new Date().toISOString()}`);
+        console.info(`[cueframe tool] ${name} ${new Date().toISOString()}`);
         try {
           return json(await definition.invoke(input, { origin, actor: 'agent:mcp' }));
         } catch (error) {

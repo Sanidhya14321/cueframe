@@ -10,7 +10,7 @@ export function HostContext() {
       const fps = project.settings.fps.numerator / project.settings.fps.denominator;
       window.parent.postMessage(
         {
-          type: 'clipkit-context',
+          type: 'cueframe-context',
           selectedId: editor.selection.getSelectedElements()[0]?.elementId ?? null,
           frame: Math.round((editor.playback.getCurrentTime() / TICKS_PER_SECOND) * fps),
         },
@@ -28,7 +28,7 @@ export function HostContext() {
       if (!(data && typeof data === 'object' && 'type' in data)) {
         return;
       }
-      if (data.type === 'clipkit-focus' && 'id' in data && typeof data.id === 'string') {
+      if (data.type === 'cueframe-focus' && 'id' in data && typeof data.id === 'string') {
         const track = nativeTracks(editor.scenes.getActiveScene().tracks).find((candidate) =>
           candidate.elements.some((item) => item.id === data.id),
         );
@@ -39,7 +39,7 @@ export function HostContext() {
         }
       }
       if (
-        data.type === 'clipkit-seek' &&
+        data.type === 'cueframe-seek' &&
         'frame' in data &&
         typeof data.frame === 'number' &&
         Number.isFinite(data.frame)

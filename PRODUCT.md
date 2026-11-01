@@ -1,4 +1,4 @@
-# ClipKit
+# cueframe
 
 <!-- impeccable:product-schema 1 -->
 
@@ -30,7 +30,7 @@ The UI addendum is staged A through I with user review after each stage. Durable
 
 ## Brand Commitments
 
-ClipKit is the app name. The requested identity is a focused, dark professional creative tool with one distinctive accent, tinted neutrals, editorial headings, clear sans-serif UI and separate user-selection and agent colors. Clear, plain copy; no invented testimonials or provider-success claims.
+cueframe is the app name. The requested identity is a focused, dark professional creative tool with one distinctive accent, tinted neutrals, editorial headings, clear sans-serif UI and separate user-selection and agent colors. Clear, plain copy; no invented testimonials or provider-success claims.
 
 ## Evidence on Hand
 

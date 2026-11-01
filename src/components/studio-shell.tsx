@@ -25,11 +25,11 @@ export const StudioShell = ({ children }: { children: ReactNode }) => {
         <div className="flex min-w-0 items-center gap-1 sm:gap-4">
           <Link
             href="/"
-            aria-label="ClipKit home"
+            aria-label="cueframe home"
             className="flex min-h-11 shrink-0 items-center gap-2 pr-1 font-semibold tracking-tight sm:pr-2"
           >
             <Clapperboard className="size-5 text-primary" />
-            <span>ClipKit</span>
+            <span>cueframe</span>
           </Link>
           <Button
             type="button"

@@ -14,8 +14,8 @@ const locationSchema = z.object({ dataFolder: z.string() });
 
 export const configFolder = (): string => {
   // biome-ignore lint/style/noProcessEnv: local runtime configuration is isolated from provider credentials
-  const { CLIPKIT_HOME } = process.env;
-  return resolve(CLIPKIT_HOME || join(homedir(), 'ClipKit'));
+  const { CUEFRAME_HOME } = process.env;
+  return resolve(CUEFRAME_HOME || join(homedir(), 'cueframe'));
 };
 
 const normalizeFolder = (value: string): string => {
@@ -49,6 +49,7 @@ export const readSettings = async (): Promise<LocalSettings> => {
       model: '',
       apiKey: '',
       fishAudioKey: '',
+      yugabyteUrl: '',
     };
     await writeJson(path, defaults);
     return defaults;
@@ -62,6 +63,7 @@ export const publicSettings = (settings: LocalSettings): PublicSettings => ({
   model: settings.model,
   hasApiKey: settings.apiKey !== '',
   hasFishAudioKey: settings.fishAudioKey !== '',
+  hasYugabyteUrl: settings.yugabyteUrl !== '',
 });
 
 export const saveSettings = (input: unknown): Promise<PublicSettings> =>

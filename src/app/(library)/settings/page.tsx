@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { SettingsForm } from '@/components/settings/settings-form';
 
-export const metadata: Metadata = { title: 'Settings · ClipKit' };
+export const metadata: Metadata = { title: 'Settings · cueframe' };
 
 const SettingsPage = () => (
   <div className="mx-auto w-full max-w-2xl px-4 py-5 sm:px-6">

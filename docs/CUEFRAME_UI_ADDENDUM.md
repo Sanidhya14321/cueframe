@@ -1,6 +1,6 @@
-# ClipKit: UI and Features Addendum (for the Codex Build Prompt)
+# cueframe: UI and Features Addendum (for the Codex Build Prompt)
 
-An addendum to docs/CLIPKIT\_PROMPT.md. It makes every feature reachable from a professional, responsive interface: a home page with a hero, clear create, edit and generate entry points, settings for every key and provider, voice input, hover-select, a brief before building, and the missing pieces from the review. Save it as docs/CLIPKIT\_UI\_ADDENDUM.md.
+An addendum to docs/CUEFRAME\_PROMPT.md. It makes every feature reachable from a professional, responsive interface: a home page with a hero, clear create, edit and generate entry points, settings for every key and provider, voice input, hover-select, a brief before building, and the missing pieces from the review. Save it as docs/CUEFRAME\_UI\_ADDENDUM.md.
 
 ## 1. Key decisions (from the brainstorm)
 
@@ -15,7 +15,7 @@ An addendum to docs/CLIPKIT\_PROMPT.md. It makes every feature reachable from a 
 ## 2. Design system with Impeccable
 
 - Install Impeccable (github.com/pbakaus/impeccable) for the agent you build with. Its README documents installs for several agents, including a Claude Code plugin and an npx installer with provider options; check the current README for Codex support, and if there is none, copy its skill and reference files into the repository and point AGENTS.md at them. Keep its license and attribution notice.
-- Run its setup command first so it writes PRODUCT.md (what ClipKit is, who it is for: creators and developers who use coding agents) and DESIGN.md (the design system).
+- Run its setup command first so it writes PRODUCT.md (what cueframe is, who it is for: creators and developers who use coding agents) and DESIGN.md (the design system).
 - Design direction to give it: a focused, dark, professional creative tool, closer to a modern video or design editor than a SaaS dashboard. One distinctive accent color, tinted neutral greys, an editorial display font for headings and a clean sans for UI, tabular numbers for timecodes, generous but consistent spacing, restrained motion (fast, purposeful, respects reduced motion). The agent's color is distinct from the user's selection color everywhere.
 - Avoid generic AI-looking design: no default purple-blue gradients, no wall of identical cards, no emoji icons, no center-everything layouts, no fake testimonials.
 - Tokens (color, type scale, spacing, radius, shadow, motion) live in one place (CSS variables used by Tailwind and the shadcn theme). No hard-coded colors in components.
@@ -39,7 +39,7 @@ A persistent top bar on every screen: logo (home), New video button, Projects, L
 
 ### 3.2 Home page
 
-- Hero: a clear one-line promise (for example: Your coding agent, now a video editor. Watch it build, then take over.), one supporting sentence, and a looping preview of a real ClipKit video (rendered by the app, not stock footage).
+- Hero: a clear one-line promise (for example: Your coding agent, now a video editor. Watch it build, then take over.), one supporting sentence, and a looping preview of a real cueframe video (rendered by the app, not stock footage).
 - Three primary actions as large tiles: Create from a prompt, Edit a video (upload), Start from a clip. Each goes to /new with that tab selected.
 - Agent card: shows the connected agent or a short Connect an agent call to action with the three options.
 - Recent projects strip with thumbnails and Resume.
@@ -89,7 +89,7 @@ Keep the existing editor (preview, timeline, properties panels, undo, export) an
 
 Three cards, each with steps, copy buttons and a live status dot that turns green when connected:
 
-- Claude Code: the one command to add ClipKit's MCP server, and the skill install. Test button that asks the agent bridge for a ping.
+- Claude Code: the one command to add cueframe's MCP server, and the skill install. Test button that asks the agent bridge for a ping.
 - Codex: the configuration snippet (or the stdio bridge command, whichever Codex needs), and a note that AGENTS.md already explains the tools.
 - Your own API: provider type (Anthropic, OpenAI-compatible such as OpenRouter, or a local server), base URL, key, model (with a Fetch models button where the provider supports listing), Test connection.
 
@@ -126,7 +126,7 @@ Every screen has designed states, not blank areas:
 
 ### 8.1 How this fits the main prompt
 
-Do steps 1 to 5 of docs/CLIPKIT\_PROMPT.md first (plan, local-only, live project, MCP tools, agent bar and locks). Then work through this addendum in this order, folding it into the remaining main steps:
+Do steps 1 to 5 of docs/CUEFRAME\_PROMPT.md first (plan, local-only, live project, MCP tools, agent bar and locks). Then work through this addendum in this order, folding it into the remaining main steps:
 
 | Step | Work |
 | --- | --- |
@@ -155,5 +155,5 @@ Cut line, in order: Review mode polish on phones, shortcut remapping, the start-
 ### 8.3 Kickoff message
 
 ```text
-Read docs/CLIPKIT_PROMPT.md and docs/CLIPKIT_UI_ADDENDUM.md. If steps 1 to 5 of the main prompt are not done, finish them first. Then do steps A to I of the addendum in order, using the Impeccable design skill for every screen. After each step, tell me which page to open and what to try, and wait for my go-ahead. Keep existing features working; reuse the repository's shadcn components and Tailwind; every feature must be reachable from the UI.
+Read docs/CUEFRAME_PROMPT.md and docs/CUEFRAME_UI_ADDENDUM.md. If steps 1 to 5 of the main prompt are not done, finish them first. Then do steps A to I of the addendum in order, using the Impeccable design skill for every screen. After each step, tell me which page to open and what to try, and wait for my go-ahead. Keep existing features working; reuse the repository's shadcn components and Tailwind; every feature must be reachable from the UI.
 ```

@@ -6,7 +6,7 @@ import { setupWhisper } from './whisper-setup';
 
 export const transcribeSpeech = async (audio: Uint8Array): Promise<string> => {
   const engine = await setupWhisper(() => Promise.resolve());
-  const folder = await mkdtemp(join(tmpdir(), 'clipkit-voice-'));
+  const folder = await mkdtemp(join(tmpdir(), 'cueframe-voice-'));
   try {
     const source = join(folder, 'speech.input');
     const wav = join(folder, 'speech.wav');

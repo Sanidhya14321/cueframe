@@ -1,10 +1,10 @@
-# ClipKit on cliplibrary: Build Prompt for Codex
+# cueframe on cliplibrary: Build Prompt for Codex
 
-A complete prompt for turning the cliplibrary repository (Next.js, Remotion, Bun) into ClipKit: a local-first video editor that coding agents (Claude Code and Codex through MCP, or any model through the user's own base URL and key) can drive in real time while the user watches and edits. Give this whole document to Codex, opened in the cloned repository.
+A complete prompt for turning the cliplibrary repository (Next.js, Remotion, Bun) into cueframe: a local-first video editor that coding agents (Claude Code and Codex through MCP, or any model through the user's own base URL and key) can drive in real time while the user watches and edits. Give this whole document to Codex, opened in the cloned repository.
 
 ## 0. What we are building and the ground rules
 
-ClipKit turns this clip library into a local video studio that AI agents operate live. The user runs one app on their own machine, connects an agent, asks for a video, and watches the agent build it in the browser. When the agent stops, the user edits anything by hand, pins comments for the agent, and exports.
+cueframe turns this clip library into a local video studio that AI agents operate live. The user runs one app on their own machine, connects an agent, asks for a video, and watches the agent build it in the browser. When the agent stops, the user edits anything by hand, pins comments for the agent, and exports.
 
 The four selling points the result must show:
 
@@ -15,9 +15,9 @@ The four selling points the result must show:
 
 Ground rules:
 
-1. Read AGENTS.md, README.md, package.json and the folders src/project, src/schemas, src/compositions, src/core and src/app first. Before changing anything, write docs/CLIPKIT\_PLAN.md (under 60 lines): how projects, layers and clips relate today, whether a project can hold several clips over time, what auth, database or backend code exists, and which files each step below will touch.
+1. Read AGENTS.md, README.md, package.json and the folders src/project, src/schemas, src/compositions, src/core and src/app first. Before changing anything, write docs/CUEFRAME\_PLAN.md (under 60 lines): how projects, layers and clips relate today, whether a project can hold several clips over time, what auth, database or backend code exists, and which files each step below will touch.
 2. Extend, do not rewrite. Keep the gallery, editor, properties panels, undo and export working. Follow the repository's conventions in AGENTS.md; if its verify gate blocks progress during the hackathon, run the fast parts (typecheck, tests) and note what was skipped.
-3. Every step ends with something visible working in the browser. Time-box each step; if it runs over, take the simplest route and note it in docs/CLIPKIT\_PLAN.md.
+3. Every step ends with something visible working in the browser. Time-box each step; if it runs over, take the simplest route and note it in docs/CUEFRAME\_PLAN.md.
 4. Local only: no accounts, no database, no cloud backend. Data lives in files on the user's machine.
 5. Licenses: import third-party code only under MIT, Apache-2.0, ISC, BSD, CC0, MIT-0 or Unlicense, keep the license text, and list it in NOTICE.md. Anything else is reimplemented from the idea, not copied.
 
@@ -25,7 +25,7 @@ Ground rules:
 
 - Remove Clerk (or any other login), role-based access, user and organization models, database clients and schemas, and any cloud API routes that only exist for accounts. Remove their environment variables, middleware, providers and UI (sign-in pages, user menus, gated routes). The app opens straight into the gallery and editor.
 - Keep any AI provider code (for example an OpenRouter client) but change it so the base URL, key and model come from local settings (section 4), not from a server or account.
-- Local data folder: by default \~/ClipKit (configurable). Inside: projects/NAME/project.json, projects/NAME/media/, projects/NAME/out/, and settings.json. Keys are stored only in settings.json on this machine, never sent anywhere except the provider the user chose, and never logged.
+- Local data folder: by default \~/cueframe (configurable). Inside: projects/NAME/project.json, projects/NAME/media/, projects/NAME/out/, and settings.json. Keys are stored only in settings.json on this machine, never sent anywhere except the provider the user chose, and never logged.
 - The local server binds to 127.0.0.1 only. Write routes require a session token that the app generates at start and gives to the browser and to the MCP server, and they check the Origin header, so other websites cannot change projects.
 
 ## 2. Run it as one app
@@ -33,8 +33,8 @@ Ground rules:
 The user should not need to know Next.js or Bun.
 
 - Use Next.js standalone output so the built app runs as a plain server.
-- Add a launcher command, clipkit, that: checks ffmpeg and prints how to install it if missing; picks a free port; starts the server; creates the data folder; opens the browser; and prints the two lines needed to connect Claude Code and Codex (section 3).
-- Package the launcher as a single executable with bun build --compile for macOS, Windows and Linux, shipped alongside the standalone build in one folder or archive. Also support bunx clipkit for developers. Electron or Tauri are out of scope for now.
+- Add a launcher command, cueframe, that: checks ffmpeg and prints how to install it if missing; picks a free port; starts the server; creates the data folder; opens the browser; and prints the two lines needed to connect Claude Code and Codex (section 3).
+- Package the launcher as a single executable with bun build --compile for macOS, Windows and Linux, shipped alongside the standalone build in one folder or archive. Also support bunx cueframe for developers. Electron or Tauri are out of scope for now.
 - First run shows a short Connect your agent screen: Claude Code, Codex, or your own API (section 4), with copy buttons for the commands and a live indicator that turns green when an agent connects.
 
 ## 3. Live project and agent tools
@@ -65,7 +65,7 @@ Outputs are short. The agent never receives clip source code or the whole projec
 ### 3.3 Three ways to connect
 
 - Claude Code: the app serves an MCP endpoint over HTTP (official MCP TypeScript SDK). The connect screen shows the one command to add it to Claude Code. Verify the exact command and transport in the current Claude Code docs.
-- Codex: the same server. If Codex needs a local command instead of a URL, ship a small stdio bridge (clipkit mcp) that forwards to the app. Verify the current Codex MCP configuration format and show the snippet on the connect screen. Add a section to AGENTS.md telling Codex how to use the tools.
+- Codex: the same server. If Codex needs a local command instead of a URL, ship a small stdio bridge (cueframe mcp) that forwards to the app. Verify the current Codex MCP configuration format and show the snippet on the connect screen. Add a section to AGENTS.md telling Codex how to use the tools.
 - Your own API: a chat panel inside the app. Settings take a provider type (Anthropic or OpenAI-compatible), base URL, key and model. A small loop on the server sends the user's message with the same tool list, runs the tool calls, and streams the reply. Reuse any existing OpenRouter code for the OpenAI-compatible path.
 
 Never add Sign in with Claude or ChatGPT. Subscriptions are used only through the user's own Claude Code or Codex.
@@ -142,7 +142,7 @@ Keep the existing in-browser export. Add render, which uses the repository's exi
 
 | Step | Work | Proof |
 | --- | --- | --- |
-| 1 | Read the repo, write docs/CLIPKIT\_PLAN.md | Plan reviewed |
+| 1 | Read the repo, write docs/CUEFRAME\_PLAN.md | Plan reviewed |
 | 2 | Remove auth, roles, database and cloud routes; local data folder and settings | App opens straight to the gallery; no login anywhere |
 | 3 | Disk-backed projects, action route, event stream; sequence track if needed | A curl action changes the open editor live; reload keeps edits |
 | 4 | Tools plus MCP endpoint; connect screen; Claude Code connection | Claude Code adds an item and the browser shows it live |
@@ -167,5 +167,5 @@ Cut line if time runs short: steps 12, 11 and 10 shrink first (fewer imported cl
 ### 7.3 Kickoff message for Codex
 
 ```text
-Read this whole document (save it as docs/CLIPKIT_PROMPT.md in the repo first). Then do step 1: read AGENTS.md and the listed folders and write docs/CLIPKIT_PLAN.md; stop and show it to me. After I approve, go through steps 2 to 12 in order. After each step, tell me what to click or run to see it working, and wait for my go-ahead before the next. Keep the existing gallery, editor and export working. Import third-party code only under permissive licenses and record it in NOTICE.md.
+Read this whole document (save it as docs/CUEFRAME_PROMPT.md in the repo first). Then do step 1: read AGENTS.md and the listed folders and write docs/CUEFRAME_PLAN.md; stop and show it to me. After I approve, go through steps 2 to 12 in order. After each step, tell me what to click or run to see it working, and wait for my go-ahead before the next. Keep the existing gallery, editor and export working. Import third-party code only under permissive licenses and record it in NOTICE.md.
 ```

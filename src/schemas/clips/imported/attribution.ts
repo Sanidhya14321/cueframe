@@ -24,7 +24,7 @@ const sources = {
 export const sourceAttribution = (source: keyof typeof sources | 'original', component: string) => {
   if (source === 'original') {
     return {
-      name: 'Original ClipKit',
+      name: 'Original cueframe',
       url: '',
       revision: 'original',
       license: 'MIT',

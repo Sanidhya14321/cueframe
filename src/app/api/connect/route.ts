@@ -10,7 +10,7 @@ export const GET = async (request: Request) => {
   return Response.json(
     {
       ...state,
-      command: `claude mcp add --transport http clipkit ${origin}/mcp --header "Authorization: Bearer ${sessionToken()}"`,
+      command: `claude mcp add --transport http cueframe ${origin}/mcp --header "Authorization: Bearer ${sessionToken()}"`,
     },
     { headers: { 'cache-control': 'no-store' } },
   );

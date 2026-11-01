@@ -13,7 +13,7 @@ const hashFrame = async (path: string) =>
     .update(await readFile(path))
     .digest('hex');
 
-const out = '/tmp/clipkit-motion-qa';
+const out = '/tmp/cueframe-motion-qa';
 await mkdir(out, { recursive: true });
 const serveUrl = await getServeUrl();
 for (const clip of CLIP_REGISTRY.filter((meta) => meta.category === 'imported')) {
@@ -66,5 +66,5 @@ for (const clip of CLIP_REGISTRY.filter((meta) => meta.category === 'imported'))
   console.info(`Checked ${clip.id}`);
 }
 console.info(
-  'All 25 clips passed identical-frame, long and short checks. Samples: /tmp/clipkit-motion-qa',
+  'All 25 clips passed identical-frame, long and short checks. Samples: /tmp/cueframe-motion-qa',
 );

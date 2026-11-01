@@ -102,7 +102,7 @@ export const saveOpenCut = async (id: string, input: unknown) => {
     }
     if (change.document && change.document.scenes.length !== 1) {
       throw new ProjectProblem(
-        'ClipKit shares one main timeline. Use tracks within the main scene.',
+        'cueframe shares one main timeline. Use tracks within the main scene.',
       );
     }
     if (change.document) {

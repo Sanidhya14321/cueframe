@@ -7,7 +7,7 @@ import { canonicalSource, report } from './storage';
 
 type LibraryClip = { id: string; title: string; category: string; still: string };
 type SuggestedClip = { id: string; title: string; role: string; still: string };
-const CLIP_DRAG = 'application/x-clipkit-clip';
+const CLIP_DRAG = 'application/x-cueframe-clip';
 const PIXELS_PER_SECOND = 50;
 const PAGE_SIZE = 24;
 
@@ -33,8 +33,8 @@ const add = (clipId: string, seconds: number) => {
   );
 };
 const dropSeconds = (clientX: number) => {
-  const scroll = document.querySelector<HTMLElement>('[data-clipkit-timeline-zoom]');
-  const zoom = Number(scroll?.dataset['clipkitTimelineZoom']);
+  const scroll = document.querySelector<HTMLElement>('[data-cueframe-timeline-zoom]');
+  const zoom = Number(scroll?.dataset['cueframeTimelineZoom']);
   if (!(scroll && zoom > 0)) {
     return 0;
   }

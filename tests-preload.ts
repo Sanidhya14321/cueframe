@@ -47,4 +47,4 @@ afterEach(() => {
 mock.module('server-only', () => ({}));
 
 // biome-ignore lint/style/noProcessEnv: local runtime configuration is isolated from provider credentials
-Object.assign(process.env, { CLIPKIT_HOME: mkdtempSync(join(tmpdir(), 'clipkit-tests-')) });
+Object.assign(process.env, { CUEFRAME_HOME: mkdtempSync(join(tmpdir(), 'cueframe-tests-')) });

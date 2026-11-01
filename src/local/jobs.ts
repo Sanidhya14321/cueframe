@@ -22,9 +22,9 @@ const jobPath = async (projectId: string, id: string) => {
   await ensureDirectory(folder);
   return join(folder, `${id}.job.json`);
 };
-const shared = globalThis as typeof globalThis & { clipkitRunningJobs?: Set<string> };
-const runningJobs = shared.clipkitRunningJobs ?? new Set<string>();
-shared.clipkitRunningJobs = runningJobs;
+const shared = globalThis as typeof globalThis & { cueframeRunningJobs?: Set<string> };
+const runningJobs = shared.cueframeRunningJobs ?? new Set<string>();
+shared.cueframeRunningJobs = runningJobs;
 export const readJob = async (projectId: string, id: string): Promise<LocalJob> => {
   const path = await jobPath(projectId, id);
   const job = jobSchema.parse(await readJson(path));
@@ -34,7 +34,7 @@ export const readJob = async (projectId: string, id: string): Promise<LocalJob> 
   const stranded = {
     ...job,
     status: 'error' as const,
-    label: 'ClipKit restarted during this task. Start it again.',
+    label: 'cueframe restarted during this task. Start it again.',
   };
   await serial(path, () => writeJson(path, stranded));
   return stranded;

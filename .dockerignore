@@ -4,3 +4,8 @@ node_modules
 footage
 coverage
 test-results
+.env*
+!.env.example
+.next-*
+**/node_modules
+integrations/opencut/.source

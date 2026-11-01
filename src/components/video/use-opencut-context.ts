@@ -11,7 +11,7 @@ export const useOpenCutContext = (iframe: RefObject<HTMLIFrameElement | null>) =
       }
       const data = event.data;
       if (
-        !(data && typeof data === 'object' && 'type' in data && data.type === 'clipkit-context')
+        !(data && typeof data === 'object' && 'type' in data && data.type === 'cueframe-context')
       ) {
         return;
       }
@@ -29,8 +29,8 @@ export const useOpenCutContext = (iframe: RefObject<HTMLIFrameElement | null>) =
     return () => window.removeEventListener('message', receive);
   }, [iframe, frames]);
   const select = (id: string) =>
-    iframe.current?.contentWindow?.postMessage({ type: 'clipkit-focus', id }, location.origin);
+    iframe.current?.contentWindow?.postMessage({ type: 'cueframe-focus', id }, location.origin);
   const seek = (frame: number) =>
-    iframe.current?.contentWindow?.postMessage({ type: 'clipkit-seek', frame }, location.origin);
+    iframe.current?.contentWindow?.postMessage({ type: 'cueframe-seek', frame }, location.origin);
   return { frames, selectedId, select, seek };
 };

@@ -1,4 +1,4 @@
-# ClipKit UI addendum progress
+# cueframe UI addendum progress
 
 The user requested one addendum stage at a time, with a demonstration and go-ahead before the next. Main steps 1-5 are already implemented: local-only settings/stores, revisioned projects/actions/SSE, MCP tools/Connect, presence/locks/activity and selective turn undo. Their existing unit and browser checks remain part of validation.
 
@@ -62,7 +62,7 @@ Run bookkeeping: target slug `src-components-studio-shell-tsx`; no critique igno
 
 ## B: event queue, authored actions and initial OpenCut adapter
 
-The user approved step B and selected a full OpenCut classic timeline replacement. B implements durable UI-to-agent delivery; the full timeline migration is a separate, already-authorized next work item before C. See `CLIPKIT_OPENCUT.md`. The current split adaptation is not described as a full replacement.
+The user approved step B and selected a full OpenCut classic timeline replacement. B implements durable UI-to-agent delivery; the full timeline migration is a separate, already-authorized next work item before C. See `CUEFRAME_OPENCUT.md`. The current split adaptation is not described as a full replacement.
 
 ### What is implemented
 
@@ -72,7 +72,7 @@ Shared tools now include `wait_for_events(projectId, timeout)` and `resolve_even
 
 Every new journal entry records author and turn ID. Actions performed while an event is claimed inherit that event's turn ID, so activity and turn undo share one identity. Existing files load with schema defaults.
 
-OpenCut's requested MIT repository and its linked working classic repository were cloned into `/tmp/clipkit-opencut` and `/tmp/clipkit-opencut-classic`. The split command from classic was adapted into a pure frame-based video split, preserving source offsets, frame totals and punch-in regions. Import a video, select it, seek inside it, open the panel and click **Split video at playhead**. Both halves are one undoable disk action. Full upstream attribution/license is in NOTICE.md and alongside the adapter.
+OpenCut's requested MIT repository and its linked working classic repository were cloned into `/tmp/cueframe-opencut` and `/tmp/cueframe-opencut-classic`. The split command from classic was adapted into a pure frame-based video split, preserving source offsets, frame totals and punch-in regions. Import a video, select it, seek inside it, open the panel and click **Split video at playhead**. Both halves are one undoable disk action. Full upstream attribution/license is in NOTICE.md and alongside the adapter.
 
 ### Impeccable review
 

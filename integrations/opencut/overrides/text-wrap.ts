@@ -1,4 +1,4 @@
-import { wrapLine } from '@clipkit/project/text-wrap';
+import { wrapLine } from '@cueframe/project/text-wrap';
 import { EditorCore } from '@/core';
 import type { TextCanvasContext } from '@/text/layout';
 
