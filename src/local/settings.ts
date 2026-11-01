@@ -1,3 +1,4 @@
+import { rename } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { isAbsolute, join, resolve } from 'node:path';
 import { z } from 'zod';
@@ -38,9 +39,17 @@ export const readSettings = async (): Promise<LocalSettings> => {
   const folder = await activeFolder();
   const path = join(folder, 'settings.json');
   return serialDisk(path, async () => {
-    const saved = await readJson(path);
-    if (saved !== null) {
-      return settingsSchema.parse({ ...settingsSchema.parse(saved), dataFolder: folder });
+    try {
+      const saved = await readJson(path);
+      if (saved !== null) {
+        return settingsSchema.parse({ ...settingsSchema.parse(saved), dataFolder: folder });
+      }
+    } catch (error) {
+      if (!(error instanceof SyntaxError || error instanceof z.ZodError)) {
+        throw error;
+      }
+      await rename(path, `${path}.corrupt-${Date.now()}`);
+      console.error('[cueframe] settings.json was unreadable and has been set aside.');
     }
     const defaults: LocalSettings = {
       dataFolder: folder,

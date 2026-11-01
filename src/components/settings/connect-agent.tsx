@@ -22,8 +22,12 @@ export const ConnectAgent = () => {
   const copy = async () => {
     try {
       const data = (await (await fetch('/api/connect', { cache: 'no-store' })).json()) as {
-        command: string;
+        command?: string;
       };
+      if (data.command === undefined) {
+        setMessage('Only an admin can copy the connection command.');
+        return;
+      }
       await navigator.clipboard.writeText(data.command);
       setMessage(
         'Connection command copied. Paste it in your terminal, then open Claude Code and use /mcp.',

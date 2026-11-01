@@ -35,7 +35,9 @@ const ensureCMake = async (folder: string) => {
     if (!['darwin', 'linux'].includes(process.platform)) {
       throw new Error('Install CMake and a C++ compiler, then retry local transcription.');
     }
-    const response = await fetch('https://pypi.org/pypi/cmake/4.4.4/json');
+    const response = await fetch('https://pypi.org/pypi/cmake/4.4.4/json', {
+      signal: AbortSignal.timeout(30000),
+    });
     if (!response.ok) {
       throw new Error('Could not find the local build tool.');
     }

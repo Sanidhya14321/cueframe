@@ -1,5 +1,5 @@
 'use client';
-import { SlidersHorizontal } from 'lucide-react';
+import { Bot, SlidersHorizontal } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -8,8 +8,9 @@ import { VideoEditorSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useLiveProject } from '@/lib/use-live-project';
+import { usePersistedState } from '@/lib/use-persisted-state';
 import { findElement, type Project } from '@/project';
-import { AgentMenu } from './agent-menu';
+import { AgentPanel } from './agent-panel';
 import { ExportVideo } from './export-video';
 import { OpenCutProjectTools } from './opencut-project-tools';
 import { useOpenCutContext } from './use-opencut-context';
@@ -36,6 +37,19 @@ export const OpenCutEditor = ({
   const context = useOpenCutContext(frame);
   const [loaded, setLoaded] = useState(false);
   const [frameOpen, setFrameOpen] = useState(false);
+  const [panelChoice, setPanelChoice] = usePersistedState<boolean | null>(
+    'cueframe-agent-panel',
+    null,
+  );
+  const [wide, setWide] = useState(false);
+  const panelOpen = panelChoice ?? wide;
+  useEffect(() => {
+    const query = matchMedia('(min-width: 90rem)');
+    const update = () => setWide(query.matches);
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
   const dockFlush = useRef<(() => void) | null>(null);
   const { settled } = editor;
   const checkpoint = useCallback(async () => {
@@ -88,12 +102,16 @@ export const OpenCutEditor = ({
               >
                 {editor.status}
               </span>
-              <AgentMenu
-                editor={editor}
-                frames={context.frames}
-                selectedId={context.selectedId}
-                select={context.select}
-              />
+              <Button
+                variant="ghost"
+                size="sm"
+                aria-pressed={panelOpen}
+                className={editor.state.agent?.status === 'working' ? 'text-agent' : ''}
+                onClick={() => setPanelChoice(!panelOpen)}
+              >
+                <Bot />
+                Agent
+              </Button>
               {selected?.type === 'composition' ? (
                 <Button
                   variant="ghost"
@@ -147,6 +165,15 @@ export const OpenCutEditor = ({
               element={selected}
               flushRef={dockFlush}
               open={frameOpen}
+            />
+          ) : null}
+          {panelOpen && editor.state && !readOnly ? (
+            <AgentPanel
+              editor={editor}
+              frames={context.frames}
+              selectedId={context.selectedId}
+              select={context.select}
+              onClose={() => setPanelChoice(false)}
             />
           ) : null}
         </div>

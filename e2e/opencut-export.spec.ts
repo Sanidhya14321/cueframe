@@ -145,7 +145,7 @@ test('the phone toolbar keeps its controls apart with a waiting draft', async ({
     expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(375);
   }
   await page.getByRole('button', { name: 'Agent', exact: true }).click();
-  const menu = await page.getByRole('dialog').boundingBox();
+  const menu = await page.getByRole('complementary', { name: 'Agent' }).boundingBox();
   expect(menu?.width).toBeLessThanOrEqual(375);
 });
 

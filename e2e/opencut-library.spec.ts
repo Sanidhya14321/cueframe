@@ -98,7 +98,7 @@ test('shows an MCP edit in the open editor without reloading', async ({ page }) 
 test('sends dictated or typed text to the agent with the editing context', async ({ page }) => {
   const { id } = await create(page);
   await page.getByRole('button', { name: 'Agent', exact: true }).click();
-  const field = page.getByRole('textbox', { name: 'Voice request' });
+  const field = page.getByRole('textbox', { name: 'Message your agent' });
   await field.fill('Make the title larger');
   await page.getByRole('button', { name: 'Send', exact: true }).click();
   await expect(page.getByRole('status', { name: 'Voice request status' })).toContainText('Sent');

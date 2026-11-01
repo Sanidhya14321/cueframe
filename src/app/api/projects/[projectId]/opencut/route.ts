@@ -15,5 +15,5 @@ export const PUT = (request: Request, { params }: Context) =>
     if (text.length > 8 * 1024 * 1024) {
       throw new ProjectProblem('Video projects must be under 8 MB.', 413);
     }
-    return Response.json(await saveOpenCut((await params).projectId, JSON.parse(text)));
+    return Response.json(await saveOpenCut((await params).projectId, JSON.parse(text) as unknown));
   });

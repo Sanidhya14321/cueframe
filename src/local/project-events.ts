@@ -45,7 +45,11 @@ export const projectEvents = (id: string, signal: AbortSignal) => {
       }, 250);
       const heartbeat = setInterval(() => {
         if (!ended) {
-          controller.enqueue(encoder.encode(': heartbeat\n\n'));
+          try {
+            controller.enqueue(encoder.encode(': heartbeat\n\n'));
+          } catch {
+            stop();
+          }
         }
       }, 15000);
       const finish = () => {

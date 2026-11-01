@@ -3,7 +3,7 @@ import { recommendClips } from '@/mcp/clip-recommend';
 
 export const GET = (request: Request) =>
   projectApi(request, async () => {
-    const brief = new URL(request.url).searchParams.get('brief')?.trim() ?? '';
+    const brief = new URL(request.url).searchParams.get('brief')?.trim().slice(0, 4000) ?? '';
     if (brief === '') {
       return Response.json({ clips: [] });
     }

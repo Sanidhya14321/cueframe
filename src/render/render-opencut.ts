@@ -1,8 +1,10 @@
 import { chromium } from 'playwright';
-import { SESSION_COOKIE } from '@/local/security';
+import { ROLE_COOKIE, SESSION_COOKIE } from '@/local/security';
 import { nativeBrowserPath } from './native-browser';
 
 const [origin, id, output] = process.argv.slice(2);
+// biome-ignore lint/style/noProcessEnv: the render worker receives its session from the server
+const { CUEFRAME_RENDER_ROLE: role = '' } = process.env;
 // biome-ignore lint/style/noProcessEnv: native render worker receives runtime authentication through its private environment
 const { CUEFRAME_RENDER_TOKEN: token } = process.env;
 if (!(origin && id && output && token)) {
@@ -17,7 +19,10 @@ try {
     acceptDownloads: true,
     viewport: { width: 1280, height: 1000 },
   });
-  await context.addCookies([{ name: SESSION_COOKIE, value: token, url: origin }]);
+  await context.addCookies([
+    { name: SESSION_COOKIE, value: token, url: origin },
+    { name: ROLE_COOKIE, value: role, url: origin },
+  ]);
   await context.route('**/*', async (route) => {
     const request = route.request();
     if (new URL(request.url()).origin !== origin) {

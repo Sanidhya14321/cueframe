@@ -11,7 +11,14 @@ const LoginPage = async ({ searchParams }: Props) => {
       method="post"
       className="mx-auto flex w-full max-w-sm flex-col gap-3 px-4 py-24"
     >
-      <h1 className="font-display text-3xl">Sign in to cueframe</h1>
+      <h1 className="font-display text-3xl">Sign in to the video editor</h1>
+      <p className="text-muted-foreground text-sm">
+        The hosted editor is for paid accounts. Prefer to run it yourself?{' '}
+        <a className="underline underline-offset-4" href="/pricing">
+          Download it free
+        </a>
+        .
+      </p>
       <label htmlFor="email" className="text-sm">
         Email
       </label>
@@ -28,7 +35,9 @@ const LoginPage = async ({ searchParams }: Props) => {
       />
       {failed ? (
         <p role="alert" className="text-sm text-destructive">
-          That password is not correct.
+          {failed === 'limit'
+            ? 'Too many attempts. Wait 15 minutes, then try again.'
+            : 'That password is not correct.'}
         </p>
       ) : null}
       <Button type="submit">Sign in</Button>

@@ -1,4 +1,15 @@
 import { beatsheetSchema, buildFromBeatsheet } from '@/agent/beatsheet';
 import { projectApi } from '@/local/project-api';
-export const maxDuration=300;
-export const POST=(request:Request,{params}:{params:Promise<{projectId:string}>})=>projectApi(request,async()=>Response.json(await buildFromBeatsheet(beatsheetSchema.parse({...await request.json() as object,projectId:(await params).projectId}),'agent:builder')));
+import { hostedSpendProblem } from '@/local/rate-limit';
+
+export const maxDuration = 300;
+export const POST = (request: Request, { params }: { params: Promise<{ projectId: string }> }) =>
+  projectApi(request, async () => {
+    const limited = hostedSpendProblem(request, 'build', 10);
+    if (limited !== null) {
+      return limited;
+    }
+    const body = (await request.json()) as object;
+    const input = beatsheetSchema.parse({ ...body, projectId: (await params).projectId });
+    return Response.json(await buildFromBeatsheet(input, 'agent:builder'));
+  });

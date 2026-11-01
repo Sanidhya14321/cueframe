@@ -5,6 +5,9 @@ import { transcribeSpeech } from '@/local/voice-input';
 const MAX_AUDIO_BYTES = 25 * 1024 * 1024;
 export const POST = (request: Request) =>
   projectApi(request, async () => {
+    if (Number(request.headers.get('content-length') ?? 0) > MAX_AUDIO_BYTES) {
+      throw new ProjectProblem('Record a voice request under 25 MB.', 413);
+    }
     const audio = new Uint8Array(await request.arrayBuffer());
     if (audio.length === 0 || audio.length > MAX_AUDIO_BYTES) {
       throw new ProjectProblem('Record a voice request under 25 MB.', 413);

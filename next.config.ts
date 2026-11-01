@@ -7,7 +7,8 @@ const { HTML_IN_CANVAS_ORIGIN_TRIAL_TOKEN: htmlInCanvasTrialToken } = process.en
 
 const { CUEFRAME_SESSION_TOKEN: existingSessionToken } = process.env;
 Object.assign(process.env, {
-  CUEFRAME_SESSION_TOKEN: existingSessionToken ?? randomBytes(32).toString('hex'),
+  CUEFRAME_SESSION_TOKEN: existingSessionToken || randomBytes(32).toString('hex'),
+  CUEFRAME_PERSISTENT_TOKEN: existingSessionToken ? '1' : '0',
 });
 
 const config: NextConfig = {
@@ -15,12 +16,20 @@ const config: NextConfig = {
   distDir: cueframeDistDir ?? '.next',
   serverExternalPackages: ['@remotion/renderer', '@remotion/bundler', '@huggingface/transformers'],
   agentRules: false,
+  experimental: { proxyClientMaxBodySize: '260mb' },
   transpilePackages: ['remotion', '@remotion/player', '@remotion/google-fonts', '@remotion/three'],
   headers: () =>
     Promise.resolve([
       {
         source: '/opencut/assets/:path*',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        ],
       },
       ...(htmlInCanvasTrialToken
         ? [

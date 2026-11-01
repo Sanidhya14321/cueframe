@@ -89,10 +89,14 @@ const runRenderWorker = (
         if (!line.startsWith('{')) {
           continue;
         }
-        const parsed = JSON.parse(line) as { progress?: number };
-        if (typeof parsed.progress === 'number' && parsed.progress - last > 0.03) {
-          last = parsed.progress;
-          update(last, `Rendering ${Math.round(last * 100)}%`).catch(() => undefined);
+        try {
+          const parsed = JSON.parse(line) as { progress?: number };
+          if (typeof parsed.progress === 'number' && parsed.progress - last > 0.03) {
+            last = parsed.progress;
+            update(last, `Rendering ${Math.round(last * 100)}%`).catch(() => undefined);
+          }
+        } catch {
+          console.error('[cueframe render] skipped an unreadable progress line');
         }
       }
     });

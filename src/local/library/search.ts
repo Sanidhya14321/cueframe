@@ -16,11 +16,9 @@ export const searchClipsByMeaning = async (
   if (!(await readSettings()).yugabyteUrl) {
     return keyword.slice(0, limit);
   }
-  const vector = await embedQuery(query);
-  if (!vector) {
-    return keyword.slice(0, limit);
-  }
-  const stored = await searchLibraryVectors(vector, 'clip', 5000);
+  const stored = await embedQuery(query)
+    .then((vector) => (vector ? searchLibraryVectors(vector, 'clip', 5000) : null))
+    .catch(() => null);
   if (!stored?.length) {
     return keyword.slice(0, limit);
   }

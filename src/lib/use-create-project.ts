@@ -32,6 +32,10 @@ export const useCreateProject = () => {
           },
         }),
       });
+      if (response.status === 401) {
+        location.assign('/login');
+        return false;
+      }
       if (!response.ok) {
         throw new Error('Could not create a local project. Try again.');
       }

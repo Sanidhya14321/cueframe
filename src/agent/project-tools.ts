@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { resolveEvent, waitForEvents } from '@/local/agent-events';
+import { appendAgentLog } from '@/local/agent-log';
 import { resolveComment, waitForComments } from '@/local/comments';
 import { readJob, startJob } from '@/local/jobs';
 import {
@@ -65,6 +66,19 @@ export const projectTools = {
     }),
   ),
 
+  share_update: defineProjectTool(
+    'Show the person a short plain-language update in the editor chat. Use thinking for what you are working out and decision for a choice you made and why. Call it before and between edits.',
+    {
+      projectId,
+      kind: z.enum(['thinking', 'decision']),
+      text: z.string().min(1).max(1000),
+      itemIds: z.array(z.string()).max(50).default([]),
+    },
+    async ({ projectId: pid, kind, text, itemIds }) => {
+      await appendAgentLog(pid, { kind, text, itemIds });
+      return { shared: true };
+    },
+  ),
   add_voiceover: defineProjectTool(
     'Generate cached Fish Audio voice lines and duck music. Skips clearly if no key is saved. Poll get_job for progress.',
     { ...voiceInputSchema.shape, confirmed },

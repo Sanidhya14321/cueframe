@@ -64,3 +64,15 @@ describe('local settings', () => {
     ).toBe(401);
   });
 });
+
+describe('settings recovery', () => {
+  it('sets a corrupt settings file aside and starts from defaults', async () => {
+    const { readdir, writeFile: write } = await import('node:fs/promises');
+    const path = await import('node:path');
+    const settings = await import('@/local/settings');
+    const { dataFolder } = await settings.readSettings();
+    await write(path.join(dataFolder, 'settings.json'), '{broken');
+    expect((await settings.readSettings()).apiKey).toBe('');
+    expect((await readdir(dataFolder)).some((name) => name.includes('.corrupt-'))).toBe(true);
+  });
+});
