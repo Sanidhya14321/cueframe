@@ -15,7 +15,7 @@ const openVideo = cache(findVideo);
 
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const video = await openVideo((await params).videoId);
-  return { title: `${video?.title ?? 'Video'} · Neuclip` };
+  return { title: `${video?.title ?? 'Video'} · cueframe` };
 };
 
 const VideoPage = async ({ params, searchParams }: Props) => {

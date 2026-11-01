@@ -4,17 +4,22 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { repoRoot } from '@/lib/repo-root';
 import { projectDirectory, readProject } from './projects';
-import { sessionToken } from './security';
+import { browserSessionToken } from './security';
+import { workerEnvironment } from './worker-env';
 
 export const renderNativeProject = async (
   id: string,
   origin: string,
   update: (progress: number, label: string) => Promise<void>,
+  revision: number,
 ) => {
   const state = await readProject(id);
+  if (state.revision !== revision) {
+    throw new Error('The project changed before rendering. Render again to use the latest edit.');
+  }
   const name = `video-${state.revision}`;
   const output = join(await projectDirectory(id), 'out', `${name}.mp4`);
-  await update(0.05, 'Rendering the OpenCut timeline');
+  await update(0.05, 'Rendering the video');
   await new Promise<void>((resolve, reject) => {
     const child = spawn(
       'bun',
@@ -23,11 +28,8 @@ export const renderNativeProject = async (
         cwd: repoRoot(),
         stdio: ['ignore', 'ignore', 'pipe'],
         env: {
-          // biome-ignore lint/style/noProcessEnv: renderer inherits runtime configuration without logging credentials
-          ...process.env,
-          NODE_OPTIONS: '',
-          BUN_OPTIONS: '',
-          CLIPKIT_RENDER_TOKEN: sessionToken(),
+          ...workerEnvironment(),
+          CUEFRAME_RENDER_TOKEN: browserSessionToken(),
         },
       },
     );
@@ -45,7 +47,9 @@ export const renderNativeProject = async (
       if (code === 0) {
         resolve();
       } else {
-        reject(new Error('OpenCut rendering failed. Try browser export from the video editor.'));
+        reject(
+          new Error('The video editor could not export this project. Check its effects and media.'),
+        );
       }
     });
   });

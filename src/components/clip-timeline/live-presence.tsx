@@ -19,11 +19,13 @@ export const LivePresence = ({
   undoAgent,
   onSelect,
   children,
+  hideBar = false,
 }: {
   state: PublicProjectState | null;
   undoAgent: () => void;
   onSelect: (id: string) => void;
   children: React.ReactNode;
+  hideBar?: boolean;
 }) => {
   const [recentIds, setRecentIds] = useState<string[]>([]);
   const latest = state?.activity.at(-1);
@@ -35,7 +37,8 @@ export const LivePresence = ({
   return (
     <LivePresenceContext.Provider value={{ agent: state?.agent ?? null, recentIds }}>
       <div
-        className="flex shrink-0 flex-wrap items-center gap-3 border-b px-3 py-1 text-xs"
+        hidden={hideBar}
+        className="flex h-10 shrink-0 items-center gap-4 border-b px-3 text-xs"
         data-testid="agent-bar"
       >
         <span
@@ -47,13 +50,15 @@ export const LivePresence = ({
         <button
           type="button"
           onClick={undoAgent}
-          className="min-h-11 underline"
+          className="text-muted-foreground hover:text-foreground disabled:opacity-50"
           disabled={!state?.activity.some((entry) => entry.actor.startsWith('agent:'))}
         >
           Undo agent turn
         </button>
         <details>
-          <summary className="flex min-h-11 cursor-pointer items-center">Activity</summary>
+          <summary className="flex cursor-pointer items-center text-muted-foreground hover:text-foreground">
+            Activity
+          </summary>
           <div className="absolute z-40 mt-2 max-h-60 max-w-sm overflow-y-auto rounded-lg border bg-background p-3 shadow-lg">
             {state?.activity.toReversed().map((entry) => (
               <button

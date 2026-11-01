@@ -1,7 +1,7 @@
 'use client';
 
 import { ExternalLink, Lock, Monitor, RotateCw, Smartphone } from 'lucide-react';
-import { type ReactNode, useMemo, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { PropertiesPanel } from '@/components/editor/properties-panel';
 import { Button } from '@/components/ui/button';
 import { resolveClipControls } from '@/core/clip-controls';
@@ -93,6 +93,8 @@ const BrowserBar = ({
   </div>
 );
 
+const DESKTOP_VIEWPORT = 1280;
+
 export const SiteWorkspace = ({
   template,
   values,
@@ -103,6 +105,21 @@ export const SiteWorkspace = ({
   liveUrl,
 }: SiteWorkspaceProps) => {
   const [device, setDevice] = useState<Device>('desktop');
+  const [pane, setPane] = useState<'preview' | 'content'>('preview');
+  const [surfaceWidth, setSurfaceWidth] = useState(DESKTOP_VIEWPORT);
+  const surface = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const element = surface.current;
+    if (!element) {
+      return;
+    }
+    const observer = new ResizeObserver(([entry]) => {
+      setSurfaceWidth(entry?.contentRect.width ?? DESKTOP_VIEWPORT);
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+  const scale = device === 'desktop' ? Math.min(1, surfaceWidth / DESKTOP_VIEWPORT) : 1;
   const [reloads, setReloads] = useState(0);
   const sections = useMemo(
     () => resolveClipControls(template.schema, template.controls, template.defaults),
@@ -111,8 +128,29 @@ export const SiteWorkspace = ({
   const site = useLastValidSite(template.id, values);
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
-      <div className="flex h-[82dvh] shrink-0 flex-col gap-3 bg-muted/40 p-3 sm:p-4 lg:h-auto lg:min-h-0 lg:flex-1">
+    <div className="flex min-h-0 flex-1 flex-col lg:flex-row lg:overflow-hidden">
+      <div className="flex shrink-0 border-b lg:hidden">
+        {(['preview', 'content'] as const).map((name) => (
+          <button
+            key={name}
+            type="button"
+            aria-pressed={pane === name}
+            onClick={() => setPane(name)}
+            className={cn(
+              'min-h-11 flex-1 text-sm capitalize',
+              pane === name ? 'bg-accent text-foreground' : 'text-muted-foreground',
+            )}
+          >
+            {name}
+          </button>
+        ))}
+      </div>
+      <div
+        className={cn(
+          'min-h-0 flex-1 flex-col gap-3 bg-muted/40 p-3 sm:p-4 lg:flex',
+          pane === 'preview' ? 'flex' : 'hidden',
+        )}
+      >
         <div className="flex min-h-8 flex-wrap items-center gap-2">
           <div className="text-muted-foreground text-xs">{status}</div>
           <div className="ml-auto flex flex-wrap items-center gap-2">{toolbar}</div>
@@ -131,19 +169,37 @@ export const SiteWorkspace = ({
               onDevice={setDevice}
               onReload={() => setReloads(reloads + 1)}
             />
-            <div className="min-h-0 flex-1">
+            <div ref={surface} className="min-h-0 flex-1 overflow-hidden">
               {site === null ? (
                 <p className="p-8 text-center text-muted-foreground text-sm">
                   Some values are not valid yet.
                 </p>
               ) : (
-                <SiteCanvas key={reloads} site={site} layout="frame" introRun={reloads} />
+                <div
+                  className="h-full origin-top-left"
+                  style={
+                    scale < 1
+                      ? {
+                          width: DESKTOP_VIEWPORT,
+                          height: `${100 / scale}%`,
+                          transform: `scale(${scale})`,
+                        }
+                      : undefined
+                  }
+                >
+                  <SiteCanvas key={reloads} site={site} layout="frame" introRun={reloads} />
+                </div>
               )}
             </div>
           </div>
         </div>
       </div>
-      <aside className="shrink-0 border-border border-t px-4 lg:w-[360px] lg:overflow-y-auto lg:border-t-0 lg:border-l">
+      <aside
+        className={cn(
+          'min-h-0 flex-1 overflow-y-auto px-4 lg:block lg:w-[360px] lg:flex-none lg:border-l',
+          pane === 'content' ? 'block' : 'hidden',
+        )}
+      >
         <PropertiesPanel sections={sections} values={values} onChange={onChange} />
       </aside>
     </div>

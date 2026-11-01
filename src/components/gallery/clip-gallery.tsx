@@ -2,6 +2,7 @@
 
 import { SearchX } from 'lucide-react';
 import type { ComponentType } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import type { GalleryMeta } from '@/lib/gallery-filters';
 import {
@@ -55,6 +56,8 @@ interface ClipGalleryProps {
   onChange: (next: GalleryFilters) => void;
 }
 
+const PAGE_SIZE = 10;
+
 export const ClipGallery = ({
   items,
   Tile,
@@ -65,6 +68,13 @@ export const ClipGallery = ({
 }: ClipGalleryProps) => {
   const effective = { ...filters, query };
   const visible = filterClips(items, effective);
+  const filterKey = JSON.stringify(effective);
+  const [paging, setPaging] = useState({ filterKey, limit: PAGE_SIZE });
+  const [batch, setBatch] = useState(PAGE_SIZE);
+  useEffect(() => {
+    setBatch(Math.max(PAGE_SIZE, Math.ceil(innerWidth / 224) * Math.ceil(innerHeight / 130)));
+  }, []);
+  const limit = Math.max(batch, paging.filterKey === filterKey ? paging.limit : PAGE_SIZE);
   const counts = {
     kinds: facetCounts(items, effective, 'kind', (meta) => [meta.kind]),
     categories: facetCounts(items, effective, 'category', (meta) => [meta.category]),
@@ -99,12 +109,23 @@ export const ClipGallery = ({
           </Button>
         </div>
       ) : (
-        <MasonryGrid
-          items={visible}
-          itemKey={galleryItemKey}
-          heightRatio={heightRatio}
-          Tile={Tile}
-        />
+        <>
+          <MasonryGrid
+            items={visible.slice(0, limit)}
+            itemKey={galleryItemKey}
+            heightRatio={heightRatio}
+            Tile={Tile}
+          />
+          {visible.length > limit ? (
+            <Button
+              variant="outline"
+              className="min-h-11 self-center"
+              onClick={() => setPaging({ filterKey, limit: limit + batch })}
+            >
+              Load more ({visible.length - limit} left)
+            </Button>
+          ) : null}
+        </>
       )}
     </div>
   );

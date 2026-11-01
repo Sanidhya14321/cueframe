@@ -10,9 +10,12 @@ import { mediaInstructions } from '@/agent/instructions';
 import { agentRequestSchema, checkMedia } from '@/agent/media';
 import { agentModel, describeAgentError } from '@/agent/model';
 import { createMediaTools, editSucceeded, type MediaAgentMessage } from '@/agent/tools';
+import { hostedSpendProblem } from '@/local/rate-limit';
 import { requireLocalSession } from '@/local/security';
 
 export const maxDuration = 60;
+
+const AGENT_REQUESTS_PER_MINUTE = 30;
 
 const badRequest = (message: string): Response =>
   Response.json({ error: message }, { status: 400 });
@@ -21,6 +24,10 @@ export const POST = async (request: Request): Promise<Response> => {
   const denied = requireLocalSession(request);
   if (denied !== null) {
     return denied;
+  }
+  const limited = hostedSpendProblem(request, 'agent', AGENT_REQUESTS_PER_MINUTE);
+  if (limited !== null) {
+    return limited;
   }
   const parsed = agentRequestSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
@@ -44,10 +51,15 @@ export const POST = async (request: Request): Promise<Response> => {
       { status: 400 },
     );
   }
+  const modelMessages = await convertToModelMessages(messages, { tools }).catch(() => null);
+  if (modelMessages === null) {
+    return badRequest('Malformed agent request.');
+  }
   const result = streamText({
     model,
     instructions: mediaInstructions({ ...media, document: masked, chatTitle }),
-    messages: await convertToModelMessages(messages, { tools }),
+    messages: modelMessages,
+    abortSignal: request.signal,
     tools,
     stopWhen: [editSucceeded, stepCountIs(6)],
   });

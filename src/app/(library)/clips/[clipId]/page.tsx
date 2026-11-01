@@ -20,7 +20,7 @@ export const generateMetadata = async ({
     return { title: 'Clip' };
   }
   const meta = getClipMeta(clipId);
-  return shareMetadata(`${meta.title} · Neuclip`, meta.description);
+  return shareMetadata(`${meta.title} · cueframe`, meta.description);
 };
 
 const ClipEditorPage = async ({ params }: { params: Promise<{ clipId: string }> }) => {

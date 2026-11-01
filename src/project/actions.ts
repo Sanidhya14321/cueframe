@@ -19,6 +19,19 @@ import {
 import { type Project, projectSchema } from './project';
 import { trackSchema } from './track';
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+const mergeProps = (
+  current: Record<string, unknown>,
+  changes: Record<string, unknown>,
+): Record<string, unknown> =>
+  Object.fromEntries([
+    ...Object.entries(current),
+    ...Object.entries(changes).map(([key, value]) => {
+      const prior = current[key];
+      return [key, isRecord(prior) && isRecord(value) ? mergeProps(prior, value) : value];
+    }),
+  ]);
 export const projectActionSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('add-item'), trackId: z.string(), element: elementSchema }),
   z.object({ type: z.literal('replace-item'), element: elementSchema }),
@@ -59,7 +72,7 @@ export const reduceProjectAction = (project: Project, action: ProjectAction): Pr
       }
       next = replaceElement(project, {
         ...found.element,
-        props: { ...found.element.props, ...action.props },
+        props: mergeProps(found.element.props, action.props),
       });
       break;
     }

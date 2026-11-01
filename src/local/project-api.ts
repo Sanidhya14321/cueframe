@@ -1,5 +1,26 @@
+import { ZodError } from 'zod';
 import { ProjectProblem } from './projects';
 import { requireLocalSession } from './security';
+
+const problemResponse = (error: unknown): Response => {
+  if (error instanceof ProjectProblem) {
+    return Response.json({ problem: error.message }, { status: error.status });
+  }
+  if (error instanceof ZodError || error instanceof SyntaxError) {
+    return Response.json(
+      { problem: 'The project request failed. Check the input.' },
+      { status: 400 },
+    );
+  }
+  if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+    return Response.json({ problem: 'That file does not exist.' }, { status: 404 });
+  }
+  console.error('[cueframe api]', error instanceof Error ? error.name : 'Unknown error');
+  return Response.json(
+    { problem: 'The project request failed. Try again in a moment.' },
+    { status: 500 },
+  );
+};
 
 export const projectApi = async (
   request: Request,
@@ -12,15 +33,7 @@ export const projectApi = async (
   try {
     return await run();
   } catch (error) {
-    return Response.json(
-      {
-        problem:
-          error instanceof ProjectProblem
-            ? error.message
-            : 'The project request failed. Check the input and local files.',
-      },
-      { status: error instanceof ProjectProblem ? error.status : 400 },
-    );
+    return problemResponse(error);
   }
 };
 export const requestActor = (request: Request, value: string): string =>

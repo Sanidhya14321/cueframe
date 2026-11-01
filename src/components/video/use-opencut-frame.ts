@@ -3,34 +3,34 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { registerEditorNavigation } from '@/lib/editor-navigation';
 
 type Reply =
-  | { type: 'clipkit-ready' }
-  | { type: 'clipkit-command-menu' }
-  | { type: 'clipkit-flushed'; requestId: string; ok: boolean };
+  | { type: 'cueframe-ready' }
+  | { type: 'cueframe-command-menu' }
+  | { type: 'cueframe-flushed'; requestId: string; ok: boolean };
 const readReply = (data: unknown): Reply | null => {
   if (!(data && typeof data === 'object' && 'type' in data)) {
     return null;
   }
-  if (data.type === 'clipkit-command-menu') {
-    return { type: 'clipkit-command-menu' };
+  if (data.type === 'cueframe-command-menu') {
+    return { type: 'cueframe-command-menu' };
   }
-  if (data.type === 'clipkit-ready') {
-    return { type: 'clipkit-ready' };
+  if (data.type === 'cueframe-ready') {
+    return { type: 'cueframe-ready' };
   }
   if (
-    data.type !== 'clipkit-flushed' ||
+    data.type !== 'cueframe-flushed' ||
     !('requestId' in data) ||
     typeof data.requestId !== 'string'
   ) {
     return null;
   }
   return {
-    type: 'clipkit-flushed',
+    type: 'cueframe-flushed',
     requestId: data.requestId,
     ok: 'ok' in data && data.ok === true,
   };
 };
 type Pending = Map<string, { resolve: () => void; reject: (error: Error) => void }>;
-const settle = (data: Extract<Reply, { type: 'clipkit-flushed' }>, pending: Pending) => {
+const settle = (data: Extract<Reply, { type: 'cueframe-flushed' }>, pending: Pending) => {
   const request = pending.get(data.requestId);
   pending.delete(data.requestId);
   if (!request) {
@@ -40,7 +40,9 @@ const settle = (data: Extract<Reply, { type: 'clipkit-flushed' }>, pending: Pend
     request.resolve();
     return;
   }
-  request.reject(new Error('OpenCut could not save. Resolve the save error before switching.'));
+  request.reject(
+    new Error('The video editor could not save. Resolve the save error and try again.'),
+  );
 };
 export const useOpenCutFrame = () => {
   const frame = useRef<HTMLIFrameElement>(null);
@@ -58,14 +60,14 @@ export const useOpenCutFrame = () => {
       if (!data) {
         return;
       }
-      if (data.type === 'clipkit-command-menu') {
+      if (data.type === 'cueframe-command-menu') {
         window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }));
         return;
       }
-      if (data.type === 'clipkit-ready') {
+      if (data.type === 'cueframe-ready') {
         setReady(true);
       }
-      if (data.type === 'clipkit-flushed') {
+      if (data.type === 'cueframe-flushed') {
         settle(data, pending.current);
       }
     };
@@ -82,7 +84,9 @@ export const useOpenCutFrame = () => {
         const requestId = crypto.randomUUID();
         const timer = setTimeout(() => {
           pending.current.delete(requestId);
-          reject(new Error('OpenCut did not respond. Keep this page open and retry saving.'));
+          reject(
+            new Error('The video editor did not respond. Keep this page open and retry saving.'),
+          );
         }, 15000);
         pending.current.set(requestId, {
           resolve: () => {
@@ -95,7 +99,7 @@ export const useOpenCutFrame = () => {
           },
         });
         frame.current?.contentWindow?.postMessage(
-          { type: 'clipkit-flush', requestId },
+          { type: 'cueframe-flush', requestId },
           location.origin,
         );
       }),
@@ -128,7 +132,9 @@ export const useOpenCutFrame = () => {
       flush()
         .then(() => location.assign(link.href))
         .catch((error: unknown) =>
-          setProblem(error instanceof Error ? error.message : 'Save OpenCut before leaving.'),
+          setProblem(
+            error instanceof Error ? error.message : 'Save the video editor before leaving.',
+          ),
         );
     };
     document.addEventListener('click', click, true);

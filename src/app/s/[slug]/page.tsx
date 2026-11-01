@@ -36,7 +36,7 @@ const PublishedSitePage = async (props: Props) => {
           Check the address, or ask the person who sent it for the link.
         </p>
         <Link href="/" className="text-sm underline underline-offset-4">
-          Go to neuclip
+          Go to cueframe
         </Link>
       </div>
     );

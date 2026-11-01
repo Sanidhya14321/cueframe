@@ -24,7 +24,7 @@ export default defineConfig({
     ? {}
     : {
         webServer: {
-          env: { CLIPKIT_HOME: mkdtempSync(join(tmpdir(), 'clipkit-e2e-')) },
+          env: { CUEFRAME_HOME: mkdtempSync(join(tmpdir(), 'cueframe-e2e-')) },
           command: `bunx next start --hostname 127.0.0.1 --port ${PORT}`,
           url: baseURL,
           timeout: 180_000,

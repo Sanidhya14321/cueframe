@@ -16,7 +16,7 @@ export const generateMetadata = async ({
   const template = findSiteTemplate(templateId);
   return template === undefined
     ? { title: 'Website' }
-    : shareMetadata(`${template.meta.title} · Neuclip`, template.meta.description);
+    : shareMetadata(`${template.meta.title} · cueframe`, template.meta.description);
 };
 
 const TemplatePreviewPage = async ({ params }: { params: Promise<{ templateId: string }> }) => {

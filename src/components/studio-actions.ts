@@ -7,6 +7,7 @@ import {
   Plug,
   Settings,
   SunMoon,
+  Tag,
 } from 'lucide-react';
 
 export const STUDIO_PAGES = [
@@ -30,6 +31,7 @@ export const STUDIO_PAGES = [
     description: 'Providers, keys and local data',
     icon: Settings,
   },
+  { href: '/pricing', label: 'Pricing', description: 'Local and hosted plans', icon: Tag },
   { href: '/websites', label: 'Websites', description: 'Open saved local websites', icon: Globe },
 ] as const;
 

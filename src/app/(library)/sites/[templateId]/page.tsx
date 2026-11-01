@@ -14,7 +14,7 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
   const template = findSiteTemplate((await params).templateId);
   return template === undefined
     ? { title: 'Website' }
-    : shareMetadata(`${template.meta.title} · Neuclip`, template.meta.description);
+    : shareMetadata(`${template.meta.title} · cueframe`, template.meta.description);
 };
 
 const SiteTemplatePage = async ({ params }: Props) => {

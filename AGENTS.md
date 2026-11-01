@@ -1,4 +1,6 @@
-# neuclip
+# cueframe
+
+Two versions ship from this codebase: a free local app users install and run themselves, and a hosted server we run for customers end to end, which is the business model. Keep both working.
 
 A single Next.js project for a library of Remotion animation clips, editable poster packs and
 website templates, with a deep, schema-driven video editor, a canvas image editor and a website
@@ -45,7 +47,7 @@ Everything lives in one package. Modules import each other through the `@/` alia
 - `src/sites` - website templates: per-template Zod content schemas, defaults, metadata and control
   layouts (`templates/<category>/<id>.ts`), slugs, event dates, `.ics` files and the published-site
   check and paths (`published-site.ts`). Pure.
-- `src/local` - local JSON stores, atomic file writes, settings and runtime session protection. The default data folder is `~/ClipKit`; `CLIPKIT_HOME` chooses the initial folder. No accounts or database.
+- `src/local` - local JSON stores, atomic file writes, settings and runtime session protection. The default data folder is `~/cueframe`; `CUEFRAME_HOME` chooses the initial folder. No accounts; YugabyteDB is optional and holds only library search vectors.
 - `src/components/sites` - each template's React website (`templates/<id>/`), the shared canvas
   and the website editor (`editor/`).
 - `src/core` - domain types, the clip project seed and the Zod-schema-to-control introspection.
@@ -59,6 +61,8 @@ Everything lives in one package. Modules import each other through the `@/` alia
 - Tests: `bun test` with happy-dom + Testing Library for unit and component, Playwright for e2e.
 - lefthook runs Biome and the no-comments, em-dash and repository checks pre-commit; typecheck and
   lint pre-push.
+- `.github/workflows/deploy.yml` calls `ci.yml`, then deploys `main` to the hosted Azure VM with
+  `deploy/azure` (see `docs/CUEFRAME_DEPLOY.md`). `ci.yml` has no `push` trigger of its own.
 
 ## Commands
 
@@ -108,7 +112,7 @@ Clips are pluggable, category-organized modules so that parallel authors rarely 
 file. Categories group clips by the type of animation and are defined once in
 `src/schemas/taxonomy.ts` (`CLIP_CATEGORIES`): `kinetic-type`, `text-reveals`, `hand-drawn`,
 `phone-reveals`, `phone-layouts`, `screen-demos`, `desk-scenes`, `overlays`, `list-pickers`, `brand`,
-`ad-reveals`, `backgrounds`, `transitions`, `invitations`.
+`ad-reveals`, `backgrounds`, `transitions`, `invitations`, `imported`.
 Each category also lists search `keywords` (synonyms the gallery search matches). Every
 `ClipMeta` also carries `tags` (from `CLIP_TAGS`) and a `theme` (`light` or `dark`), which the
 gallery search and filters read.
@@ -245,6 +249,20 @@ its current document and the chat's name with each message to `POST /api/agent` 
   `renameChat` tool. Reloaded turns never re-apply their edits.
 - `e2e/media-agent.spec.ts` replays recorded streams, so CI never calls the model.
 
+## Agent video pipeline
+
+cueframe sits between coding agents and video editing: the agent writes and directs the video, and
+every section stays editable until the person exports. Library clips are suggestions, never the
+default.
+
+- `suggest_clips` (`src/agent/beat-suggest.ts`) ranks clips per beat from the Yugabyte metadata
+  vectors, falling back to `src/mcp/clip-vectors.json`, then filters by aspect and a minimum score.
+  It places nothing, and an empty list means no clip fits.
+- `build_from_beatsheet` (`src/agent/beatsheet.ts`) never picks a clip. A segment becomes separate
+  backdrop, headline and subtitle layers (`src/agent/beat-sections.ts`) in the agent's `style`.
+  Only a segment with an explicit `clipId` uses a clip, and the result lists its `unfilledSlots`.
+- `edit_project` lets MCP agents and the in-app chat author primitives with validated JSON Patch.
+
 ## Poster packs and the image editor
 
 The home grid lists clips and poster packs together. A pack card shows a carousel of its pages,
@@ -304,7 +322,7 @@ driven by the template's `defineControls` layout, and the AI editor (media kind 
 `{ templateId, content }`, edits only under `/content`, `src/agent/site.ts`). Drafts autosave to
 `localStorage`. `/preview/<templateId>` shows a template with its defaults.
 
-Saved websites live in `websites.json` in the selected local data folder. The existing `/api/sites` routes validate content and save, draft, rename or delete local websites. `/websites` lists them; `/websites/<id>` edits one; `/s/<slug>` opens a local preview only while ClipKit runs. Template drafts still autosave in localStorage. All saves require the runtime session and matching browser Origin. No cloud publishing is available.
+Saved websites live in `websites.json` in the selected local data folder. The existing `/api/sites` routes validate content and save, draft, rename or delete local websites. `/websites` lists them; `/websites/<id>` edits one; `/s/<slug>` opens a local preview only while cueframe runs. Template drafts still autosave in localStorage. All saves require the runtime session and matching browser Origin. No cloud publishing is available.
 
 To add a template:
 
@@ -319,16 +337,16 @@ To add a template:
 
 ## Local runtime and storage
 
-Clerk, approval roles, API keys, OAuth, Neon and Drizzle have been removed. `src/proxy.ts` permits only loopback hosts, refuses foreign Origins and boots the browser's HttpOnly SameSite runtime cookie. API writes require that cookie and the same Origin, or the app's runtime Bearer token for local CLI/MCP clients. `next.config.ts` generates the runtime token before server workers start. Do not expose or log it.
+`src/proxy.ts` permits only loopback hosts locally, or only the `CUEFRAME_PUBLIC_URL` host behind the single `CUEFRAME_PASSWORD` login when hosted, refuses foreign Origins and boots the browser's HttpOnly SameSite runtime cookie. API writes require that cookie and the same Origin, or the app's runtime Bearer token for local CLI/MCP clients. `next.config.ts` generates the runtime token before server workers start. Do not expose or log it.
 
 `src/local/settings.ts` reads settings from disk, with provider and Fish Audio keys confined to `settings.json` (mode 0600). The settings API returns only key-presence flags. Settings changes use serialized atomic writes; a location pointer contains only the chosen data-folder path. Never log provider error bodies or redirect credential-bearing provider requests.
 
 `src/local/videos.ts` saves videos to `projects/<id>/project.json` and creates `media/` and `out/`. `src/local/sites.ts` saves websites to `websites.json`. IDs are twelve lowercase alphanumeric characters; reject traversal and symlinked project paths. Video projects use revisioned disk actions and SSE; poster drafts remain in localStorage. `src/local/projects.ts` owns project history, presence and comments; uploads and full-fidelity outputs stay within each project folder.
 
-The existing `/mcp` SDK endpoint and video/site/catalog tools now use local stores with no owner argument. Live tools are defined once in `src/agent/project-tools.ts`, registered through `src/mcp/project-tools.ts` and use the same action dispatcher as the browser. `/connect` shows the Claude Code HTTP command. Agent instructions and the Codex bridge remain step 11. Preserve existing tool validation.
+The existing `/mcp` SDK endpoint and video/site/catalog tools now use local stores with no owner argument. Live tools are defined once in `src/agent/project-tools.ts`, registered through `src/mcp/project-tools.ts` and use the same action dispatcher as the browser. `/connect` shows the Claude Code HTTP command. Preserve existing tool validation.
 
-Tests use a temporary `CLIPKIT_HOME` initialized by `tests-preload.ts`; no test reads real user files or calls a database. `tests/local` covers storage, settings and request security. Playwright runs on loopback without sign-in or cloud credentials.
+Tests use a temporary `CUEFRAME_HOME` initialized by `tests-preload.ts`; no test reads real user files or calls a database. `tests/local` covers storage, settings and request security. Playwright runs on loopback without sign-in or cloud credentials.
 
 ## UI design workflow
 
-For every app screen use the project-local Impeccable skill at `.agents/skills/impeccable/SKILL.md`, reading its relevant references. Read `PRODUCT.md` and `DESIGN.md`; use the semantic tokens in `src/app/globals.css` and existing shadcn components. Record critique/audit evidence and screenshots per approved addendum stage in `docs/CLIPKIT_UI_REVIEW.md`. Work through `docs/CLIPKIT_UI_ADDENDUM.md` A-I in order and wait for user go-ahead after each stage. Keep existing artwork and editor behavior intact.
+For every app screen use the project-local Impeccable skill at `.agents/skills/impeccable/SKILL.md`, reading its relevant references. Read `PRODUCT.md` and `DESIGN.md`; use the semantic tokens in `src/app/globals.css` and existing shadcn components. Record critique/audit evidence and screenshots per approved addendum stage in `docs/CUEFRAME_UI_REVIEW.md`. Work through `docs/CUEFRAME_UI_ADDENDUM.md` A-I in order and wait for user go-ahead after each stage. Keep existing artwork and editor behavior intact.

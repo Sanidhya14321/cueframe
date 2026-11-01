@@ -10,7 +10,7 @@ import { findSiteTemplate } from '@/sites/templates';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = { title: 'My websites · Neuclip' };
+export const metadata: Metadata = { title: 'My websites · cueframe' };
 
 const formatDate = (date: Date): string =>
   new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(date);
@@ -19,16 +19,16 @@ const WebsitesPage = async () => {
   const sites = await listSites();
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-10 sm:px-6">
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-5 sm:px-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div className="flex flex-col gap-1">
-          <h1 className="font-semibold text-2xl tracking-tight">My websites</h1>
+          <h1 className="font-display text-2xl">My websites</h1>
           <p className="text-muted-foreground text-sm">
             Websites saved on this computer. Edit one and save changes to its local preview.
           </p>
         </div>
         <Button asChild variant="outline">
-          <Link href="/?type=site">
+          <Link href="/library?type=site">
             <Plus />
             New website
           </Link>

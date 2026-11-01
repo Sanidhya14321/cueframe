@@ -24,6 +24,7 @@ export const useLiveProject = (
   const queue = useRef(Promise.resolve());
   const clientId = useRef('');
   const pending = useRef(0);
+  const failure = useRef('');
   latest.current = state;
   view.current = value;
   const accept = useCallback((next: PublicProjectState) => {
@@ -124,11 +125,13 @@ export const useLiveProject = (
             setValue(next.project);
             view.current = next.project;
           }
+          failure.current = '';
           setProblem('');
         })
-        .catch((error: unknown) =>
-          setProblem(error instanceof Error ? error.message : 'Save failed.'),
-        )
+        .catch((error: unknown) => {
+          failure.current = error instanceof Error ? error.message : 'Save failed.';
+          setProblem(failure.current);
+        })
         .finally(() => {
           pending.current -= 1;
           setStatus(pending.current === 0 ? 'Saved locally' : 'Saving…');
@@ -156,10 +159,17 @@ export const useLiveProject = (
     },
     [send],
   );
+  const settled = useCallback(async () => {
+    await queue.current;
+    if (failure.current) {
+      throw new Error(failure.current);
+    }
+  }, []);
   return {
     value,
     state,
     status,
+    settled,
     problem,
     clearProblem: () => setProblem(''),
     set: (next: Project) => change(next, false),

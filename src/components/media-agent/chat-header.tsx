@@ -72,7 +72,7 @@ const RenameField = ({
       aria-label="Chat name"
       maxLength={60}
       ref={field}
-      className="h-7 w-full min-w-0 rounded-md border bg-background px-2 font-medium text-base outline-none focus:border-violet-500/60 focus:ring-2 focus:ring-violet-500/20 sm:text-sm"
+      className="h-7 w-full min-w-0 rounded-md border bg-background px-2 font-medium text-base outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary sm:text-sm"
     />
   );
 };

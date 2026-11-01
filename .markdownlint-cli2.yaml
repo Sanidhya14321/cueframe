@@ -24,3 +24,4 @@ ignores:
   - "**/coverage/**"
   - "**/playwright-report/**"
   - "**/test-results/**"
+  - ".agents/**"

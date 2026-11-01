@@ -11,9 +11,12 @@ import {
   createId,
   createTrack,
   defaultAnimation,
+  type Element,
   identityTransform,
 } from '@/project';
 import { getClipDefaults, getClipSchema, isClipId } from '@/schemas';
+import { type BeatStyle, beatStyleSchema, sectionElements, styleColor } from './beat-sections';
+import { BEAT_ROLES } from './beat-suggest';
 import { clipCatalog } from './catalog';
 
 export const beatsheetSchema = z.object({
@@ -21,20 +24,24 @@ export const beatsheetSchema = z.object({
   aspect: z.enum(['landscape', 'portrait', 'square']).default('landscape'),
   targetSeconds: z.number().min(8).max(120).default(30),
   musicFile: z.string().optional(),
+  style: beatStyleSchema.prefault({}),
   segments: z
     .array(
       z.object({
-        role: z.enum(['hook', 'point', 'proof', 'turn', 'cta']),
+        role: z.enum(BEAT_ROLES),
         text: z.string().min(1).max(64),
+        subtitle: z.string().max(120).optional(),
         energy: z.number().int().min(1).max(5),
         voiceLine: z.string().max(1000).optional(),
+        clipId: z.string().optional(),
+        props: z.record(z.string(), z.unknown()).optional(),
       }),
     )
     .min(12)
     .max(16),
 });
 export type Beatsheet = z.infer<typeof beatsheetSchema>;
-const roles = { hook: 'opener', point: 'feature', proof: 'proof', turn: 'transition', cta: 'cta' };
+type Segment = Beatsheet['segments'][number];
 const audioItem = (
   src: string,
   from: number,
@@ -51,66 +58,109 @@ const audioItem = (
   volume,
   transform: identityTransform(),
 });
-const paletteColor = (path: string): string => {
-  if (/background/.test(path)) {
-    return '#0b0d17';
-  }
-  if (/surface/.test(path)) {
-    return '#1c2035';
-  }
-  return /ink|text|foreground/.test(path) ? '#f5f3ff' : '#a78bfa';
-};
-const chooseClip = (
-  segment: Beatsheet['segments'][number],
-  index: number,
-  previous: string,
-  aspect: string,
-) => {
-  const candidates = clipCatalog
-    .filter(
-      (clip) =>
-        clip.textSlots.length > 0 &&
-        clip.aspectSupport.includes(aspect) &&
-        clip.id !== previous &&
-        clip.roles.includes(roles[segment.role] ?? 'feature'),
-    )
-    .sort(
-      (a, b) =>
-        Math.abs(a.energy - segment.energy) - Math.abs(b.energy - segment.energy) ||
-        a.id.localeCompare(b.id),
-    );
-  const choice =
-    candidates[index % candidates.length] ?? clipCatalog.find((clip) => clip.id === 'word-build');
+const chosenClip = (clipId: string, aspect: string) => {
+  const choice = clipCatalog.find((clip) => clip.id === clipId);
   if (!(choice && isClipId(choice.id))) {
-    throw new ProjectProblem('No suitable catalog clip.');
+    throw new ProjectProblem(`Unknown clip ${clipId}. Use suggest_clips.`);
+  }
+  if (!choice.aspectSupport.includes(aspect)) {
+    throw new ProjectProblem(`Clip ${clipId} does not support ${aspect}.`);
   }
   return { ...choice, id: choice.id };
 };
-const segmentProps = (choice: ReturnType<typeof chooseClip>, text: string) => {
-  let props: Record<string, unknown> = structuredClone(getClipDefaults(choice.id)) as Record<
-    string,
-    unknown
-  >;
+const clipProps = (
+  choice: ReturnType<typeof chosenClip>,
+  segment: Segment,
+  style: BeatStyle,
+): { props: Record<string, unknown>; unfilledSlots: string[] } => {
+  const defaults = getClipDefaults(choice.id) as Record<string, unknown>;
+  let props = structuredClone(defaults);
   const slot =
     choice.textSlots.find((field) => /(^|\.)(text|title|headline|brandName)$/.test(field.path)) ??
     choice.textSlots[0];
   if (slot) {
-    props = setAtPath(props, slot.path.split('.'), text) as Record<string, unknown>;
+    props = setAtPath(props, slot.path.split('.'), segment.text) as Record<string, unknown>;
+  }
+  const subtitle = choice.textSlots.find((field) => /(^|\.)subtitle$/.test(field.path));
+  if (subtitle && segment.subtitle) {
+    props = setAtPath(props, subtitle.path.split('.'), segment.subtitle) as Record<string, unknown>;
   }
   for (const field of describeControlPaths(getClipSchema(choice.id)).values()) {
-    if (/font/i.test(field.path.join('.'))) {
-      const font = /subtitle|secondary/i.test(field.path.join('.')) ? 'Instrument Serif' : 'Inter';
-      if (field.kind === 'text' || (field.kind === 'enum' && field.options.includes(font))) {
-        props = setAtPath(props, field.path, font) as Record<string, unknown>;
-      }
+    const path = field.path.join('.');
+    if (
+      /font/i.test(path) &&
+      (field.kind === 'text' || (field.kind === 'enum' && field.options.includes(style.font)))
+    ) {
+      props = setAtPath(props, field.path, style.font) as Record<string, unknown>;
     }
     if (field.kind === 'color') {
-      const path = field.path.join('.').toLowerCase();
-      const color = paletteColor(path);
-      props = setAtPath(props, field.path, color) as Record<string, unknown>;
+      props = setAtPath(props, field.path, styleColor(style, path.toLowerCase())) as Record<
+        string,
+        unknown
+      >;
     }
   }
-  return props;
+  const merged = { ...props, ...segment.props };
+  const read = (source: Record<string, unknown>, path: string) =>
+    path
+      .split('.')
+      .reduce<unknown>((value, key) => (value as Record<string, unknown>)?.[key], source);
+  return {
+    props: merged,
+    unfilledSlots: choice.textSlots
+      .map((field) => field.path)
+      .filter((path) => read(merged, path) === read(defaults, path)),
+  };
+};
+const checkSegments = ({ segments, aspect }: Beatsheet) => {
+  if (segments.some((segment) => segment.text.trim().split(/\s+/).length > 4)) {
+    throw new ProjectProblem('Use 1 to 4 words per segment.');
+  }
+  for (const { clipId } of segments) {
+    if (clipId) {
+      chosenClip(clipId, aspect);
+    }
+  }
+};
+type SegmentSlot = { from: number; duration: number; width: number; height: number };
+const placeSegment = async (
+  input: Beatsheet,
+  actor: string,
+  segment: Segment,
+  tracks: Record<'headlines' | 'details' | 'sections', { id: string }>,
+  { from, duration, width, height }: SegmentSlot,
+) => {
+  const add = (trackId: string, element: Element, label: string) =>
+    commitAction(input.projectId, { type: 'add-item', trackId, element }, { actor, label });
+  const beatLabel = `${segment.role}: ${segment.text}`;
+  const placed = { from, duration, voiceLine: segment.voiceLine };
+  if (segment.clipId) {
+    const choice = chosenClip(segment.clipId, input.aspect);
+    const { props, unfilledSlots } = clipProps(choice, segment, input.style);
+    const element = createCompositionElement(choice.id, props, {
+      from,
+      durationInFrames: duration,
+      voiceLine: segment.voiceLine ?? segment.text,
+      animation: { ...defaultAnimation(), durationInFrames: Math.min(6, duration) },
+    });
+    await add(tracks.sections.id, element, beatLabel);
+    return { ...placed, id: element.id, clipId: choice.id as string, unfilledSlots };
+  }
+  const { backdrop, headline, detail } = sectionElements(input.style, {
+    text: segment.text,
+    subtitle: segment.subtitle,
+    energy: segment.energy,
+    from,
+    duration,
+    width,
+    height,
+  });
+  await add(tracks.sections.id, backdrop, `Backdrop: ${segment.text}`);
+  await add(tracks.headlines.id, headline, beatLabel);
+  if (detail) {
+    await add(tracks.details.id, detail, `Detail: ${segment.subtitle}`);
+  }
+  return { ...placed, id: headline.id };
 };
 export const buildFromBeatsheet = async (input: Beatsheet, actor: string) => {
   const state = await readProject(input.projectId);
@@ -125,16 +175,20 @@ export const buildFromBeatsheet = async (input: Beatsheet, actor: string) => {
       `At ${bpm} BPM, choose a target between ${Math.ceil((count * 2 * 60) / bpm)} and ${Math.floor((count * 4 * 60) / bpm)} seconds for ${count} segments.`,
     );
   }
-  if (input.segments.some((segment) => segment.text.trim().split(/\s+/).length > 4)) {
-    throw new ProjectProblem('Use 1 to 4 words per segment.');
-  }
+  checkSegments(input);
   await setAgentStatus(input.projectId, actor, {
     status: 'working',
     label: 'Building the beat sheet',
     itemIds: [],
     name: actor === 'agent:mcp' ? 'MCP agent' : 'Beat-sheet builder',
   });
-  const tracks = [createTrack('Clips'), createTrack('Sound effects'), createTrack('Music')];
+  const tracks = [
+    createTrack('Headlines'),
+    createTrack('Details'),
+    createTrack('Sections'),
+    createTrack('Sound effects'),
+    createTrack('Music'),
+  ];
   const sizes = { landscape: [1920, 1080], portrait: [1080, 1920], square: [1080, 1080] } as const;
   const [width, height] = sizes[input.aspect];
   const total = Math.round(input.targetSeconds * fps);
@@ -145,6 +199,7 @@ export const buildFromBeatsheet = async (input: Beatsheet, actor: string) => {
       operations: [
         { op: 'replace', path: '/width', value: width },
         { op: 'replace', path: '/height', value: height },
+        { op: 'replace', path: '/background', value: input.style.background },
         {
           op: 'replace',
           path: '/durationInFrames',
@@ -161,16 +216,12 @@ export const buildFromBeatsheet = async (input: Beatsheet, actor: string) => {
       { actor, label: `Add ${track.name}` },
     );
   }
-  const clips = tracks[0];
-  const effects = tracks[1];
-  const music = tracks[2];
-  if (!(clips && effects && music)) {
+  const [headlines, details, sections, effects, music] = tracks;
+  if (!(headlines && details && sections && effects && music)) {
     throw new ProjectProblem('Could not create tracks.');
   }
   let from = 0;
-  let previous = '';
-  const items: { id: string; from: number; duration: number; voiceLine?: string | undefined }[] =
-    [];
+  const items: Awaited<ReturnType<typeof placeSegment>>[] = [];
   const whoosh = await saveMedia(
     input.projectId,
     synthesizeSound(0.16, bpm, 'whoosh'),
@@ -178,23 +229,24 @@ export const buildFromBeatsheet = async (input: Beatsheet, actor: string) => {
   );
   const hit = await saveMedia(input.projectId, synthesizeSound(0.18, bpm, 'hit'), 'audio/wav');
   for (const [index, segment] of input.segments.entries()) {
-    const choice = chooseClip(segment, index, previous, input.aspect);
-    const props = segmentProps(choice, segment.text);
     const beatStart = Math.round((index * availableBeats) / count);
     const beatEnd = Math.round(((index + 1) * availableBeats) / count);
     const duration =
       index === count - 1 ? total - from : Math.round((((beatEnd - beatStart) * 60) / bpm) * fps);
-    const element = createCompositionElement(choice.id, props, {
-      from,
-      durationInFrames: duration,
-      voiceLine: segment.voiceLine ?? segment.text,
-      animation: { ...defaultAnimation(), durationInFrames: Math.min(6, duration) },
-    });
-    await commitAction(
-      input.projectId,
-      { type: 'add-item', trackId: clips.id, element },
-      { actor, label: `${segment.role}: ${segment.text}` },
+    const placed = await placeSegment(
+      input,
+      actor,
+      segment,
+      { headlines, details, sections },
+      {
+        from,
+        duration,
+        width,
+        height,
+      },
     );
+    const itemId = placed.id;
+    items.push(placed);
     await commitAction(
       input.projectId,
       {
@@ -227,13 +279,11 @@ export const buildFromBeatsheet = async (input: Beatsheet, actor: string) => {
         { actor, label: 'Cut whoosh' },
       );
     }
-    items.push({ id: element.id, from, duration, voiceLine: segment.voiceLine });
     from += duration;
-    previous = choice.id;
     await setAgentStatus(input.projectId, actor, {
       status: 'working',
       label: `${index + 1}/${count}: ${segment.text}`,
-      itemIds: [element.id],
+      itemIds: [itemId],
       name: 'Beat-sheet builder',
     });
     await new Promise((resolve) => setTimeout(resolve, 180));

@@ -31,6 +31,31 @@ await cp(
   resolve(overrides, 'scene-exporter.ts'),
   resolve(root, 'services/renderer/scene-exporter.ts'),
 );
+const patch = async (path: string, pattern: RegExp, replacement: string) => {
+  const code = await Bun.file(path).text();
+  if (!pattern.test(code)) {
+    throw new Error(`OpenCut patch no longer applies to ${path}`);
+  }
+  await Bun.write(path, code.replace(pattern, replacement));
+};
+await patch(
+  resolve(root, 'services/renderer/compositor/frame-descriptor.ts'),
+  /type: "sceneEffect",\s+effectPassGroups:/,
+  'type: "sceneEffect", effect_pass_groups:',
+);
+await patch(
+  resolve(root, 'services/renderer/compositor/types.ts'),
+  /type: "sceneEffect";\s+effectPassGroups:/,
+  'type: "sceneEffect"; effect_pass_groups:',
+);
+const textPath = resolve(root, 'text/primitives.ts');
+await patch(textPath, /\tconst lines = text\.content\.split\("\\n"\);\r?\n/, '');
+await patch(
+  textPath,
+  /const lineMetrics = lines\.map\(/,
+  'const lines = wrapTextLines({ content: text.content, canvasHeight, ctx });\n\tconst lineMetrics = lines.map(',
+);
+await patch(textPath, /^/, 'import { wrapTextLines } from "@cueframe-text-wrap";\n');
 const managerPath = resolve(root, 'core/managers/project-manager.ts');
 const manager = await Bun.file(managerPath).text();
 await Bun.write(
@@ -51,6 +76,11 @@ await Bun.write(
       'if (this.hasPendingSave && !this.isPaused) {\r\n\t\t\t\tthis.queueSave();',
     )
     .replace('void this.saveNow();', 'void this.saveNow().catch(() => undefined);'),
+);
+await patch(
+  savePath,
+  /async flush\(\): Promise<void> \{\s+this\.hasPendingSave = true;/,
+  'async flush(): Promise<void> { this.hasPendingSave = true; while (this.isSaving) { await new Promise((settle) => setTimeout(settle, 25)); }',
 );
 const effectPath = resolve(root, 'services/renderer/effect-preview.ts');
 const effects = await Bun.file(effectPath).text();
@@ -138,14 +168,43 @@ await Bun.write(
   scenesPath,
   (await Bun.file(scenesPath).text()).replace(
     '<SceneSelector />',
-    '<span className="px-3 text-xs">Main timeline</span>',
+    '<span className="px-3 text-xs">Main timeline</span><button type="button" className="px-2 text-xs text-muted-foreground hover:text-foreground" onClick={() => window.dispatchEvent(new Event("cueframe-fit-timeline"))}>Fit timeline</button>',
   ),
+);
+const timelineView = resolve(root, 'timeline/components/index.tsx');
+await Bun.write(
+  timelineView,
+  `import { TICKS_PER_SECOND as CUEFRAME_TICKS } from "@/wasm";\n${(
+    await Bun.file(timelineView).text()
+  )
+    .replace(
+      'ref={tracksScrollRef}',
+      'ref={tracksScrollRef} data-cueframe-timeline-zoom={zoomLevel}',
+    )
+    .replace(
+      'const expandedElementIds = useTimelineStore(',
+      `const cueframeFitted = useRef(false);
+	const cueframeFit = useCallback(() => {
+		const seconds = Math.max(timeline.getTotalDuration() / CUEFRAME_TICKS, 1);
+		setZoomLevel((containerWidth * 0.9) / (seconds * 50));
+	}, [containerWidth, setZoomLevel, timeline]);
+	useEffect(() => {
+		if (!cueframeFitted.current && tracksContainerWidth && timelineDuration > 0) {
+			cueframeFitted.current = true;
+			cueframeFit();
+		}
+		window.addEventListener("cueframe-fit-timeline", cueframeFit);
+		return () => window.removeEventListener("cueframe-fit-timeline", cueframeFit);
+	}, [cueframeFit, tracksContainerWidth, timelineDuration]);
+
+	const expandedElementIds = useTimelineStore(`,
+    )}`,
 );
 const timelineManager = resolve(root, 'core/managers/timeline-manager.ts');
 const managerCode = await Bun.file(timelineManager).text();
 await Bun.write(
   timelineManager,
-  'import {guardNativeTracks} from "@clipkit-native-locks";\n' +
+  'import {guardNativeTracks} from "@cueframe-native-locks";\n' +
     managerCode.replace(
       'updateTracks(newTracks: SceneTracks): void {',
       'updateTracks(newTracks: SceneTracks): void { if(!guardNativeTracks(newTracks)) {return;}',
@@ -167,8 +226,9 @@ await build({
       'next/image': resolve(overrides, 'image.tsx'),
       'next/link': resolve(overrides, 'link.tsx'),
       'next/navigation': resolve(overrides, 'navigation.ts'),
-      '@clipkit-native-locks': resolve(overrides, 'locks.ts'),
-      '@clipkit': resolve(here, '../../src'),
+      '@cueframe-native-locks': resolve(overrides, 'locks.ts'),
+      '@cueframe-text-wrap': resolve(overrides, 'text-wrap.ts'),
+      '@cueframe': resolve(here, '../../src'),
       '@': root,
     },
     dedupe: ['react', 'react-dom'],

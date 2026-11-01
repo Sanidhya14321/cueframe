@@ -40,7 +40,7 @@ export const EditorSidebar = ({
             className={cn(
               'flex w-16 shrink-0 flex-col items-center gap-1 rounded-lg py-1.5 text-[11px] transition-colors md:py-2',
               active === id
-                ? 'bg-violet-500/12 text-violet-600 dark:text-violet-300'
+                ? 'bg-primary/12 text-primary'
                 : 'text-muted-foreground hover:bg-accent hover:text-foreground',
             )}
           >

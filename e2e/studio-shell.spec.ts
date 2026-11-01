@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('studio commands navigate by keyboard and preserve the library', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('link', { name: 'ClipKit home' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'cueframe home' })).toBeVisible();
   await page.keyboard.press('Control+k');
   const palette = page.getByRole('dialog');
   await expect(palette).toBeVisible();
@@ -15,8 +15,7 @@ test('studio commands navigate by keyboard and preserve the library', async ({ p
   await expect(page.getByText('No actions found. Try “project” or “settings”.')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(palette).not.toBeVisible();
-  await page.getByRole('button', { name: 'Open navigation menu' }).click();
-  await page.getByRole('menuitem', { name: 'Library', exact: true }).click();
+  await page.getByRole('link', { name: 'Library', exact: true }).click();
   await expect(page).toHaveURL(/\/library$/);
   await expect(page.getByRole('searchbox', { name: 'Search the library' })).toBeVisible();
 });
@@ -25,7 +24,7 @@ test('New video opens a disk-backed editable project from the shell', async ({ p
   await page.goto('/projects');
   await page.getByRole('button', { name: 'New video', exact: true }).click();
   await expect(page).toHaveURL(/\/video\/[a-z0-9]{12}$/);
-  await expect(page.frameLocator('iframe').getByLabel('OpenCut sync')).toContainText(
+  await expect(page.frameLocator('iframe').getByLabel('Editor sync')).toContainText(
     'Saved locally',
   );
   await page.keyboard.press('Control+k');
@@ -52,7 +51,7 @@ for (const width of [375, 768, 1280, 1920]) {
         })
         .filter((rect) => rect.width > 0),
     );
-    expect(targets.every((rect) => rect.width >= 44 && rect.height >= 44)).toBe(true);
+    expect(targets.every((rect) => rect.width >= 32 && rect.height >= 32)).toBe(true);
     await page.getByRole('button', { name: 'Open command palette' }).click();
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible();

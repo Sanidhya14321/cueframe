@@ -1,0 +1,55 @@
+services:
+  yugabyte-volume:
+    image: yugabytedb/yugabyte:2026.1.2.0-b137
+    user: root
+    entrypoint: ["chown", "-R", "10001:100", "/home/yugabyte/var"]
+    restart: "no"
+    volumes:
+      - yugabyte-data:/home/yugabyte/var
+  yugabyte:
+    image: yugabytedb/yugabyte:2026.1.2.0-b137
+    hostname: yugabyte
+    command: ["bin/yugabyted", "start", "--background=false", "--base_dir=/home/yugabyte/var", "--advertise_address=yugabyte"]
+    volumes:
+      - yugabyte-data:/home/yugabyte/var
+    depends_on:
+      yugabyte-volume:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "bin/ysqlsh -h $$(hostname) -c 'select 1'"]
+      interval: 10s
+      retries: 30
+      start_period: 30s
+  cueframe:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      yugabyte:
+        condition: service_healthy
+    ports:
+      - 127.0.0.1:3000:3000
+    environment:
+      YUGABYTE_DATABASE_URL: postgresql://yugabyte:yugabyte@yugabyte:5433/yugabyte
+      AGENT_BASE_URL: ${AGENT_BASE_URL:-}
+      AGENT_MODEL: ${AGENT_MODEL:-}
+      AGENT_API_KEY: ${AGENT_API_KEY:-}
+      FISH_AUDIO_API_KEY: ${FISH_AUDIO_API_KEY:-}
+      CUEFRAME_PUBLIC_URL: ${CUEFRAME_PUBLIC_URL:-http://localhost:3000}
+      CUEFRAME_SESSION_TOKEN: ${CUEFRAME_SESSION_TOKEN:-}
+      CUEFRAME_PASSWORD: ${CUEFRAME_PASSWORD:?Set your owner password in .env}
+    volumes:
+      - cueframe-data:/data
+  library-index:
+    build: .
+    command: ["bun", "run", "library:index"]
+    restart: "no"
+    depends_on:
+      yugabyte:
+        condition: service_healthy
+    environment:
+      YUGABYTE_DATABASE_URL: postgresql://yugabyte:yugabyte@yugabyte:5433/yugabyte
+    volumes:
+      - cueframe-data:/data
+volumes:
+  yugabyte-data:
+  cueframe-data:

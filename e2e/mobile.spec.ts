@@ -6,7 +6,7 @@ const pageWidth = (page: Page) =>
   page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
 
 test('the library fits a phone screen and keeps the nav pinned', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/library');
   await expect(page.getByRole('searchbox', { name: 'Search the library' })).toBeVisible();
   expect(await pageWidth(page)).toBe(0);
   await page.mouse.wheel(0, 4000);

@@ -21,15 +21,15 @@ export const StudioShell = ({ children }: { children: ReactNode }) => {
       >
         Skip to content
       </a>
-      <header className="studio-topbar sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between gap-1 border-b bg-background px-2 sm:gap-3 sm:px-4">
+      <header className="studio-topbar sticky top-0 z-30 flex h-11 shrink-0 items-center justify-between gap-1 border-b bg-background px-2 sm:gap-3 sm:px-4">
         <div className="flex min-w-0 items-center gap-1 sm:gap-4">
           <Link
             href="/"
-            aria-label="ClipKit home"
+            aria-label="cueframe home"
             className="flex min-h-11 shrink-0 items-center gap-2 pr-1 font-semibold tracking-tight sm:pr-2"
           >
             <Clapperboard className="size-5 text-primary" />
-            <span>ClipKit</span>
+            <span>cueframe</span>
           </Link>
           <Button
             type="button"

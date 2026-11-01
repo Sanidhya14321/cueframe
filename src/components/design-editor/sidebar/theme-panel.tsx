@@ -170,7 +170,7 @@ const ofKind = <Kind extends DesignControl['kind']>(
 ): ControlOf<Kind>[] =>
   controls.filter((control): control is ControlOf<Kind> => control.kind === kind);
 
-export const ColorControls = ({ editor }: { editor: DesignEditorState }) => {
+const ColorControls = ({ editor }: { editor: DesignEditorState }) => {
   const colors = ofKind(editor.design.controls, 'color');
   return colors.length === 0 ? null : (
     <div className="flex flex-col gap-3" data-testid="color-controls">

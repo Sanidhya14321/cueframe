@@ -75,13 +75,24 @@ export const saveOpenCut = async (id: string, input: unknown) => {
   return serialDisk(path, async () => {
     const current = await readOpenCut(id);
     if (current.version !== change.version) {
-      throw new ProjectProblem('OpenCut changed in another tab. Reload before editing again.', 409);
+      throw new ProjectProblem(
+        'This video changed in another tab. Reload before editing again.',
+        409,
+      );
     }
     if (change.document && change.document.metadata.id !== id) {
-      throw new ProjectProblem('OpenCut project ID does not match.');
+      throw new ProjectProblem('Video project ID does not match.');
     }
-    if (change.media?.some((asset) => !asset.url.startsWith(`/api/projects/${id}/media/`))) {
-      throw new ProjectProblem('OpenCut media must be stored in this project.');
+    if (
+      change.media?.some(
+        (asset) =>
+          !(
+            asset.url.startsWith(`/api/projects/${id}/media/`) ||
+            /^\/previews\/[a-z0-9-]+\.mp4$/.test(asset.url)
+          ),
+      )
+    ) {
+      throw new ProjectProblem('Video media must be stored in this project.');
     }
     if (change.document && !change.project) {
       const existing = await readProject(id);
@@ -91,7 +102,7 @@ export const saveOpenCut = async (id: string, input: unknown) => {
     }
     if (change.document && change.document.scenes.length !== 1) {
       throw new ProjectProblem(
-        'ClipKit shares one main timeline. Use tracks within the main scene.',
+        'cueframe shares one main timeline. Use tracks within the main scene.',
       );
     }
     if (change.document) {
@@ -116,7 +127,7 @@ export const saveOpenCut = async (id: string, input: unknown) => {
         {
           actor: `browser:${change.clientId ?? 'opencut'}`,
           revision: change.canonicalRevision,
-          label: 'Edit in OpenCut',
+          label: 'Edit in video editor',
           title: change.document.metadata.name,
           ...(change.summary
             ? { nativeVideo: { ...change.summary, revision: current.version + 1 } }

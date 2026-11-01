@@ -33,7 +33,7 @@ export const ShareDialog = ({
         <DialogHeader>
           <DialogTitle>Your local website is ready</DialogTitle>
           <DialogDescription>
-            Open this preview on this computer while ClipKit is running. Saved websites are listed
+            Open this preview on this computer while cueframe is running. Saved websites are listed
             under Websites.
           </DialogDescription>
         </DialogHeader>

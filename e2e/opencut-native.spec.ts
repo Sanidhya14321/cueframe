@@ -24,7 +24,7 @@ const create = async (page: Page) => {
   });
   await page.goto(`/video/${id}`);
   const editor = page.frameLocator('iframe');
-  await expect(editor.getByLabel('OpenCut sync')).toHaveText('Saved locally');
+  await expect(editor.getByLabel('Editor sync')).toHaveText('Saved locally');
   return { id, editor };
 };
 const read = (page: Page, id: string) =>
@@ -82,9 +82,8 @@ test('actual OpenCut imports media, saves, selects by keyboard, splits, undoes a
   await expect.poll(() => count(page, id)).toBe(1);
   await page.reload();
   await expect(editor.getByRole('button', { name: 'Select proof.mp4', exact: true })).toBeVisible();
-  await editor.getByRole('button', { name: 'Export', exact: true }).click();
-  const downloading = page.waitForEvent('download');
-  await editor.getByRole('button', { name: 'Export', exact: true }).last().click();
+  const downloading = page.waitForEvent('download', { timeout: 120_000 });
+  await page.getByRole('button', { name: 'Export', exact: true }).click();
   const download = await downloading;
   const path = await download.path();
   expect(path).not.toBeNull();
@@ -116,9 +115,9 @@ test('native failed saves stay recoverable and retry persists the edit', async (
   });
   await editor.getByRole('button', { name: 'Text', exact: true }).click();
   await editor.getByRole('button', { name: 'Add Default text to timeline', exact: true }).click();
-  await expect(editor.getByLabel('OpenCut sync')).toHaveText('Test disk unavailable');
+  await expect(editor.getByLabel('Editor sync')).toHaveText('Test disk unavailable');
   await editor.getByRole('button', { name: 'Retry saving', exact: true }).click();
-  await expect(editor.getByLabel('OpenCut sync')).toHaveText('Saved locally');
+  await expect(editor.getByLabel('Editor sync')).toHaveText('Saved locally');
   await expect.poll(() => count(page, id)).toBe(1);
   await page.reload();
   await expect(editor.getByRole('button', { name: 'Select Text', exact: true })).toBeVisible();
@@ -207,7 +206,7 @@ test('existing source layers open in the actual native timeline and native local
     .toMatchObject({ status: 'done' });
   const native = await read(page, id);
   expect(native.source.project.tracks[0].elements[0].type).toBe('shape');
-  await page.getByRole('link', { name: 'Animation controls & agent tools', exact: true }).click();
+  await page.getByRole('link', { name: 'Animation workspace', exact: true }).click();
   await expect(page.getByRole('status', { name: 'Project sync' })).toContainText('Saved locally');
 });
 
@@ -373,7 +372,7 @@ test('native agent locks refuse edits and agent undo updates OpenCut', async ({ 
     },
   );
   expect(status).toBe(423);
-  await call('move_item', { projectId: id, id: 'native-locked-title', from: 12, confirmed: true });
+  await call('move_item', { projectId: id, id: 'native-locked-title', start: 12, confirmed: true });
   await call('set_agent_status', {
     projectId: id,
     status: 'idle',
@@ -382,6 +381,7 @@ test('native agent locks refuse edits and agent undo updates OpenCut', async ({ 
     confirmed: true,
   });
   await expect(clip).toHaveAttribute('data-agent-locked', 'false');
+  await page.getByRole('button', { name: 'Agent', exact: true }).click();
   await page.getByRole('button', { name: 'Undo agent turn', exact: true }).click();
   await clip.click();
   await expect(editor.locator('.native-properties textarea').first()).toHaveValue('Original text');

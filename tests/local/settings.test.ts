@@ -20,19 +20,22 @@ describe('local settings', () => {
       apiKey: 'test-provider-secret',
       fishAudioKey: 'test-voice-secret',
       model: 'test-model',
+      yugabyteUrl: 'postgresql://localhost:5433/test-vector-database',
     });
     const response = await GET(request());
     const text = await response.text();
     expect(text).not.toContain('test-provider-secret');
     expect(text).not.toContain('test-voice-secret');
+    expect(text).not.toContain('test-vector-database');
     expect(JSON.parse(text)).toMatchObject({ hasApiKey: true, hasFishAudioKey: true });
     expect((await readSettings()).apiKey).toBe('test-provider-secret');
     expect((await stat(join(configFolder(), 'settings.json'))).mode & 0o777).toBe(0o600);
   });
   it('preserves omitted secrets and removes them explicitly', async () => {
-    await saveSettings({ apiKey: 'keep-me' });
+    await saveSettings({ apiKey: 'keep-me', yugabyteUrl: 'postgresql://localhost:5433/library' });
     await saveSettings({ model: 'another-model' });
     expect((await readSettings()).apiKey).toBe('keep-me');
+    expect((await readSettings()).yugabyteUrl).toBe('postgresql://localhost:5433/library');
     await saveSettings({ clearApiKey: true });
     expect((await readSettings()).apiKey).toBe('');
   });
@@ -59,5 +62,17 @@ describe('local settings', () => {
     expect(
       (await PUT(new Request('http://127.0.0.1:3000/api/settings', { method: 'PUT' }))).status,
     ).toBe(401);
+  });
+});
+
+describe('settings recovery', () => {
+  it('sets a corrupt settings file aside and starts from defaults', async () => {
+    const { readdir, writeFile: write } = await import('node:fs/promises');
+    const path = await import('node:path');
+    const settings = await import('@/local/settings');
+    const { dataFolder } = await settings.readSettings();
+    await write(path.join(dataFolder, 'settings.json'), '{broken');
+    expect((await settings.readSettings()).apiKey).toBe('');
+    expect((await readdir(dataFolder)).some((name) => name.includes('.corrupt-'))).toBe(true);
   });
 });

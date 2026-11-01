@@ -100,8 +100,8 @@ export const SettingsForm = () => {
           onChange={(event) => setSettings({ ...settings, dataFolder: event.target.value })}
         />
         <p className="text-muted-foreground text-xs">
-          Defaults to ~/ClipKit. Switching folders does not move existing projects. Keys are stored
-          in that folder’s settings.json; a location pointer stays in the original ClipKit folder.
+          Defaults to ~/cueframe. Switching folders does not move existing projects. Keys are stored
+          in that folder’s settings.json; a location pointer stays in the original cueframe folder.
         </p>
       </fieldset>
       <fieldset className="flex flex-col gap-3" disabled={busy}>

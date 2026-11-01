@@ -58,7 +58,7 @@ export const PublishDialog = ({
           <DialogTitle>Save website locally</DialogTitle>
           <DialogDescription>
             Choose a local address. This website stays on this computer and is available only while
-            ClipKit is running.
+            cueframe is running.
           </DialogDescription>
         </DialogHeader>
         <form

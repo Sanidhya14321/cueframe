@@ -36,11 +36,11 @@ const editorial = localFont({
 
 export const metadata: Metadata = {
   ...shareMetadata(
-    'ClipKit',
+    'cueframe',
     'Editable motion clips, poster packs and websites. Change anything in the browser, then export or publish.',
   ),
   metadataBase: SITE_URL,
-  appleWebApp: { title: 'ClipKit', statusBarStyle: 'black-translucent' },
+  appleWebApp: { title: 'cueframe', statusBarStyle: 'black-translucent' },
 };
 
 export const viewport: Viewport = {

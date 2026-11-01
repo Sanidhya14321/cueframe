@@ -6,6 +6,7 @@ import { useKeybindingsStore } from '@/actions/keybindings-store';
 import { useEditorActions } from '@/actions/use-editor-actions';
 import { useKeybindingsListener } from '@/actions/use-keybindings';
 import { ExportButton } from '@/components/editor/export-button';
+import { useAssetsPanelStore } from '@/components/editor/panels/assets/assets-panel-store';
 import { MediaView } from '@/components/editor/panels/assets/views/assets';
 import { SettingsView } from '@/components/editor/panels/assets/views/settings';
 import { PropertiesPanel } from '@/components/editor/panels/properties';
@@ -22,8 +23,12 @@ import { Timeline } from '@/timeline/components';
 import { buildElementFromMedia } from '@/timeline/element-utils';
 import { useTimelineStore } from '@/timeline/timeline-store';
 import { mediaTimeFromSeconds, ZERO_MEDIA_TIME } from '@/wasm';
+import { CaptionsView } from './captions-panel';
 import { HostContext } from './host-context';
+import { LibraryView, libraryDropTarget } from './library-panel';
+import { ScenesView } from './scenes-panel';
 import { connectCanonical, hydrateCanonical, storageService } from './storage';
+import { TimelineDivider } from './workspace-split';
 import './style.css';
 
 function syncTheme() {
@@ -115,7 +120,7 @@ async function open() {
     if (!response.ok) {
       throw new Error('Cannot load the rendered source');
     }
-    const file = new File([await response.blob()], 'ClipKit source.mp4', { type: 'video/mp4' });
+    const file = new File([await response.blob()], 'cueframe source.mp4', { type: 'video/mp4' });
     const [processed] = await processMediaAssets({ files: [file] });
     if (!processed) {
       throw new Error('The rendered video could not be imported');
@@ -171,6 +176,15 @@ function Runtime() {
   };
   const [tab, setTab] = useState('Media');
   const [status, setStatus] = useState('Saved locally');
+  useEffect(
+    () =>
+      useAssetsPanelStore.subscribe((panel) => {
+        if (panel.activeTab === 'effects') {
+          setTab('Effects');
+        }
+      }),
+    [],
+  );
   useEffect(() => {
     useKeybindingsStore.getState().setLoadingProject(false);
     const flushRequest = (event: MessageEvent<unknown>) => {
@@ -183,7 +197,7 @@ function Runtime() {
           message &&
           typeof message === 'object' &&
           'type' in message &&
-          message.type === 'clipkit-flush' &&
+          message.type === 'cueframe-flush' &&
           'requestId' in message &&
           typeof message.requestId === 'string'
         )
@@ -195,13 +209,13 @@ function Runtime() {
         .flush()
         .then(() =>
           window.parent.postMessage(
-            { type: 'clipkit-flushed', requestId: message.requestId, ok: true },
+            { type: 'cueframe-flushed', requestId: message.requestId, ok: true },
             location.origin,
           ),
         )
         .catch(() =>
           window.parent.postMessage(
-            { type: 'clipkit-flushed', requestId: message.requestId, ok: false },
+            { type: 'cueframe-flushed', requestId: message.requestId, ok: false },
             location.origin,
           ),
         );
@@ -210,24 +224,27 @@ function Runtime() {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault();
         event.stopImmediatePropagation();
-        window.parent.postMessage({ type: 'clipkit-command-menu' }, location.origin);
+        window.parent.postMessage({ type: 'cueframe-command-menu' }, location.origin);
       }
     };
     window.addEventListener('keydown', command, true);
     window.addEventListener('message', flushRequest);
-    window.parent.postMessage({ type: 'clipkit-ready' }, location.origin);
+    window.parent.postMessage({ type: 'cueframe-ready' }, location.origin);
     const handler = (event: Event) => setStatus((event as CustomEvent<string>).detail);
-    window.addEventListener('clipkit-save', handler);
+    window.addEventListener('cueframe-save', handler);
     return () => {
-      window.removeEventListener('clipkit-save', handler);
+      window.removeEventListener('cueframe-save', handler);
       window.removeEventListener('message', flushRequest);
       window.removeEventListener('keydown', command, true);
     };
   }, [editor]);
   const panels: Record<string, React.ReactNode> = {
     Media: <MediaView />,
+    Library: <LibraryView />,
+    Scenes: <ScenesView />,
     Inspect: <PropertiesPanel />,
     Text: <TextView />,
+    Captions: <CaptionsView />,
     ...(editor.renderer.isDegraded ? {} : { Effects: <EffectsView /> }),
     Settings: <SettingsView />,
   };
@@ -248,7 +265,9 @@ function Runtime() {
           onChange={(event) => setName(event.target.value)}
           onBlur={rename}
         />
-        <output aria-label="OpenCut sync">{status}</output>
+        <output aria-label="Editor sync" data-idle={status === 'Saved locally'}>
+          {status}
+        </output>
         <button
           type="button"
           disabled={!editor.command.canUndo()}
@@ -279,7 +298,7 @@ function Runtime() {
             Reload saved version
           </button>
         )}
-        <ExportButton />
+        {new URLSearchParams(location.search).get('mode') === 'render' ? <ExportButton /> : null}
       </header>
       <div className="native-workspace">
         <section className="native-assets">
@@ -297,7 +316,7 @@ function Runtime() {
           </nav>
           <div className="native-asset-content">{panels[tab]}</div>
         </section>
-        <section className="native-preview" aria-label="OpenCut preview">
+        <section className="native-preview" aria-label="Editor preview">
           <PreviewPanel
             overlayControls={[]}
             overlayInstances={[]}
@@ -311,7 +330,8 @@ function Runtime() {
           <PropertiesPanel />
         </aside>
       </div>
-      <section className="native-timeline" aria-label="OpenCut timeline">
+      <TimelineDivider />
+      <section className="native-timeline" aria-label="Editor timeline" {...libraryDropTarget}>
         <Timeline />
       </section>
       <Toaster />
@@ -326,7 +346,7 @@ class EditorBoundary extends Component<{ children: ReactNode }, { problem: strin
   override render() {
     return this.state.problem ? (
       <div role="alert" className="native-loading">
-        <p>OpenCut could not display this project: {this.state.problem}</p>
+        <p>The video editor could not display this project: {this.state.problem}</p>
         <button type="button" onClick={() => location.reload()}>
           Reload saved project
         </button>
@@ -337,17 +357,21 @@ class EditorBoundary extends Component<{ children: ReactNode }, { problem: strin
   }
 }
 function App() {
-  const [state, setState] = useState('Loading OpenCut editor');
+  const [state, setState] = useState('Loading video editor');
   useEffect(() => {
     const progress = (event: Event) => setState((event as CustomEvent<string>).detail);
-    window.addEventListener('clipkit-save', progress);
-    return () => window.removeEventListener('clipkit-save', progress);
+    window.addEventListener('cueframe-save', progress);
+    return () => window.removeEventListener('cueframe-save', progress);
   }, []);
   const [ready, setReady] = useState(false);
+  const [failed, setFailed] = useState(false);
   useEffect(() => {
     open()
       .then(() => setReady(true))
-      .catch((error) => setState(error instanceof Error ? error.message : 'Could not open editor'));
+      .catch((error) => {
+        setState(error instanceof Error ? error.message : 'Could not open editor');
+        setFailed(true);
+      });
   }, []);
   return ready ? (
     <EditorBoundary>
@@ -356,11 +380,11 @@ function App() {
   ) : (
     <div role="status" className="native-loading">
       {state}
-      {state === 'Loading OpenCut editor' ? null : (
+      {failed ? (
         <button type="button" onClick={() => location.reload()}>
           Retry opening
         </button>
-      )}
+      ) : null}
     </div>
   );
 }

@@ -1,10 +1,11 @@
 node_modules
 .next
 .next-ui
-dist
-build
+.next-*
+/dist
+/build
 coverage
-out
+/out
 
 *.log
 .DS_Store
@@ -35,3 +36,6 @@ integrations/opencut/.source/
 integrations/opencut/.types/
 
 .next-native-dev
+
+.impeccable
+.agents

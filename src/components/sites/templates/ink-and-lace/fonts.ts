@@ -1,13 +1,31 @@
-import { Bodoni_Moda, Jost } from 'next/font/google';
+import localFont from 'next/font/local';
 
-const display = Bodoni_Moda({
-  style: ['normal', 'italic'],
-  axes: ['opsz'],
-  subsets: ['latin'],
+const display = localFont({
+  src: [
+    {
+      path: '../../../../../node_modules/@fontsource-variable/bodoni-moda/files/bodoni-moda-latin-standard-normal.woff2',
+      weight: '400 900',
+      style: 'normal',
+    },
+    {
+      path: '../../../../../node_modules/@fontsource-variable/bodoni-moda/files/bodoni-moda-latin-standard-italic.woff2',
+      weight: '400 900',
+      style: 'italic',
+    },
+  ],
   variable: '--font-il-display',
 });
 
-const sans = Jost({ subsets: ['latin'], variable: '--font-il-sans' });
+const sans = localFont({
+  src: [
+    {
+      path: '../../../../../node_modules/@fontsource-variable/jost/files/jost-latin-wght-normal.woff2',
+      weight: '100 900',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-il-sans',
+});
 
 export const FONT_VARIABLES = `${display.variable} ${sans.variable}`;
 

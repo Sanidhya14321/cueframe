@@ -1,8 +1,8 @@
 import type { MetadataRoute } from 'next';
 
 const manifest = (): MetadataRoute.Manifest => ({
-  name: 'Neuclip',
-  short_name: 'Neuclip',
+  name: 'cueframe',
+  short_name: 'cueframe',
   description: 'A library of Remotion animation clips with a deep, schema-driven editor.',
   start_url: '/',
   display: 'standalone',

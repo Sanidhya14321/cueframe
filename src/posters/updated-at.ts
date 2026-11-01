@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import updatedAt from './poster-updated-at.json';
+import updatedAt from './poster-updated-at.json' with { type: 'json' };
 
 export const posterUpdatedAtSchema = z.record(z.string(), z.iso.datetime());
 

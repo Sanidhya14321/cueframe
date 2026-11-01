@@ -37,7 +37,7 @@ Technical baseline: 15/20, five dimensions scored 3/4 each. Scoped source detect
 
 ## Verdict and strengths
 
-The panel uses ClipKit's approved dark semantic surfaces and editorial heading, with a short type/text/queue workflow. Native select, shadcn textarea and explicit voice-text wording keep expectations honest. Jobs persist locally; success clears the field and appears in the list. A mocked server failure retains the user's draft and provides recovery copy. The split explanation correctly promises an undoable edit rather than a complete editor replacement.
+The panel uses cueframe's approved dark semantic surfaces and editorial heading, with a short type/text/queue workflow. Native select, shadcn textarea and explicit voice-text wording keep expectations honest. Jobs persist locally; success clears the field and appears in the list. A mocked server failure retains the user's draft and provides recovery copy. The split explanation correctly promises an undoable edit rather than a complete editor replacement.
 
 ## Priorities and fixes
 
@@ -57,6 +57,6 @@ Composition load is low: choose a type, enter the request, queue. Queue and spli
 
 ## Evidence limits
 
-A inspected a fresh isolated project at four widths. B used a separate headless Chromium context, created two test requests and verified failure/draft retention, panel bounds and control dimensions. A completed before B findings entered parent synthesis. No native browser/physical device, assistive-technology session or profiling was used. The bounded B pass did not inject a browser detector overlay; no overlay is claimed. Owned browser contexts were closed. Parent verification includes actual HTTP MCP claim/edit/resolve delivery, persistent metadata and video split/undo; final results and screenshots are in docs/CLIPKIT_UI_REVIEW.md.
+A inspected a fresh isolated project at four widths. B used a separate headless Chromium context, created two test requests and verified failure/draft retention, panel bounds and control dimensions. A completed before B findings entered parent synthesis. No native browser/physical device, assistive-technology session or profiling was used. The bounded B pass did not inject a browser detector overlay; no overlay is claimed. Owned browser contexts were closed. Parent verification includes actual HTTP MCP claim/edit/resolve delivery, persistent metadata and video split/undo; final results and screenshots are in docs/CUEFRAME_UI_REVIEW.md.
 
 Questions skipped: the user already chose full OpenCut classic timeline replacement. Pause at B as requested, then continue that authorized migration before C.

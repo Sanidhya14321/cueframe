@@ -42,7 +42,7 @@ const fallbackNotice = (name: string) => {
   ]).get(name);
 };
 export const runtimeLicenses = (): Plugin => ({
-  name: 'clipkit-runtime-licenses',
+  name: 'cueframe-runtime-licenses',
   async generateBundle() {
     const packages = await Promise.all(
       [...this.getModuleIds()].filter((id) => id.includes('/node_modules/')).map(findPackage),

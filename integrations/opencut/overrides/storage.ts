@@ -1,6 +1,6 @@
 /* biome-ignore-all lint/performance/noAwaitInLoops: source previews and media imports execute sequentially */
 /* biome-ignore-all lint/complexity/useLiteralKeys: native records require indexed access under strict TypeScript */
-import type { Project } from '@clipkit/project/project';
+import type { Project } from '@cueframe/project/project';
 
 type PublicProjectState = {
   project: Project;
@@ -13,6 +13,7 @@ import { processMediaAssets } from '@/media/processing';
 import type { MediaAsset } from '@/media/types';
 import type { TProject } from '@/project/types';
 import { TICKS_PER_SECOND } from '@/wasm';
+import * as drafts from './draft-previews';
 import { setNativeLocks } from './locks';
 import { nativeToProject, needsSourcePreview, projectToNative } from './project-bridge';
 
@@ -28,11 +29,12 @@ let version = 0;
 let media: StoredAsset[] = [];
 let source: PublicProjectState;
 let linked = false;
+const mediaFiles = new Map<string, File>();
 let savedSignature = '';
 const clientId = crypto.randomUUID();
 let chain: Promise<unknown> = Promise.resolve();
 export const report = (status: string) =>
-  window.dispatchEvent(new CustomEvent('clipkit-save', { detail: status }));
+  window.dispatchEvent(new CustomEvent('cueframe-save', { detail: status }));
 async function request(method: string, data?: unknown) {
   const response = await fetch(endpoint, {
     method,
@@ -135,14 +137,18 @@ export const storageService = {
   loadAllMediaAssets(): Promise<MediaAsset[]> {
     return Promise.all(
       media.map(async (asset) => {
-        const response = await fetch(asset.url);
-        if (!response.ok) {
-          throw new Error(`Cannot load ${asset.name}`);
+        let file = mediaFiles.get(asset.url);
+        if (!file) {
+          const response = await fetch(asset.url);
+          if (!response.ok) {
+            throw new Error(`Cannot load ${asset.name}`);
+          }
+          file = new File([await response.blob()], asset.name, {
+            type: asset.mime,
+            lastModified: asset.lastModified,
+          });
+          mediaFiles.set(asset.url, file);
         }
-        const file = new File([await response.blob()], asset.name, {
-          type: asset.mime,
-          lastModified: asset.lastModified,
-        });
         return { ...asset, file, url: URL.createObjectURL(file) };
       }),
     );
@@ -167,10 +173,10 @@ export const storageService = {
     return Promise.resolve([]);
   },
   deleteProjectMedia() {
-    throw new Error('Manage projects from ClipKit Projects');
+    throw new Error('Manage projects from cueframe Projects');
   },
   deleteProject() {
-    throw new Error('Manage projects from ClipKit Projects');
+    throw new Error('Manage projects from cueframe Projects');
   },
   loadSavedSounds() {
     return Promise.resolve([]);
@@ -181,10 +187,21 @@ export const storageService = {
 };
 
 export const canonicalSource = () => source;
+const setHydrating = (active: boolean) => {
+  const root = document.getElementById('root');
+  if (root) {
+    root.inert = active;
+    root.dataset['hydratedRevision'] = active ? '' : String(source.revision);
+  }
+  if (active) {
+    report('Applying project changes');
+  }
+};
 export async function connectCanonical() {
   const editor = EditorCore.getInstance();
   await hydrateCanonical(editor);
   linked = true;
+  setHydrating(false);
   updateLocks();
   if (source.agent?.status !== 'working') {
     await editor.save.flush();
@@ -203,10 +220,10 @@ export async function connectCanonical() {
       accept(value);
     }
   }, 250);
-  const accept = (latest: PublicProjectState) => {
+  const accept = (latest: PublicProjectState, force = false) => {
     source.agent = latest.agent;
     updateLocks();
-    if (latest.revision === source.revision) {
+    if (latest.revision === source.revision && !force) {
       return;
     }
     if (loading || editor.save.getIsDirty()) {
@@ -214,6 +231,7 @@ export async function connectCanonical() {
       return;
     }
     loading = true;
+    setHydrating(true);
     editor.save.pause();
     request('GET')
       .then(() => hydrateCanonical(editor))
@@ -222,15 +240,21 @@ export async function connectCanonical() {
         editor.command.clear();
         editor.save.resume();
         report('Saved locally');
+        upgrade();
       })
       .catch((error) =>
         report(error instanceof Error ? error.message : 'Could not receive agent changes'),
       )
       .finally(() => {
         loading = false;
+        setHydrating(false);
         editor.save.resume();
       });
   };
+  const upgrade = () => {
+    drafts.upgradeDrafts(report, () => accept(source, true)).catch(() => undefined);
+  };
+  upgrade();
   events.onmessage = (event: MessageEvent<string>) =>
     accept(JSON.parse(event.data) as PublicProjectState);
   return () => {
@@ -242,6 +266,8 @@ export async function connectCanonical() {
 export async function hydrateCanonical(editor: EditorCore) {
   editor.save.pause();
   const items = source.project.tracks.flatMap((track) => track.elements);
+  const previewCount = items.filter(needsSourcePreview).length;
+  let previewNumber = 0;
   for (const item of items) {
     const id = `source-${item.id}`;
     if (
@@ -252,31 +278,27 @@ export async function hydrateCanonical(editor: EditorCore) {
     ) {
       continue;
     }
-    let preview:
-      | {
-          url: string;
-          width: number;
-          height: number;
-          duration: number;
-          fps: number;
-          hasAudio: boolean;
-        }
-      | undefined;
+    let preview: Awaited<ReturnType<typeof drafts.renderPreview>> | undefined;
     let url: string;
     if (needsSourcePreview(item)) {
-      report(`Preparing ${item.type} preview`);
-      const response = await fetch(
-        `/api/projects/${projectId}/opencut/preview/${encodeURIComponent(item.id)}`,
-        { method: 'POST' },
+      previewNumber += 1;
+      report(
+        `Preparing ${item.type === 'composition' ? item.clipId : item.type} (${previewNumber} of ${previewCount})`,
       );
-      if (!response.ok) {
-        throw new Error(
-          'Could not prepare an animation layer. Open Animation workspace to inspect it.',
-        );
-      }
-      preview = await response.json();
-      if (!preview) {
-        throw new Error('Missing preview metadata');
+      preview = item.type === 'composition' ? await drafts.cachedPreview(item.id) : undefined;
+      if (item.type === 'composition' && !preview) {
+        drafts.draftIds.add(item.id);
+        preview = {
+          url: `/previews/${item.clipId}.mp4`,
+          width: source.project.width,
+          height: source.project.height,
+          duration: item.durationInFrames / source.project.fps,
+          fps: source.project.fps,
+          hasAudio: false,
+        };
+      } else {
+        drafts.draftIds.delete(item.id);
+        preview ??= await drafts.renderPreview(item.id);
       }
       url = preview.url;
     } else if (item.type === 'video' || item.type === 'audio' || item.type === 'image') {
@@ -295,7 +317,7 @@ export async function hydrateCanonical(editor: EditorCore) {
     const mime = response.headers.get('content-type') ?? 'video/webm';
     const file = new File(
       [await response.blob()],
-      `${item.type}-${item.id}.${mime.split('/')[1] ?? 'webm'}`,
+      `${item.type === 'composition' ? item.clipId : item.type}.${mime.split('/')[1] ?? 'webm'}`,
       { type: mime },
     );
     const processed = preview
@@ -313,7 +335,7 @@ export async function hydrateCanonical(editor: EditorCore) {
     if (!processed) {
       throw new Error('Unsupported source media');
     }
-    if (!url.startsWith(`/api/projects/${projectId}/media/`)) {
+    if (!(url.startsWith(`/api/projects/${projectId}/media/`) || drafts.draftIds.has(item.id))) {
       const upload = await fetch(`/api/projects/${projectId}/media`, {
         method: 'POST',
         headers: { 'content-type': mime },
@@ -367,6 +389,7 @@ function updateLocks() {
   if (tracks) {
     setNativeLocks(locked, tracks);
   }
+  drafts.paintThumbnails(source.project);
   for (const button of document.querySelectorAll<HTMLButtonElement>('button[data-element-id]')) {
     const active = locked.includes(button.dataset['elementId'] ?? '');
     button.dataset['agentLocked'] = String(active);

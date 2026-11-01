@@ -1,33 +1,29 @@
 /* biome-ignore-all lint/style/noProcessEnv: native render worker clears inherited server-only runtime options */
+/* biome-ignore-all lint/performance/noAwaitInLoops: source layers render one at a time */
 import { spawn } from 'node:child_process';
 import { readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { repoRoot } from '@/lib/repo-root';
+import type { Project } from '@/project';
+import { needsSourcePreview } from '@/project/source-preview';
 import { ensureDirectory, writeJson } from './files';
-import { readMedia } from './media';
+import { inlineProjectMedia } from './media';
+import { prepareOpenCutPreview } from './opencut-preview';
 import { renderNativeProject } from './opencut-render';
 import { projectDirectory, readProject } from './projects';
+import { renderTurn } from './render-turn';
+import { workerEnvironment } from './worker-env';
 
-export const inlineProjectMedia = async (value: unknown): Promise<unknown> => {
-  if (typeof value === 'string') {
-    const match = /^\/api\/projects\/([a-z0-9]{12})\/media\/([a-f0-9]+\.[a-z0-9]+)$/.exec(value);
-    if (match?.[1] && match[2]) {
-      const { data, mime } = await readMedia(match[1], match[2]);
-      return `data:${mime};base64,${data.toString('base64')}`;
-    }
-    return value;
+const prepareTimelinePreviews = async (
+  projectId: string,
+  project: Project,
+  update: (progress: number, label: string) => Promise<void>,
+) => {
+  const layers = project.tracks.flatMap((track) => track.elements).filter(needsSourcePreview);
+  for (const [index, layer] of layers.entries()) {
+    await update(0.01, `Preparing layer ${index + 1} of ${layers.length}`);
+    await prepareOpenCutPreview(projectId, layer.id);
   }
-  if (Array.isArray(value)) {
-    return Promise.all(value.map(inlineProjectMedia));
-  }
-  if (typeof value === 'object' && value !== null) {
-    return Object.fromEntries(
-      await Promise.all(
-        Object.entries(value).map(async ([key, entry]) => [key, await inlineProjectMedia(entry)]),
-      ),
-    );
-  }
-  return value;
 };
 export const renderLocalProject = async (
   projectId: string,
@@ -36,17 +32,19 @@ export const renderLocalProject = async (
 ) => {
   const state = await readProject(projectId);
   if (state.project.opencut) {
-    return renderNativeProject(projectId, origin, update);
+    await prepareTimelinePreviews(projectId, state.project, update);
+    return renderTurn(() => renderNativeProject(projectId, origin, update, state.revision));
   }
   await update(0.01, 'Preparing the full-fidelity renderer');
   const name = `video-${state.revision}`;
   const outDir = join(await projectDirectory(projectId), 'out');
-  const project = (await inlineProjectMedia(state.project)) as typeof state.project;
+  const { opencut: _native, ...canonical } = state.project;
+  const project = (await inlineProjectMedia(canonical)) as typeof state.project;
   await ensureDirectory(outDir);
   const input = join(outDir, `${name}.input.json`);
   await writeJson(input, project);
   try {
-    await runRenderWorker(input, name, update);
+    await renderTurn(() => runRenderWorker(input, name, update));
   } finally {
     await rm(input, { force: true });
   }
@@ -74,7 +72,7 @@ const runRenderWorker = (
       {
         cwd: repoRoot(),
         stdio: ['ignore', 'pipe', 'pipe'],
-        env: { ...process.env, NODE_OPTIONS: '', BUN_OPTIONS: '' },
+        env: workerEnvironment(),
       },
     );
     let buffer = '';
@@ -82,7 +80,7 @@ const runRenderWorker = (
     const timer = setTimeout(() => {
       child.kill();
       reject(new Error('The local render timed out.'));
-    }, 600000);
+    }, 1200000);
     child.stdout.on('data', (chunk: Buffer) => {
       buffer += chunk.toString();
       const lines = buffer.split('\n');
@@ -91,14 +89,21 @@ const runRenderWorker = (
         if (!line.startsWith('{')) {
           continue;
         }
-        const parsed = JSON.parse(line) as { progress?: number };
-        if (typeof parsed.progress === 'number' && parsed.progress - last > 0.03) {
-          last = parsed.progress;
-          update(last, `Rendering ${Math.round(last * 100)}%`).catch(() => undefined);
+        try {
+          const parsed = JSON.parse(line) as { progress?: number };
+          if (typeof parsed.progress === 'number' && parsed.progress - last > 0.03) {
+            last = parsed.progress;
+            update(last, `Rendering ${Math.round(last * 100)}%`).catch(() => undefined);
+          }
+        } catch {
+          console.error('[cueframe render] skipped an unreadable progress line');
         }
       }
     });
-    child.stderr.on('data', () => undefined);
+    let detail = '';
+    child.stderr.on('data', (chunk: Buffer) => {
+      detail = `${detail}${chunk}`.slice(-1500);
+    });
     child.on('error', () => {
       clearTimeout(timer);
       reject(new Error('Could not start the local Bun renderer.'));
@@ -108,6 +113,7 @@ const runRenderWorker = (
       if (code === 0) {
         resolve();
       } else {
+        console.error(`[cueframe render] ${detail}`);
         reject(new Error('Local rendering failed. Check the project media and available memory.'));
       }
     });

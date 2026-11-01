@@ -30,7 +30,7 @@ export const guardNativeTracks = (tracks: SceneTracks) => {
   for (const id of locked) {
     if (originals.get(id) !== next.get(id)) {
       window.dispatchEvent(
-        new CustomEvent('clipkit-save', {
+        new CustomEvent('cueframe-save', {
           detail: 'This layer is locked while the agent edits it.',
         }),
       );

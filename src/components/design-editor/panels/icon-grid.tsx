@@ -42,7 +42,7 @@ export const IconGrid = ({ selected, onPick, columns = 6 }: IconGridProps) => {
             onClick={() => onPick(name)}
             className={cn(
               'flex aspect-square items-center justify-center rounded-md hover:bg-accent dark:invert-0',
-              selected === name ? 'bg-violet-500/15' : 'bg-muted/60',
+              selected === name ? 'bg-primary/12' : 'bg-muted/60',
             )}
           >
             <span

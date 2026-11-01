@@ -18,7 +18,7 @@ export const BuildVideo = ({ projectId }: { projectId: string }) => {
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [text, setText] = useState(
-    'Meet ClipKit\nCreate with agents\nWatch every change\nKeep full control\nPick a look\nMake it yours\nTiming that lands\nWords that move\nProof in motion\nOne clear story\nBuild in real time\nNow the drop\nYour voice matters\nPolish every frame\nExport your video\nStart creating today',
+    'Meet cueframe\nCreate with agents\nWatch every change\nKeep full control\nPick a look\nMake it yours\nTiming that lands\nWords that move\nProof in motion\nOne clear story\nBuild in real time\nNow the drop\nYour voice matters\nPolish every frame\nExport your video\nStart creating today',
   );
   const [message, setMessage] = useState('');
   const build = async () => {

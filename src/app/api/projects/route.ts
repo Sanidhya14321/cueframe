@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { projectApi } from '@/local/project-api';
 import { publicProjectState } from '@/local/project-state';
-import { createProject, listProjects, openProject } from '@/local/projects';
+import { createProject, listProjectSummaries, openProject } from '@/local/projects';
 import { projectSchema } from '@/project';
 
 const input = z.object({
@@ -12,11 +12,11 @@ const input = z.object({
 export const GET = (request: Request) =>
   projectApi(request, async () =>
     Response.json(
-      (await listProjects()).map(({ id, title, revision, updatedAt }) => ({
+      (await listProjectSummaries()).map(({ id, title, revision, updated }) => ({
         id,
         title,
         revision,
-        updatedAt,
+        updatedAt: new Date(updated),
       })),
     ),
   );

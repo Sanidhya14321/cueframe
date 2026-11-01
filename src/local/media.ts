@@ -1,7 +1,9 @@
 import 'server-only';
 import { createHash } from 'node:crypto';
-import { lstat, readFile, writeFile } from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
+import { lstat, readFile, stat, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { Readable } from 'node:stream';
 import { ensureDirectory } from './files';
 import { ProjectProblem, projectDirectory } from './projects';
 
@@ -51,12 +53,41 @@ export const saveMedia = async (
   await writeFile(await mediaPath(id, name), data, { mode: 0o600 });
   return { url: `/api/projects/${id}/media/${name}`, name };
 };
-export const readMedia = async (id: string, name: string) => {
+const mimeOf = (name: string) =>
+  Object.entries(extensions).find(([, value]) => value === name.split('.').at(-1))?.[0] ??
+  'application/octet-stream';
+export const mediaFile = async (id: string, name: string) => {
+  const path = await mediaPath(id, name);
+  return {
+    size: (await stat(path)).size,
+    mime: mimeOf(name),
+    open: (range?: { start: number; end: number }) =>
+      Readable.toWeb(createReadStream(path, range)) as unknown as BodyInit,
+  };
+};
+const readMedia = async (id: string, name: string) => {
   const path = await mediaPath(id, name);
   const data = await readFile(path);
-  const extension = name.split('.').at(-1);
-  const mime =
-    Object.entries(extensions).find(([, value]) => value === extension)?.[0] ??
-    'application/octet-stream';
-  return { data, mime };
+  return { data, mime: mimeOf(name) };
+};
+export const inlineProjectMedia = async (value: unknown): Promise<unknown> => {
+  if (typeof value === 'string') {
+    const match = /^\/api\/projects\/([a-z0-9]{12})\/media\/([a-f0-9]+\.[a-z0-9]+)$/.exec(value);
+    if (match?.[1] && match[2]) {
+      const { data, mime } = await readMedia(match[1], match[2]);
+      return `data:${mime};base64,${data.toString('base64')}`;
+    }
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return Promise.all(value.map(inlineProjectMedia));
+  }
+  if (typeof value === 'object' && value !== null) {
+    return Object.fromEntries(
+      await Promise.all(
+        Object.entries(value).map(async ([key, entry]) => [key, await inlineProjectMedia(entry)]),
+      ),
+    );
+  }
+  return value;
 };

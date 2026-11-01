@@ -1,9 +1,11 @@
 /* biome-ignore-all lint/complexity/useLiteralKeys: native parameter records require indexed access under strict TypeScript */
 /* biome-ignore-all lint/complexity/noExcessiveCognitiveComplexity: typed conversion explicitly covers each source and native element variant */
-import type { Element } from '@clipkit/project/element';
-import type { Project } from '@clipkit/project/project';
+import type { Element } from '@cueframe/project/element';
+import type { Project } from '@cueframe/project/project';
+import { needsSourcePreview } from '@cueframe/project/source-preview';
 import type { MediaAsset } from '@/media/types';
 import type { TProject } from '@/project/types';
+import { FONT_SIZE_SCALE_REFERENCE } from '@/text/typography';
 import type { SceneTracks, TimelineElement, TimelineTrack } from '@/timeline';
 import { DEFAULTS } from '@/timeline/defaults';
 import {
@@ -31,14 +33,10 @@ const transformParams = (item: Element) => ({
   'transform.rotate': item.transform.rotation,
   opacity: item.transform.opacity,
 });
-export const needsSourcePreview = (item: Element) =>
-  item.type === 'composition' ||
-  item.type === 'captions' ||
-  Boolean(
-    item.animation && item.animation.kind !== 'none' && item.animation.durationInFrames > 0,
-  ) ||
-  (item.type === 'video' && Boolean(item.punchIns?.length)) ||
-  (item.type === 'audio' && (Boolean(item.duckRegions?.length) || item.loop === true));
+const seenItems = new Map<string, Element>();
+
+export { needsSourcePreview };
+
 const nativeItem = (
   item: Element,
   project: Project,
@@ -56,10 +54,11 @@ const nativeItem = (
         params: {
           ...DEFAULTS.text.element.params,
           content: item.content,
-          fontSize: item.fontSize,
+          fontSize: (item.fontSize * FONT_SIZE_SCALE_REFERENCE) / project.height,
           fontFamily: item.fontFamily,
           color: item.color,
           fontWeight: 'bold',
+          lineHeight: 1.1,
         },
       },
       startTime,
@@ -71,8 +70,6 @@ const nativeItem = (
       params: {
         fill: item.color,
         cornerRadius: Math.min(50, (item.radius / Math.min(item.width, item.height)) * 100),
-        'transform.scaleX': (item.width / 512) * item.transform.scale,
-        'transform.scaleY': (item.height / 512) * item.transform.scale,
       },
     });
   } else {
@@ -105,8 +102,9 @@ const nativeItem = (
   }
   const params = { ...built.params, ...transformParams(item) };
   if (item.type === 'shape' && !proxy) {
-    params['transform.scaleX'] = (item.width / 512) * item.transform.scale;
-    params['transform.scaleY'] = (item.height / 512) * item.transform.scale;
+    const fit = Math.min(project.width, project.height);
+    params['transform.scaleX'] = (item.width / fit) * item.transform.scale;
+    params['transform.scaleY'] = (item.height / fit) * item.transform.scale;
   }
   if (item.type === 'audio') {
     Object.assign(params, { volume: item.volume === 0 ? -100 : 20 * Math.log10(item.volume) });
@@ -230,9 +228,11 @@ export function projectToNative(
 
 export function nativeToProject(native: TProject, source: Project, media: MediaAsset[]): Project {
   const fps = native.settings.fps.numerator / native.settings.fps.denominator;
-  const originals = new Map(
-    source.tracks.flatMap((track) => track.elements).map((item) => [item.id, item]),
-  );
+  const fit = Math.min(native.settings.canvasSize.width, native.settings.canvasSize.height);
+  for (const item of source.tracks.flatMap((track) => track.elements)) {
+    seenItems.set(item.id, item);
+  }
+  const originals = seenItems;
   const assets = new Map(media.map((asset) => [asset.id, asset]));
   const tracks = native.scenes
     .flatMap((scene) => allTracks(scene.tracks))
@@ -271,7 +271,12 @@ export function nativeToProject(native: TProject, source: Project, media: MediaA
             ...base,
             type: 'text',
             content: String(item.params['content'] ?? ''),
-            fontSize: Number(item.params['fontSize'] ?? 48),
+            fontSize:
+              Math.round(
+                ((Number(item.params['fontSize'] ?? 48) * native.settings.canvasSize.height) /
+                  FONT_SIZE_SCALE_REFERENCE) *
+                  1000,
+              ) / 1000,
             fontFamily: String(item.params['fontFamily'] ?? 'Inter'),
             color: String(item.params['color'] ?? '#ffffff'),
           };
@@ -309,11 +314,11 @@ export function nativeToProject(native: TProject, source: Project, media: MediaA
             type: 'shape',
             kind: item.type === 'graphic' && item.definitionId === 'ellipse' ? 'ellipse' : 'rect',
             color: String(item.params['fill'] ?? '#ffffff'),
-            width: 512 * Math.abs(Number(item.params['transform.scaleX'] ?? 1)),
-            height: 512 * Math.abs(Number(item.params['transform.scaleY'] ?? 1)),
+            width: fit * Math.abs(Number(item.params['transform.scaleX'] ?? 1)),
+            height: fit * Math.abs(Number(item.params['transform.scaleY'] ?? 1)),
             radius:
               (Number(item.params['cornerRadius'] ?? 0) / 100) *
-              512 *
+              fit *
               Math.min(
                 Math.abs(Number(item.params['transform.scaleX'] ?? 1)),
                 Math.abs(Number(item.params['transform.scaleY'] ?? 1)),

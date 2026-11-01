@@ -1,7 +1,7 @@
 {
   "name": "cueframe",
   "version": "0.0.0",
-  "description": "An open library of Remotion animation clips with a schema-driven in-browser editor.",
+  "description": "A Remotion video studio with an agent-editable timeline, available to run locally or hosted.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
   },
   "scripts": {
     "dev": "next dev --webpack --hostname 127.0.0.1 --port 3000",
+    "local": "next build && next start --hostname 127.0.0.1 --port 3000",
     "build": "next build --webpack",
     "start": "next start --hostname 127.0.0.1 --port 3000",
     "typecheck": "tsc --noEmit",
@@ -28,6 +29,7 @@
     "test:e2e": "playwright test",
     "render": "bun run src/render/render-all.ts",
     "render-one": "bun run src/render/render-one.ts",
+    "clip-vectors": "bun run scripts/build-clip-vectors.ts",
     "render:posters": "bun run src/render/render-posters.ts",
     "render:sites": "bun run src/render/render-sites.ts",
     "footage": "bun run src/render/footage/generate-footage.ts",
@@ -41,12 +43,24 @@
     "catalog:build": "bun run scripts/build-catalog.ts",
     "whisper:setup": "bun --conditions=react-server run scripts/setup-whisper.ts",
     "opencut:build": "bun install --cwd integrations/opencut --frozen-lockfile && bun run --cwd integrations/opencut build",
-    "opencut:typecheck": "bun run --cwd integrations/opencut typecheck"
+    "opencut:typecheck": "bun run --cwd integrations/opencut typecheck",
+    "local:configure": "bun run scripts/configure-local.ts",
+    "library:index": "bun --conditions=react-server run scripts/index-library.ts"
   },
   "dependencies": {
     "@ai-sdk/react": "4.0.158",
+    "@fontsource-variable/bodoni-moda": "5.3.0",
+    "@fontsource-variable/caveat": "5.3.0",
+    "@fontsource-variable/eb-garamond": "5.3.0",
+    "@fontsource-variable/fraunces": "5.3.0",
+    "@fontsource-variable/fredoka": "5.3.0",
+    "@fontsource-variable/jost": "5.3.0",
+    "@fontsource-variable/nunito": "5.3.0",
+    "@fontsource/gochi-hand": "5.3.0",
     "@fontsource/instrument-serif": "5.3.0",
     "@fontsource/inter": "5.3.0",
+    "@fontsource/poiret-one": "5.3.0",
+    "@huggingface/transformers": "4.3.2",
     "@modelcontextprotocol/sdk": "1.32.2",
     "@openrouter/ai-sdk-provider": "3.1.0",
     "@react-three/drei": "10.7.9",
@@ -75,6 +89,7 @@
     "nanoid": "6.0.2",
     "next": "16.4.2",
     "playwright": "1.64.0",
+    "postgres": "4.0.0",
     "postprocessing": "6.39.5",
     "radix-ui": "1.8.1",
     "react": "19.3.0",

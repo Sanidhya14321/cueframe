@@ -7,7 +7,7 @@ export const ffmpegPath = () => {
   const bundled = join(
     repoRoot(),
     'node_modules',
-    `@remotion/compositor-${process.platform}-${process.arch}`,
+    `@remotion/compositor-${process.platform}-${process.arch}${process.platform === 'linux' ? '-gnu' : ''}`,
     'ffmpeg',
   );
   return existsSync(bundled) ? bundled : 'ffmpeg';

@@ -1,15 +1,42 @@
-import { Caveat, Fraunces, Nunito } from 'next/font/google';
+import localFont from 'next/font/local';
 
-const display = Fraunces({
-  subsets: ['latin'],
-  style: ['normal', 'italic'],
-  axes: ['SOFT', 'opsz'],
+const display = localFont({
+  src: [
+    {
+      path: '../../../../../node_modules/@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2',
+      weight: '100 900',
+      style: 'normal',
+    },
+    {
+      path: '../../../../../node_modules/@fontsource-variable/fraunces/files/fraunces-latin-full-italic.woff2',
+      weight: '100 900',
+      style: 'italic',
+    },
+  ],
   variable: '--font-pp-display',
 });
 
-const body = Nunito({ subsets: ['latin'], variable: '--font-pp-body' });
+const body = localFont({
+  src: [
+    {
+      path: '../../../../../node_modules/@fontsource-variable/nunito/files/nunito-latin-wght-normal.woff2',
+      weight: '200 1000',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-pp-body',
+});
 
-const hand = Caveat({ weight: ['500', '700'], subsets: ['latin'], variable: '--font-pp-hand' });
+const hand = localFont({
+  src: [
+    {
+      path: '../../../../../node_modules/@fontsource-variable/caveat/files/caveat-latin-wght-normal.woff2',
+      weight: '400 700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-pp-hand',
+});
 
 export const FONT_VARIABLES = `${display.variable} ${body.variable} ${hand.variable}`;
 

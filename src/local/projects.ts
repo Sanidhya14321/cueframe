@@ -4,7 +4,7 @@ import { activePresence } from './presence';
 import { assertEditable } from './project-guards';
 import { ProjectProblem } from './project-problem';
 import 'server-only';
-import { readdir } from 'node:fs/promises';
+import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { customAlphabet } from 'nanoid';
 import { checkMedia } from '@/agent/media';
@@ -62,6 +62,46 @@ export const listProjects = async (): Promise<ProjectState[]> => {
   return rows
     .filter((row): row is ProjectState => row !== null)
     .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+};
+const summaries = new Map<string, { modified: number; summary: ProjectSummary }>();
+export interface ProjectSummary {
+  id: string;
+  title: string;
+  revision: number;
+  updated: number;
+  seconds: number;
+  size: string;
+  engine: string;
+}
+export const listProjectSummaries = async (): Promise<ProjectSummary[]> => {
+  const folder = await projectsFolder();
+  const rows = await Promise.all(
+    (await readdir(folder)).filter(validId).map(async (id) => {
+      const file = await stat(join(folder, id, 'project.json')).catch(() => null);
+      if (!file) {
+        return null;
+      }
+      const cached = summaries.get(id);
+      if (cached?.modified === file.mtimeMs) {
+        return cached.summary;
+      }
+      const state = await readProject(id);
+      const summary = {
+        id,
+        title: state.title,
+        revision: state.revision,
+        updated: state.updatedAt.getTime(),
+        seconds: state.nativeVideo?.duration || state.project.durationInFrames / state.project.fps,
+        size: `${state.project.width}×${state.project.height}`,
+        engine: state.nativeVideo ? 'Edited video' : 'Animation source',
+      };
+      summaries.set(id, { modified: file.mtimeMs, summary });
+      return summary;
+    }),
+  );
+  return rows
+    .filter((row): row is ProjectSummary => row !== null)
+    .sort((a, b) => b.updated - a.updated);
 };
 export const createProject = async (input: {
   title: string;

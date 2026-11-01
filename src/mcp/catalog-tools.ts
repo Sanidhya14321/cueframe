@@ -2,6 +2,7 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { searchCatalog } from '@/agent/catalog';
 import { clipFieldGuide, jsonSchema } from '@/agent/instructions';
+import { searchLibraryVectors } from '@/local/library/vectors';
 import {
   CLIP_CATEGORIES,
   CLIP_DEFAULTS,
@@ -13,6 +14,8 @@ import {
   getClipMeta,
   isClipId,
 } from '@/schemas';
+import { embedQuery } from './clip-embeddings';
+import { recommendClips } from './clip-recommend';
 import { ORIENTATIONS, orientationOf } from './clip-search';
 import { failure, json } from './results';
 
@@ -32,11 +35,41 @@ const categoryCounts = () =>
 
 export const registerCatalogTools = (server: McpServer, appUrl: string): void => {
   server.registerTool(
+    'search_library',
+    {
+      title: 'Search library by meaning',
+      description:
+        'Match a user prompt to clips, poster pages and website templates using Yugabyte pgvector metadata embeddings.',
+      inputSchema: {
+        query: z.string().min(1).max(4000),
+        kind: z.enum(['clip', 'poster', 'site']).optional(),
+        limit: z.number().int().min(1).max(40).default(12),
+      },
+      annotations: { readOnlyHint: true },
+    },
+    async ({ query, kind, limit }) => {
+      try {
+        const vector = await embedQuery(query);
+        if (!vector) {
+          return failure('The local embedding model is unavailable. Run bun run library:index.');
+        }
+        const results = await searchLibraryVectors(vector, kind, limit);
+        return results === null
+          ? failure(
+              'Configure Yugabyte and run bun run library:index before searching the full library.',
+            )
+          : json({ results });
+      } catch {
+        return failure('Library search failed. Check Yugabyte and run bun run library:index.');
+      }
+    },
+  );
+  server.registerTool(
     'search_clips',
     {
       title: 'Search clips',
       description:
-        'Search the Neuclip library of animation clips by what a video needs, for example "app launch phone reveal", "logo outro" or "pricing list". Every clip is labelled with what is on screen, its beats, mood, use cases and the role it plays in a video (opener, feature, proof, cta, closer, transition, background, overlay). Leave query empty to browse with filters.',
+        'Search the cueframe library of animation clips by what a video needs, for example "app launch phone reveal", "logo outro" or "pricing list". Every clip is labelled with what is on screen, its beats, mood, use cases and the role it plays in a video (opener, feature, proof, cta, closer, transition, background, overlay). Leave query empty to browse with filters.',
       inputSchema: {
         query: z.string().describe('Plain-language description of the clip you want'),
         category: z.enum(CATEGORY_IDS).optional(),
@@ -47,8 +80,14 @@ export const registerCatalogTools = (server: McpServer, appUrl: string): void =>
       },
       annotations: { readOnlyHint: true },
     },
-    ({ query, category, theme, orientation, role, limit }) => {
-      const hits = searchCatalog(query, isCategory(category) ? category : undefined, 113)
+    async ({ query, category, theme, orientation, role, limit }) => {
+      const hits = (
+        await searchCatalog(
+          query,
+          isCategory(category) ? category : undefined,
+          CLIP_REGISTRY.length,
+        )
+      )
         .filter(
           (clip) =>
             (!theme || clip.theme === theme) &&
@@ -61,6 +100,29 @@ export const registerCatalogTools = (server: McpServer, appUrl: string): void =>
         categories: hits.length === 0 ? categoryCounts() : undefined,
       });
     },
+  );
+
+  server.registerTool(
+    'recommend_clips',
+    {
+      title: 'Recommend clips for a brief',
+      description:
+        'Turn a video brief into a storyboard: one distinct clip per story role, ranked by local semantic similarity and each clip\'s labels, with alternatives and textSlots, the prop paths to fill with your copy. Reads format and theme from the brief ("dark vertical reel") unless given. Use this before add_item.',
+      inputSchema: {
+        brief: z.string().min(1).describe('What the video is about, in plain language'),
+        roles: z.array(z.enum(CLIP_ROLES)).min(1).max(16).optional(),
+        orientation: z.enum(ORIENTATIONS).optional(),
+        theme: z.enum(CLIP_THEMES).optional(),
+      },
+      annotations: { readOnlyHint: true },
+    },
+    async ({ brief, roles, orientation, theme }) =>
+      json({
+        storyboard: (await recommendClips(brief, { roles, orientation, theme })).map((step) => ({
+          ...step,
+          preview: step.clip ? previewUrl(appUrl, step.clip.id) : null,
+        })),
+      }),
   );
 
   server.registerTool(

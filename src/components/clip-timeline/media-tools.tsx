@@ -163,7 +163,7 @@ export const MediaTools = ({
     .find((item) => item.id === selectedId);
   return (
     <details className="text-xs">
-      <summary className="cursor-pointer">Media & render</summary>
+      <summary className="cursor-pointer">Media & voice</summary>
       <div className="absolute right-3 z-40 mt-2 flex w-80 flex-col gap-3 rounded-xl border bg-background p-4 shadow-xl">
         <Button
           type="button"
@@ -235,17 +235,9 @@ export const MediaTools = ({
         <Button type="button" size="sm" disabled={working} onClick={() => start('voice')}>
           Generate voiceover
         </Button>
-        <Button type="button" size="sm" disabled={working} onClick={() => start('render')}>
-          Render full-fidelity MP4
-        </Button>
         <p aria-live="polite">{message || job?.label}</p>
         {job && working ? <progress className="w-full" max={1} value={job.progress} /> : null}
         {result?.message ? <p>{result.message}</p> : null}
-        {result?.url ? (
-          <a className="underline" href={result.url} download={result.fileName}>
-            Download rendered MP4
-          </a>
-        ) : null}
       </div>
     </details>
   );

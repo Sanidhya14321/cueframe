@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { siteImage } from '@/og/site-card';
 import { findSiteTemplate, SITE_TEMPLATES } from '@/sites/templates';
 
-export const alt = 'A neuclip website template';
+export const alt = 'A cueframe website template';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 

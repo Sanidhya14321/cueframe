@@ -65,7 +65,7 @@ export const LayersPanel = ({ editor }: { editor: DesignEditorState }) => {
             key={element.id}
             className={cn(
               'group relative flex h-10 items-center gap-2 rounded-lg px-2 text-sm transition-colors',
-              selected ? 'bg-violet-500/15' : 'hover:bg-accent',
+              selected ? 'bg-primary/12' : 'hover:bg-accent',
               element.hidden && 'opacity-50',
             )}
           >
@@ -113,7 +113,7 @@ export const LayersPanel = ({ editor }: { editor: DesignEditorState }) => {
                     setRenamingId(null);
                   }
                 }}
-                className="absolute inset-y-1 right-16 left-8 rounded-md bg-background px-2 text-sm outline outline-violet-500"
+                className="absolute inset-y-1 right-16 left-8 rounded-md bg-background px-2 text-sm outline outline-primary"
               />
             ) : null}
             <button

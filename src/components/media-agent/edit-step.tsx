@@ -45,7 +45,7 @@ const PHASE_ICONS = {
 } as const;
 
 const PHASE_TONES: Record<Phase, string> = {
-  working: 'animate-spin text-violet-500',
+  working: 'animate-spin text-primary',
   applied: 'text-emerald-600 dark:text-emerald-400',
   rejected: 'text-amber-600 dark:text-amber-400',
   failed: 'text-destructive',

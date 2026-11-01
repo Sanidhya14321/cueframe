@@ -1,8 +1,24 @@
 # cueframe
 
-A local-first video studio built on [Remotion](https://www.remotion.dev). Browse
-a library of animation clips, edit them on a timeline and export finished video
-from your own machine.
+A video studio built on [Remotion](https://www.remotion.dev). Browse a library of
+animation clips, edit them on a timeline and export finished video.
+
+## Team
+
+Built by **something dot exe**: Sanidhya Vats and Sonal Nautiyal.
+
+## Pitch deck
+
+[Download the cueframe pitch deck (PPTX)](docs/cueframe-pitch-deck.pptx)
+
+## Two ways to use cueframe
+
+- **Local (free):** download cueframe and run it on your own computer with your
+  own AI and voice keys. Your projects stay on your machine as files.
+- **Hosted (paid):** we run a private cueframe server for you, end to end, so you
+  need no installation or configuration. Each customer gets an isolated instance.
+  This is how the project is funded. See `/pricing` in the app; online payments
+  are not enabled yet.
 
 ## Features
 
@@ -13,11 +29,12 @@ from your own machine.
 - AI editing through any OpenAI-compatible provider.
 - MCP tools that let agents create, edit and render projects.
 - Local transcription with Whisper and optional voiceover with Fish.
+- A project chat that edits the open video with your saved model or a connected agent.
 
-There are no accounts or database services. Projects are stored as files on
-your machine.
+Projects are stored as files, on your machine or in your hosted instance's
+private storage. The local version has no accounts. YugabyteDB is optional and stores library metadata embeddings for agent search.
 
-## Getting started
+## Run it locally
 
 You need [Bun](https://bun.sh) 1.4 or newer.
 
@@ -27,8 +44,51 @@ bun run dev
 ```
 
 Open <http://127.0.0.1:3000>. To use AI features, open **Settings** and add your
-provider base URL, API key and model. Keep the server local: it only accepts
-loopback connections.
+provider base URL, API key and model. A local install only accepts loopback
+connections.
+
+## Host it
+
+[docs/CUEFRAME_DEPLOY.md](docs/CUEFRAME_DEPLOY.md) covers Docker, private server
+instances and deploying the `Dockerfile` to Azure, including the settings that
+turn on login.
+
+## Yugabyte and voice setup
+
+Put your existing cluster's YSQL connection URL in `.env.local` as
+`YUGABYTE_DATABASE_URL=postgresql://USER:PASSWORD@HOST:5433/DATABASE?sslmode=require`.
+Use your cluster's TLS settings and URL-encode credentials. The database user
+needs permission to enable the `vector` extension and create the
+`cueframe_library_vectors` table. An administrator can enable the extension first.
+Yugabyte supports [pgvector cosine distance](https://docs.yugabyte.com/stable/additional-features/pg-extensions/extension-pgvector/).
+
+For the same setup command, add `FISH_AUDIO_API_KEY`, `AGENT_BASE_URL`,
+`AGENT_MODEL` and `AGENT_API_KEY` to `.env.local`, or enter the provider and Fish
+keys in Settings. Then run:
+
+```bash
+bun run local:configure
+bun run library:index
+bun run dev
+```
+
+Configuration imports nonempty values into the private local `settings.json`;
+the application reads credentials from that file. Existing settings are preserved.
+The settings API returns only presence flags for keys and the database URL.
+
+Indexing downloads the local MiniLM embedding model on first use and stores
+384-dimensional vectors and metadata for clips, poster pages and sites. Run it
+again after library changes: unchanged documents are skipped, changed documents
+are embedded again and removed entries are deleted in one transaction. Search
+uses exact cosine distance, suitable for this curated library, with no ANN index
+required. Clip search and agent storyboards combine semantic and keyword ranks.
+The `search_library` MCP tool searches across all three library types. Project
+documents and user prompts are not persisted in the database.
+
+Without Yugabyte configured, existing local clip search and recommendations
+remain available. A configured but unreachable database produces an error.
+Fish voiceover uses the saved key and requires a voice reference ID on the
+voiceover request.
 
 ## Commands
 
@@ -48,6 +108,15 @@ loopback connections.
 - `src/agent`, `src/mcp`: agent tools and the MCP server.
 - `src/render`: rendering scripts.
 - `tests`, `e2e`: unit, component and end-to-end tests.
+
+## Documentation
+
+- [docs/cueframe-pitch-deck.pptx](docs/cueframe-pitch-deck.pptx): the pitch deck.
+- [docs/CUEFRAME_DEPLOY.md](docs/CUEFRAME_DEPLOY.md): running and hosting.
+- [docs/CUEFRAME_OPENCUT.md](docs/CUEFRAME_OPENCUT.md): the video editor integration.
+- [docs/CUEFRAME_UI_ADDENDUM.md](docs/CUEFRAME_UI_ADDENDUM.md) and
+  [docs/CUEFRAME_UI_REVIEW.md](docs/CUEFRAME_UI_REVIEW.md): the UI plan and its review record.
+- [docs/archive](docs/archive): the original build prompt, plan, progress log and audits.
 
 ## Contributing
 

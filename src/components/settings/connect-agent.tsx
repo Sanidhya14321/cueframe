@@ -22,8 +22,12 @@ export const ConnectAgent = () => {
   const copy = async () => {
     try {
       const data = (await (await fetch('/api/connect', { cache: 'no-store' })).json()) as {
-        command: string;
+        command?: string;
       };
+      if (data.command === undefined) {
+        setMessage('Sign in to copy the connection command.');
+        return;
+      }
       await navigator.clipboard.writeText(data.command);
       setMessage(
         'Connection command copied. Paste it in your terminal, then open Claude Code and use /mcp.',
@@ -33,9 +37,14 @@ export const ConnectAgent = () => {
     }
   };
   return (
-    <div className="mx-auto flex max-w-2xl flex-col gap-5 p-6">
+    <div className="mx-auto flex max-w-2xl flex-col gap-4 px-4 py-5 sm:px-6">
       <h1 className="text-2xl font-semibold">Connect your agent</h1>
       <p>Keep this local app running while your agent edits. Every action appears in the editor.</p>
+      <p className="text-sm text-muted-foreground">
+        A connected coding agent has priority over the API model. In a project's Agent panel, copy
+        its listener prompt into your coding agent once to start receiving chat messages. Listening
+        confirms that it is ready to reply to that project.
+      </p>
       <p role="status">
         <span className={connection.connected ? 'text-emerald-600' : 'text-muted-foreground'}>
           {connection.connected ? '● Connected' : '○ Waiting for connection'}: {connection.name}
@@ -44,14 +53,14 @@ export const ConnectAgent = () => {
       <section className="rounded-xl border p-5">
         <h2 className="mb-3 font-semibold">Claude Code</h2>
         <code className="mb-4 block break-all text-xs">
-          claude mcp add --transport http clipkit http://127.0.0.1:&lt;port&gt;/mcp --header
+          claude mcp add --transport http cueframe http://127.0.0.1:&lt;port&gt;/mcp --header
           "Authorization: Bearer &lt;runtime token&gt;"
         </code>
         <Button type="button" onClick={copy}>
           Copy Claude Code command
         </Button>
         <p className="mt-3 text-xs text-muted-foreground">
-          The copied command includes this app session’s token. Restarting ClipKit rotates it; copy
+          The copied command includes this app session’s token. Restarting cueframe rotates it; copy
           a fresh command after restarting.
         </p>
       </section>

@@ -52,7 +52,7 @@ The scoped CLI detector returned `[]`: zero primary findings and zero advisories
 - P2: The mobile menu does not visually mark the current route. Current destination now has a selected background and checkmark as well as aria-current. Guidance: adapt/polish.
 - P3: Short landscape palette clips at 667x375. The dialog now has a viewport-relative maximum height and a shrinking, scrolling results region. Guidance: adapt.
 
-No P0 or P1 defect was established. All identified scoped defects were addressed; verification is recorded in docs/CLIPKIT_UI_REVIEW.md.
+No P0 or P1 defect was established. All identified scoped defects were addressed; verification is recorded in docs/CUEFRAME_UI_REVIEW.md.
 
 ## Cognitive load and emotional journey
 

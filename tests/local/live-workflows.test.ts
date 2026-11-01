@@ -1,5 +1,8 @@
 import { beforeEach, describe, expect, it } from 'bun:test';
+import { beatStyleSchema } from '@/agent/beat-sections';
+import { suggestBeatClips, suggestInputSchema } from '@/agent/beat-suggest';
 import { buildFromBeatsheet } from '@/agent/beatsheet';
+import { projectTools } from '@/agent/project-tools';
 import { seedProjectForClip } from '@/core';
 import { addComment, resolveComment, waitForComments } from '@/local/comments';
 import {
@@ -11,11 +14,22 @@ import {
 } from '@/local/projects';
 import { applyTranscript, tightenWords } from '@/local/transcribe';
 import { addVoiceover } from '@/local/voice';
-import { createTrack, createVideoElement } from '@/project';
+import { CLIP_VECTORS } from '@/mcp/clip-embeddings';
+import { createTextElement, createTrack, createVideoElement } from '@/project';
 import { resetTestHome } from './test-home';
 
 beforeEach(resetTestHome);
 describe('live editor workflows', () => {
+  it('adds a library clip to a project with no tracks', async () => {
+    const seed = seedProjectForClip('typewriter');
+    const state = await createProject({ title: 'Empty', project: { ...seed, tracks: [] } });
+    await projectTools.add_item.invoke(
+      { projectId: state.id, clipId: 'typewriter', start: 12, confirmed: true },
+      { origin: 'http://127.0.0.1', actor: 'browser:test' },
+    );
+    const elements = (await readProject(state.id)).project.tracks[0]?.elements;
+    expect(elements?.map((item) => item.from)).toEqual([12]);
+  });
   it('refuses all browser writes to locked items, including reset and undo', async () => {
     const state = await createProject({
       title: 'Locks',
@@ -89,6 +103,7 @@ describe('live editor workflows', () => {
         projectId: state.id,
         aspect: 'landscape',
         targetSeconds: 30,
+        style: beatStyleSchema.parse({}),
         segments: Array.from({ length: 16 }, (_, index) => ({
           role:
             index === 0 ? ('hook' as const) : index === 15 ? ('cta' as const) : ('point' as const),
@@ -99,17 +114,118 @@ describe('live editor workflows', () => {
       'agent:builder',
     );
     const saved = await readProject(state.id);
-    const clips = saved.project.tracks
-      .flatMap((row) => row.elements)
-      .filter((item) => item.type === 'composition');
+    const elements = saved.project.tracks.flatMap((row) => row.elements);
+    const clips = elements.filter((item) => item.type === 'shape');
+    expect(elements.filter((item) => item.type === 'composition')).toHaveLength(0);
+    expect(elements.filter((item) => item.type === 'text')).toHaveLength(16);
     expect(clips).toHaveLength(16);
     expect(clips.at(-1)?.from ?? 0).toBeLessThan(900);
     expect((clips.at(-1)?.from ?? 0) + (clips.at(-1)?.durationInFrames ?? 0)).toBe(900);
-    expect(
-      saved.project.tracks.flatMap((row) => row.elements).filter((item) => item.type === 'audio'),
-    ).toHaveLength(32);
+    expect(elements.filter((item) => item.type === 'audio')).toHaveLength(32);
     expect(saved.agent?.status).toBe('idle');
   }, 20000);
+  it('places only the clips the agent chose, in its style, and reports placeholder copy', async () => {
+    const state = await createProject({
+      title: 'Chosen',
+      project: { ...seedProjectForClip('typewriter'), tracks: [] },
+    });
+    const style = {
+      background: '#f4efe4',
+      surface: '#e7dfcf',
+      ink: '#141414',
+      accent: '#b3261e',
+      font: 'Instrument Serif',
+    };
+    const result = await buildFromBeatsheet(
+      {
+        projectId: state.id,
+        aspect: 'landscape',
+        targetSeconds: 30,
+        style,
+        segments: Array.from({ length: 16 }, (_, index) => ({
+          role: 'point' as const,
+          text: `Beat ${index + 1}`,
+          subtitle: index === 0 ? 'Dateline' : undefined,
+          energy: 3,
+          clipId: index === 0 ? 'reveal-wipe' : undefined,
+        })),
+      },
+      'agent:builder',
+    );
+    const saved = await readProject(state.id);
+    const elements = saved.project.tracks.flatMap((row) => row.elements);
+    const chosen = elements.filter((item) => item.type === 'composition');
+    expect(saved.project.background).toBe(style.background);
+    expect(chosen.map((item) => item.clipId)).toEqual(['reveal-wipe']);
+    expect(chosen[0]?.props).toMatchObject({
+      text: 'Beat 1',
+      subtitle: 'Dateline',
+      background: style.background,
+      font: style.font,
+    });
+    expect(result.items[0]).toMatchObject({ clipId: 'reveal-wipe', unfilledSlots: [] });
+    expect(elements.filter((item) => item.type === 'shape')).toHaveLength(15);
+  }, 20000);
+  it('rejects a clip the agent names that does not exist', async () => {
+    const state = await createProject({
+      title: 'Unknown',
+      project: { ...seedProjectForClip('typewriter'), tracks: [] },
+    });
+    await expect(
+      buildFromBeatsheet(
+        {
+          projectId: state.id,
+          aspect: 'landscape',
+          targetSeconds: 30,
+          style: beatStyleSchema.parse({}),
+          segments: Array.from({ length: 16 }, (_, index) => ({
+            role: 'point' as const,
+            text: `Beat ${index + 1}`,
+            energy: 3,
+            clipId: 'missing-clip',
+          })),
+        },
+        'agent:builder',
+      ),
+    ).rejects.toThrow('Unknown clip');
+  }, 20000);
+  it('suggests by similarity without placing anything, and offers nothing below the bar', async () => {
+    const [id = ''] = Object.keys(CLIP_VECTORS);
+    const vector = CLIP_VECTORS[id] ?? [];
+    const input = suggestInputSchema.parse({
+      brief: 'launch',
+      beats: [{ role: 'hook', text: 'Open' }],
+    });
+    const [match] = await suggestBeatClips(input, 'http://localhost', async () => vector);
+    expect(match?.suggestions.length).toBeGreaterThan(0);
+    expect(match?.suggestions[0]?.score).toBeGreaterThan(0.2);
+    const [none] = await suggestBeatClips(input, 'http://localhost', async () =>
+      vector.map((value) => value * 0),
+    );
+    expect(none?.suggestions).toEqual([]);
+  });
+  it('lets an agent author a primitive through edit_project', async () => {
+    const state = await createProject({
+      title: 'Authored',
+      project: { ...seedProjectForClip('typewriter'), tracks: [createTrack('Text')] },
+    });
+    await projectTools.edit_project.invoke(
+      {
+        projectId: state.id,
+        confirmed: true,
+        operations: [
+          {
+            op: 'add',
+            path: '/tracks/0/elements/0',
+            value: createTextElement({ content: 'Written by the agent' }),
+          },
+        ],
+      },
+      { origin: 'http://127.0.0.1', actor: 'agent:mcp' },
+    );
+    const [item] = (await readProject(state.id)).project.tracks[0]?.elements ?? [];
+    expect(item).toMatchObject({ type: 'text', content: 'Written by the agent' });
+  });
   it('cuts fillers and pauses while retaining source offsets, captions and emphasis', async () => {
     const words = [
       { text: 'Hello', startMs: 0, endMs: 400 },

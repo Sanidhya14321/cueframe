@@ -133,3 +133,44 @@ export const DesignEditorSkeleton = () => (
     </div>
   </div>
 );
+
+export const VideoEditorSkeleton = () => (
+  <div
+    className="flex h-full min-h-0 flex-col gap-1 bg-background p-1"
+    role="status"
+    aria-busy
+    aria-label="Loading the video editor"
+  >
+    <Skeleton className="h-12 shrink-0" />
+    <div className="flex min-h-0 flex-1 gap-1">
+      <Skeleton className="hidden w-1/4 lg:block" />
+      <Skeleton className="flex-1" />
+      <Skeleton className="hidden w-1/5 lg:block" />
+    </div>
+    <div className="flex h-1/3 shrink-0 flex-col gap-1">
+      {TRACKS.map((track) => (
+        <Skeleton key={track} className="flex-1" />
+      ))}
+    </div>
+  </div>
+);
+
+export const VideoRouteSkeleton = () => (
+  <div className="h-[calc(100dvh-6.5rem)]">
+    <VideoEditorSkeleton />
+  </div>
+);
+
+export const ListPageSkeleton = () => (
+  <div
+    className="flex w-full max-w-4xl flex-col gap-4 px-4 py-6 sm:px-6 lg:px-10"
+    role="status"
+    aria-busy
+    aria-label="Loading the page"
+  >
+    <Skeleton className="h-9 w-48" />
+    {PROPERTY_ROWS.map((row) => (
+      <Skeleton key={row} className="h-16 w-full" />
+    ))}
+  </div>
+);

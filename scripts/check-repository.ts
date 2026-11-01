@@ -25,6 +25,7 @@ const BINARY_EXTENSIONS = new Set([
   'otf',
   'eot',
   'pdf',
+  'pptx',
   'zip',
   'gz',
   'tgz',

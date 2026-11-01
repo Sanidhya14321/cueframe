@@ -1,4 +1,4 @@
-import track from '@/footage/elevator-newspaper.track.json';
+import track from '@/footage/elevator-newspaper.track.json' with { type: 'json' };
 import type { FootagePlate } from '../footage/footage-stage';
 import { parseTrack } from '../footage/footage-track';
 

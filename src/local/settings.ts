@@ -1,3 +1,4 @@
+import { rename } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { isAbsolute, join, resolve } from 'node:path';
 import { z } from 'zod';
@@ -14,8 +15,8 @@ const locationSchema = z.object({ dataFolder: z.string() });
 
 export const configFolder = (): string => {
   // biome-ignore lint/style/noProcessEnv: local runtime configuration is isolated from provider credentials
-  const { CLIPKIT_HOME } = process.env;
-  return resolve(CLIPKIT_HOME || join(homedir(), 'ClipKit'));
+  const { CUEFRAME_HOME } = process.env;
+  return resolve(CUEFRAME_HOME || join(homedir(), 'cueframe'));
 };
 
 const normalizeFolder = (value: string): string => {
@@ -38,10 +39,20 @@ export const readSettings = async (): Promise<LocalSettings> => {
   const folder = await activeFolder();
   const path = join(folder, 'settings.json');
   return serialDisk(path, async () => {
-    const saved = await readJson(path);
-    if (saved !== null) {
-      return settingsSchema.parse({ ...settingsSchema.parse(saved), dataFolder: folder });
+    try {
+      const saved = await readJson(path);
+      if (saved !== null) {
+        return settingsSchema.parse({ ...settingsSchema.parse(saved), dataFolder: folder });
+      }
+    } catch (error) {
+      if (!(error instanceof SyntaxError || error instanceof z.ZodError)) {
+        throw error;
+      }
+      await rename(path, `${path}.corrupt-${Date.now()}`);
+      console.error('[cueframe] settings.json was unreadable and has been set aside.');
     }
+    // biome-ignore lint/style/noProcessEnv: the container stack supplies its private database address
+    const { YUGABYTE_DATABASE_URL: yugabyteUrl = '' } = process.env;
     const defaults: LocalSettings = {
       dataFolder: folder,
       providerType: 'openai-compatible',
@@ -49,6 +60,7 @@ export const readSettings = async (): Promise<LocalSettings> => {
       model: '',
       apiKey: '',
       fishAudioKey: '',
+      yugabyteUrl,
     };
     await writeJson(path, defaults);
     return defaults;
@@ -62,6 +74,7 @@ export const publicSettings = (settings: LocalSettings): PublicSettings => ({
   model: settings.model,
   hasApiKey: settings.apiKey !== '',
   hasFishAudioKey: settings.fishAudioKey !== '',
+  hasYugabyteUrl: settings.yugabyteUrl !== '',
 });
 
 export const saveSettings = (input: unknown): Promise<PublicSettings> =>

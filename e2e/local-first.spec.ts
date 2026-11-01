@@ -5,12 +5,12 @@ test('gallery opens without an account and settings persist without returning ke
   request,
 }) => {
   expect((await request.get('/api/settings')).status()).toBe(401);
-  await page.goto('/');
+  await page.goto('/library');
   await expect(page.getByRole('link', { name: /sign in|profile/i })).toHaveCount(0);
   await page.getByRole('link', { name: 'Settings', exact: true }).click();
-  await expect(page.getByLabel('Data folder')).toHaveValue(/clipkit-/i);
+  await expect(page.getByLabel('Data folder')).toHaveValue(/cueframe-/i);
   await page.getByLabel('Model', { exact: true }).fill('local-test-model');
-  await page.getByLabel('API key', { exact: true }).fill('clipkit-test-key');
+  await page.getByLabel('API key', { exact: true }).fill('cueframe-test-key');
   await page.getByRole('button', { name: 'Save settings', exact: true }).click();
   await expect(page.getByRole('main').getByRole('status')).toHaveText(
     'Settings saved on this computer.',

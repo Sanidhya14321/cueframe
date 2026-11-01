@@ -1,4 +1,4 @@
-# ClipKit
+# cueframe
 
 <!-- impeccable:product-schema 1 -->
 
@@ -8,11 +8,13 @@ web
 
 ## Users
 
-Creators and developers who use coding agents to make videos and want to inspect, edit and export the result themselves.
+Creators and developers who use coding agents to make videos and want to inspect, edit and export the result themselves, on their own machine or on a hosted instance we run for them.
 
 ## Product Purpose
 
-A local video studio where an agent builds an editable timeline live. The browser remains the control center, and users can take over at any time.
+A video studio where an agent builds an editable timeline live. The browser remains the control center, and users can take over at any time.
+
+It ships in two versions from one codebase. Local is a free download that runs on the user's computer. Hosted is a private server we run end to end for people without the setup or configuration, and it is the business model.
 
 ## Positioning
 
@@ -30,7 +32,7 @@ The UI addendum is staged A through I with user review after each stage. Durable
 
 ## Brand Commitments
 
-ClipKit is the app name. The requested identity is a focused, dark professional creative tool with one distinctive accent, tinted neutrals, editorial headings, clear sans-serif UI and separate user-selection and agent colors. Clear, plain copy; no invented testimonials or provider-success claims.
+cueframe is the app name. The requested identity is a focused, dark professional creative tool with one distinctive accent, tinted neutrals, editorial headings, clear sans-serif UI and separate user-selection and agent colors. Clear, plain copy; no invented testimonials or provider-success claims.
 
 ## Evidence on Hand
 

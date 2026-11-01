@@ -2,13 +2,17 @@ import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 import { APICallError, type LanguageModel } from 'ai';
 import { readSettings } from '@/local/settings';
 
+export class AgentConfigurationError extends Error {}
+
 export const agentModel = async (): Promise<LanguageModel> => {
   const settings = await readSettings();
   if (settings.providerType !== 'openai-compatible') {
-    throw new Error('Choose an OpenAI-compatible provider in Settings.');
+    throw new AgentConfigurationError('Choose an OpenAI-compatible provider in Settings.');
   }
   if (!settings.model) {
-    throw new Error('Choose a model in Settings before using the AI editor.');
+    throw new AgentConfigurationError(
+      'Choose a provider and model in Settings before using the AI editor.',
+    );
   }
   return createOpenRouter({
     baseURL: settings.baseUrl,

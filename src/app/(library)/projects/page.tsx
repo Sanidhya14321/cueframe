@@ -1,30 +1,17 @@
-import Link from 'next/link';
 import { NewProject } from '@/components/clip-timeline/new-project';
-import { listProjects } from '@/local/projects';
+import { ProjectsTable } from '@/components/video/projects-table';
+import { listProjectSummaries } from '@/local/projects';
 export const dynamic = 'force-dynamic';
-const ProjectsPage = async () => (
-  <div className="mx-auto w-full max-w-3xl p-6">
-    <h1 className="mb-6 text-2xl font-semibold">Local projects</h1>
-    <NewProject />
-    <p className="mb-4 text-sm text-muted-foreground">
-      Open a clip from the gallery to start a project, or connect an agent.
-    </p>
-    <div className="flex flex-col gap-3">
-      {(await listProjects()).map((project) => (
-        <Link
-          className="rounded-lg border p-4 hover:bg-muted"
-          key={project.id}
-          href={`/video/${project.id}`}
-        >
-          {project.title}
-          <span className="ml-3 text-xs text-muted-foreground">
-            {project.nativeVideo
-              ? `OpenCut · ${project.nativeVideo.duration.toFixed(1)}s · Revision ${project.nativeVideo.revision}`
-              : `Animation source · Revision ${project.revision}`}
-          </span>
-        </Link>
-      ))}
+const ProjectsPage = async () => {
+  const rows = await listProjectSummaries();
+  return (
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-5 sm:px-6">
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="font-display text-2xl">Projects</h1>
+        <NewProject />
+      </div>
+      <ProjectsTable rows={rows} />
     </div>
-  </div>
-);
+  );
+};
 export default ProjectsPage;

@@ -265,7 +265,7 @@ export const ClipTimelineEditor = ({
             <span>{editor.status}</span>
             {editor.state ? (
               <a className="underline" href={`/video/${editor.state.id}`}>
-                OpenCut editor
+                Video editor
               </a>
             ) : null}
             {editor.state ? (

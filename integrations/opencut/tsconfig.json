@@ -9,9 +9,9 @@
       "@/services/video-cache/service": ["./overrides/video-cache.ts"],
       "@/services/storage/migrations": ["./overrides/migrations.ts"],
       "mediabunny": ["./overrides/browser-media.ts"],
-      "@clipkit/*": ["../../src/*"],
-      "@clipkit/project": ["../../src/project/index.ts"],
-      "@clipkit/local/project-state": ["../../src/local/project-state.ts"]
+      "@cueframe/*": ["../../src/*"],
+      "@cueframe/project": ["../../src/project/index.ts"],
+      "@cueframe/local/project-state": ["../../src/local/project-state.ts"]
     }
   },
   "include": ["overrides/**/*.ts", "overrides/**/*.tsx", "build.ts", "license-audit.ts"],

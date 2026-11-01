@@ -1,32 +1,46 @@
 import { randomBytes } from 'node:crypto';
 import type { NextConfig } from 'next';
 
-const { CLIPKIT_DIST_DIR: clipkitDistDir } = process.env;
+const { CUEFRAME_DIST_DIR: cueframeDistDir } = process.env;
 
 const { HTML_IN_CANVAS_ORIGIN_TRIAL_TOKEN: htmlInCanvasTrialToken } = process.env;
 
-const { CLIPKIT_SESSION_TOKEN: existingSessionToken } = process.env;
+const { CUEFRAME_SESSION_TOKEN: existingSessionToken } = process.env;
 Object.assign(process.env, {
-  CLIPKIT_SESSION_TOKEN: existingSessionToken ?? randomBytes(32).toString('hex'),
+  CUEFRAME_SESSION_TOKEN: existingSessionToken || randomBytes(32).toString('hex'),
+  CUEFRAME_PERSISTENT_TOKEN: existingSessionToken ? '1' : '0',
 });
 
 const config: NextConfig = {
   reactStrictMode: true,
-  distDir: clipkitDistDir ?? '.next',
-  serverExternalPackages: ['@remotion/renderer', '@remotion/bundler'],
+  staticPageGenerationTimeout: 600,
+  distDir: cueframeDistDir ?? '.next',
+  serverExternalPackages: ['@remotion/renderer', '@remotion/bundler', '@huggingface/transformers'],
   agentRules: false,
+  experimental: { proxyClientMaxBodySize: '260mb', cpus: 4 },
   transpilePackages: ['remotion', '@remotion/player', '@remotion/google-fonts', '@remotion/three'],
   headers: () =>
-    Promise.resolve(
-      htmlInCanvasTrialToken
+    Promise.resolve([
+      {
+        source: '/opencut/assets/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        ],
+      },
+      ...(htmlInCanvasTrialToken
         ? [
             {
               source: '/:path*',
               headers: [{ key: 'Origin-Trial', value: htmlInCanvasTrialToken }],
             },
           ]
-        : [],
-    ),
+        : []),
+    ]),
 };
 
 export default config;

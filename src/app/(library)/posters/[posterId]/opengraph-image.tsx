@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { posterImage } from '@/og/poster-card';
 import { findPoster, POSTER_META } from '@/posters';
 
-export const alt = 'A neuclip poster pack';
+export const alt = 'A cueframe poster pack';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
