@@ -43,7 +43,9 @@
     "catalog:build": "bun run scripts/build-catalog.ts",
     "whisper:setup": "bun --conditions=react-server run scripts/setup-whisper.ts",
     "opencut:build": "bun install --cwd integrations/opencut --frozen-lockfile && bun run --cwd integrations/opencut build",
-    "opencut:typecheck": "bun run --cwd integrations/opencut typecheck"
+    "opencut:typecheck": "bun run --cwd integrations/opencut typecheck",
+    "local:configure": "bun run scripts/configure-local.ts",
+    "library:index": "bun --conditions=react-server run scripts/index-library.ts"
   },
   "dependencies": {
     "@ai-sdk/react": "4.0.158",
@@ -87,6 +89,7 @@
     "nanoid": "6.0.2",
     "next": "16.4.2",
     "playwright": "1.64.0",
+    "postgres": "4.0.0",
     "postprocessing": "6.39.5",
     "radix-ui": "1.8.1",
     "react": "19.3.0",

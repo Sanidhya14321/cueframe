@@ -1,4 +1,5 @@
 import { clipCatalog } from '@/agent/catalog';
+import { searchLibraryVectors } from '@/local/library/vectors';
 import type { ClipRole, ClipTheme } from '@/schemas';
 import { embedQuery, semanticOrder } from './clip-embeddings';
 import { type ClipSearchHit, type Orientation, searchClips } from './clip-search';
@@ -53,6 +54,12 @@ export const recommendClips = async (
   embed: (text: string) => Promise<readonly number[] | null> = embedQuery,
 ): Promise<ClipRecommendation[]> => {
   const vector = await embed(brief);
+  const stored = vector ? await searchLibraryVectors(vector, 'clip', 5000) : null;
+  const semantic = vector
+    ? stored?.length
+      ? stored.map((row) => row.id)
+      : semanticOrder(vector)
+    : [];
   const orientation = options.orientation ?? matchWord(brief, ORIENTATION_WORDS);
   const theme = options.theme ?? matchWord(brief, THEME_WORDS);
   const used = new Set<string>();
@@ -64,7 +71,7 @@ export const recommendClips = async (
     const keyword = new Map(
       searchClips(brief, { role, orientation, theme }, 500).map((hit, index) => [hit.id, index]),
     );
-    const ordered = vector ? blendRanks(candidates, keyword, semanticOrder(vector)) : candidates;
+    const ordered = vector ? blendRanks(candidates, keyword, semantic) : candidates;
     const hits = ordered.filter((hit) => !used.has(hit.id));
     const clip = hits.find((hit) => !categories.has(hit.category)) ?? hits[0] ?? null;
     if (clip !== null) {

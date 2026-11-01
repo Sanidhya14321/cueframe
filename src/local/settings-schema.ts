@@ -11,6 +11,16 @@ const providerUrl = z.url().refine((value) => {
   );
 }, 'Use an HTTP or HTTPS base URL without credentials, query or fragment.');
 
+const yugabyteUrl = z.union([
+  z.literal(''),
+  z
+    .url()
+    .refine(
+      (value) => ['postgres:', 'postgresql:'].includes(new URL(value).protocol),
+      'Use a PostgreSQL YSQL connection URL.',
+    ),
+]);
+
 export const settingsSchema = z
   .object({
     dataFolder: z.string().min(1),
@@ -19,16 +29,18 @@ export const settingsSchema = z
     model: z.string().max(200),
     apiKey: z.string().max(4096),
     fishAudioKey: z.string().max(4096),
+    yugabyteUrl: yugabyteUrl.default(''),
   })
   .strict();
 
 export type LocalSettings = z.infer<typeof settingsSchema>;
 
 export const publicSettingsSchema = settingsSchema
-  .omit({ apiKey: true, fishAudioKey: true })
+  .omit({ apiKey: true, fishAudioKey: true, yugabyteUrl: true })
   .extend({
     hasApiKey: z.boolean(),
     hasFishAudioKey: z.boolean(),
+    hasYugabyteUrl: z.boolean(),
   });
 
 export type PublicSettings = z.infer<typeof publicSettingsSchema>;
@@ -36,6 +48,7 @@ export type PublicSettings = z.infer<typeof publicSettingsSchema>;
 export const settingsChangeSchema = settingsSchema
   .partial()
   .extend({
+    yugabyteUrl: yugabyteUrl.optional(),
     clearApiKey: z.boolean().optional(),
     clearFishAudioKey: z.boolean().optional(),
   })

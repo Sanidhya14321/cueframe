@@ -20,19 +20,22 @@ describe('local settings', () => {
       apiKey: 'test-provider-secret',
       fishAudioKey: 'test-voice-secret',
       model: 'test-model',
+      yugabyteUrl: 'postgresql://localhost:5433/test-vector-database',
     });
     const response = await GET(request());
     const text = await response.text();
     expect(text).not.toContain('test-provider-secret');
     expect(text).not.toContain('test-voice-secret');
+    expect(text).not.toContain('test-vector-database');
     expect(JSON.parse(text)).toMatchObject({ hasApiKey: true, hasFishAudioKey: true });
     expect((await readSettings()).apiKey).toBe('test-provider-secret');
     expect((await stat(join(configFolder(), 'settings.json'))).mode & 0o777).toBe(0o600);
   });
   it('preserves omitted secrets and removes them explicitly', async () => {
-    await saveSettings({ apiKey: 'keep-me' });
+    await saveSettings({ apiKey: 'keep-me', yugabyteUrl: 'postgresql://localhost:5433/library' });
     await saveSettings({ model: 'another-model' });
     expect((await readSettings()).apiKey).toBe('keep-me');
+    expect((await readSettings()).yugabyteUrl).toBe('postgresql://localhost:5433/library');
     await saveSettings({ clearApiKey: true });
     expect((await readSettings()).apiKey).toBe('');
   });

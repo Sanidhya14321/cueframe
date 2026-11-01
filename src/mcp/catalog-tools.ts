@@ -2,6 +2,7 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { searchCatalog } from '@/agent/catalog';
 import { clipFieldGuide, jsonSchema } from '@/agent/instructions';
+import { searchLibraryVectors } from '@/local/library/vectors';
 import {
   CLIP_CATEGORIES,
   CLIP_DEFAULTS,
@@ -13,6 +14,7 @@ import {
   getClipMeta,
   isClipId,
 } from '@/schemas';
+import { embedQuery } from './clip-embeddings';
 import { recommendClips } from './clip-recommend';
 import { ORIENTATIONS, orientationOf } from './clip-search';
 import { failure, json } from './results';
@@ -33,6 +35,36 @@ const categoryCounts = () =>
 
 export const registerCatalogTools = (server: McpServer, appUrl: string): void => {
   server.registerTool(
+    'search_library',
+    {
+      title: 'Search library by meaning',
+      description:
+        'Match a user prompt to clips, poster pages and website templates using Yugabyte pgvector metadata embeddings.',
+      inputSchema: {
+        query: z.string().min(1).max(4000),
+        kind: z.enum(['clip', 'poster', 'site']).optional(),
+        limit: z.number().int().min(1).max(40).default(12),
+      },
+      annotations: { readOnlyHint: true },
+    },
+    async ({ query, kind, limit }) => {
+      try {
+        const vector = await embedQuery(query);
+        if (!vector) {
+          return failure('The local embedding model is unavailable. Run bun run library:index.');
+        }
+        const results = await searchLibraryVectors(vector, kind, limit);
+        return results === null
+          ? failure(
+              'Configure Yugabyte and run bun run library:index before searching the full library.',
+            )
+          : json({ results });
+      } catch {
+        return failure('Library search failed. Check Yugabyte and run bun run library:index.');
+      }
+    },
+  );
+  server.registerTool(
     'search_clips',
     {
       title: 'Search clips',
@@ -48,11 +80,13 @@ export const registerCatalogTools = (server: McpServer, appUrl: string): void =>
       },
       annotations: { readOnlyHint: true },
     },
-    ({ query, category, theme, orientation, role, limit }) => {
-      const hits = searchCatalog(
-        query,
-        isCategory(category) ? category : undefined,
-        CLIP_REGISTRY.length,
+    async ({ query, category, theme, orientation, role, limit }) => {
+      const hits = (
+        await searchCatalog(
+          query,
+          isCategory(category) ? category : undefined,
+          CLIP_REGISTRY.length,
+        )
       )
         .filter(
           (clip) =>

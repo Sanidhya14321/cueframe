@@ -1,0 +1,25 @@
+services:
+  yugabyte:
+    image: yugabytedb/yugabyte:latest
+    command: ["bin/yugabyted", "start", "--background=false"]
+    volumes:
+      - yugabyte-data:/root/var
+    healthcheck:
+      test: ["CMD-SHELL", "bin/ysqlsh -h $$(hostname) -c 'select 1'"]
+      interval: 10s
+      retries: 30
+      start_period: 30s
+  cueframe:
+    build: .
+    depends_on:
+      yugabyte:
+        condition: service_healthy
+    ports:
+      - 127.0.0.1:3000:3000
+    environment:
+      YUGABYTE_DATABASE_URL: postgresql://yugabyte:yugabyte@yugabyte:5433/yugabyte
+    volumes:
+      - cueframe-data:/data
+volumes:
+  yugabyte-data:
+  cueframe-data:
