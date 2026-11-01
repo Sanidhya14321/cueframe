@@ -11,6 +11,7 @@ services:
       start_period: 30s
   cueframe:
     build: .
+    restart: unless-stopped
     depends_on:
       yugabyte:
         condition: service_healthy
@@ -18,6 +19,10 @@ services:
       - 127.0.0.1:3000:3000
     environment:
       YUGABYTE_DATABASE_URL: postgresql://yugabyte:yugabyte@yugabyte:5433/yugabyte
+      CUEFRAME_PUBLIC_URL: ${CUEFRAME_PUBLIC_URL:-http://localhost:3000}
+      CUEFRAME_SESSION_TOKEN: ${CUEFRAME_SESSION_TOKEN:-demo-session-token-replace-before-public-deployment}
+      CUEFRAME_USERS: >-
+        ${CUEFRAME_USERS:-[{"email":"admin@cueframe.demo","password":"admin-demo","role":"admin"},{"email":"creator@cueframe.demo","password":"creator-demo","role":"creator"},{"email":"viewer@cueframe.demo","password":"viewer-demo","role":"viewer"}]}
     volumes:
       - cueframe-data:/data
 volumes:
